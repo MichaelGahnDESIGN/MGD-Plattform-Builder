@@ -18,7 +18,30 @@ Privacy, security, compliance, modular backends, administration, moderation, Doc
 
 ---
 
-## Neu in 0.4: Migrationen, Übersetzungen, Agentenverwaltung und Dead Letter Jobs
+## Neu in 0.5: Translation Review, Agenten-Historie und idempotente Jobs
+
+Version 0.5 ergänzt echte Team- und Betriebsworkflows. Übersetzungen durchlaufen jetzt Draft, Review, Published beziehungsweise Rejected. JSON Exporte lassen sich wieder importieren, landen dabei absichtlich erneut im Draft. Service Principals besitzen eigene Detailseiten und eine Lebenszyklus-Historie. Hintergrundjobs können mit Idempotency Keys gegen doppelte Ausführung geschützt und über eine Handler Registry modular verarbeitet werden.
+
+```text
+Translation:
+draft → review → published
+              ↘ rejected
+
+Agent:
+created → token_rotated → revoked
+
+Job:
+request + idempotency key
+→ genau ein Job
+→ Handler Registry
+→ done / retry / dead
+```
+
+Mehr: [0.5 Translation Review, Agenten-Historie und idempotente Jobs](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki/22-Translation-Review-Agenten-Historie-und-Idempotente-Jobs)
+
+---
+
+## Seit 0.4: Migrationen, Übersetzungen, Agentenverwaltung und Dead Letter Jobs
 
 Version 0.4 macht die Referenzplattform deutlich betriebstauglicher. Datenbankänderungen laufen jetzt über einen checksum-geprüften Migration Runner, Übersetzungen werden zentral mit Draft- und Published-Status verwaltet, Service Principals können im Backoffice erstellt, rotiert und widerrufen werden und Jobs unterstützen Claiming, Retry und Dead Letter States.
 
@@ -234,7 +257,7 @@ Beispiel:
 project:
   name: "Example Platform"
   type: "community"
-  foundation_version: "0.4.0"
+  foundation_version: "0.5.0"
 
 market:
   countries: ["DE"]
@@ -623,7 +646,7 @@ Projekt-Plattform-System/
 
 ## Reifegrad
 
-Aktueller Stand: **Early Foundation / 0.4.x**
+Aktueller Stand: **Early Foundation / 0.5.x**
 
 Vor 1.0 können sich Schemas und Empfehlungen noch ändern. Beiträge aus realen Projekten sind ausdrücklich erwünscht.
 
