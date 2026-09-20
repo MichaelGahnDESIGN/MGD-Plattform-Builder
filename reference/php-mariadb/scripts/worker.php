@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use MGD\Platform\Core\Jobs\Handlers\DemoAuditExportHandler;
 use MGD\Platform\Core\Jobs\JobHandlerRegistry;
 use MGD\Platform\Core\Jobs\Outbox;
 
@@ -9,13 +10,7 @@ $container = require dirname(__DIR__) . '/bootstrap.php';
 $outbox = new Outbox($container['database']);
 $handlers = new JobHandlerRegistry();
 
-$handlers->register('demo.audit-export', static function (array $payload): void {
-    if (!isset($payload['requested_by'])) {
-        throw new RuntimeException('demo.audit-export requires requested_by.');
-    }
-
-    // Replace this demonstration with a real export handler in a project.
-});
+$handlers->register('demo.audit-export', new DemoAuditExportHandler());
 
 $workerId = gethostname() . ':' . getmypid();
 $jobs = $outbox->claim($workerId, 25);
