@@ -289,38 +289,77 @@ if ($path === '/translations' && $method === 'GET') {
 
     $rows = [];
     foreach ($translations->list() as $row) {
+        $actions = '';
+        $key = (string) $row['translation_key'];
+        $locale = (string) ($row['locale'] ?? '');
+        $status = (string) ($row['status'] ?? 'missing');
+
+        if (in_array('translations.manage', $actor->capabilities, true) && in_array($status, ['draft', 'rejected'], true)) {
+            $actions .= '<form class="inline" method="post" action="/translations/submit">
+                <input type="hidden" name="_csrf" value="' . View::e(Csrf::token()) . '">
+                <input type="hidden" name="translation_key" value="' . View::e($key) . '">
+                <input type="hidden" name="locale" value="' . View::e($locale) . '">
+                <button type="submit">Submit review</button>
+            </form>';
+        }
+
+        if (in_array('translations.review', $actor->capabilities, true) && $status === 'review') {
+            $actions .= '<form class="inline" method="post" action="/translations/review">
+                <input type="hidden" name="_csrf" value="' . View::e(Csrf::token()) . '">
+                <input type="hidden" name="translation_key" value="' . View::e($key) . '">
+                <input type="hidden" name="locale" value="' . View::e($locale) . '">
+                <input type="hidden" name="decision" value="approve">
+                <button type="submit">Approve</button>
+            </form>
+            <form class="inline" method="post" action="/translations/review">
+                <input type="hidden" name="_csrf" value="' . View::e(Csrf::token()) . '">
+                <input type="hidden" name="translation_key" value="' . View::e($key) . '">
+                <input type="hidden" name="locale" value="' . View::e($locale) . '">
+                <input type="hidden" name="decision" value="reject">
+                <button class="danger" type="submit">Reject</button>
+            </form>';
+        }
+
         $rows[] = [
-            '<code>' . View::e((string) $row['translation_key']) . '</code>',
-            View::e((string) ($row['locale'] ?? '')),
+            '<code>' . View::e($key) . '</code>',
+            View::e($locale),
             View::e((string) ($row['value_text'] ?? '')),
-            Ui::badge((string) ($row['status'] ?? 'missing')),
-            View::e((string) ($row['updated_at'] ?? '')),
+            Ui::badge($status),
+            View::e((string) ($row['review_note'] ?? '')),
+            $actions,
         ];
     }
 
-    $form = '';
+    $forms = '';
 
     if (in_array('translations.manage', $actor->capabilities, true)) {
-        $form = '<form method="post" action="/translations/save" class="panel">
-            <h2>Add or update translation</h2>
+        $forms .= '<form method="post" action="/translations/save" class="panel">
+            <h2>Create or update draft</h2>
             <input type="hidden" name="_csrf" value="' . View::e(Csrf::token()) . '">
             <label>Key<input name="translation_key" placeholder="dashboard.welcome" required></label>
             <label>Locale<input name="locale" placeholder="de" required></label>
             <label>Value<input name="value" required></label>
             <label>Description<input name="description"></label>
-            <label>Status
-                <select name="status">
-                    <option value="draft">draft</option>
-                    <option value="published">published</option>
-                </select>
-            </label>
-            <button type="submit">Save translation</button>
+            <button type="submit">Save draft</button>
         </form>';
+    }
+
+    if (in_array('translations.import', $actor->capabilities, true)) {
+        $forms .= '<form method="post" action="/translations/import" class="panel">
+            <h2>Import JSON as drafts</h2>
+            <input type="hidden" name="_csrf" value="' . View::e(Csrf::token()) . '">
+            <textarea name="json" rows="10" placeholder="{&quot;locale&quot;:&quot;de&quot;,&quot;translations&quot;:{&quot;dashboard.welcome&quot;:&quot;Willkommen&quot;}}" required></textarea>
+            <button type="submit">Import</button>
+        </form>';
+    }
+
+    if (in_array('translations.export', $actor->capabilities, true)) {
+        $forms .= '<div class="panel"><h2>Export</h2><p><a href="/translations/export">Download all translations as JSON</a></p></div>';
     }
 
     echo View::page(
         'Translations',
-        '<h1>Translations</h1>' . $form . Ui::table(['Key', 'Locale', 'Value', 'Status', 'Updated'], $rows),
+        '<h1>Translations</h1>' . $forms . Ui::table(['Key', 'Locale', 'Value', 'Status', 'Review note', 'Actions'], $rows),
         $actor->capabilities
     );
     exit;
@@ -331,21 +370,86 @@ if ($path === '/translations/save' && $method === 'POST') {
     requireCsrf();
 
     try {
-        $translations->save(
+        $translations->saveDraft(
             $actor,
             (string) ($_POST['translation_key'] ?? ''),
             (string) ($_POST['locale'] ?? ''),
             (string) ($_POST['value'] ?? ''),
-            (string) ($_POST['status'] ?? 'draft'),
             trim((string) ($_POST['description'] ?? '')) ?: null,
         );
-    } catch (InvalidArgumentException $error) {
+    } catch (Throwable $error) {
         http_response_code(422);
         echo View::page('Invalid translation', Ui::notice($error->getMessage(), 'error'), $actor->capabilities);
         exit;
     }
 
     redirect('/translations');
+}
+
+if ($path === '/translations/submit' && $method === 'POST') {
+    requireCapability($authorization, $actor, 'translations.manage');
+    requireCsrf();
+
+    try {
+        $translations->submitForReview(
+            $actor,
+            (string) ($_POST['translation_key'] ?? ''),
+            (string) ($_POST['locale'] ?? '')
+        );
+    } catch (Throwable $error) {
+        http_response_code(422);
+        echo View::page('Submit failed', Ui::notice($error->getMessage(), 'error'), $actor->capabilities);
+        exit;
+    }
+
+    redirect('/translations');
+}
+
+if ($path === '/translations/review' && $method === 'POST') {
+    requireCapability($authorization, $actor, 'translations.review');
+    requireCsrf();
+
+    try {
+        $decision = (string) ($_POST['decision'] ?? '');
+        $translations->review(
+            $actor,
+            (string) ($_POST['translation_key'] ?? ''),
+            (string) ($_POST['locale'] ?? ''),
+            $decision === 'approve',
+            trim((string) ($_POST['review_note'] ?? '')) ?: null,
+        );
+    } catch (Throwable $error) {
+        http_response_code(422);
+        echo View::page('Review failed', Ui::notice($error->getMessage(), 'error'), $actor->capabilities);
+        exit;
+    }
+
+    redirect('/translations');
+}
+
+if ($path === '/translations/import' && $method === 'POST') {
+    requireCapability($authorization, $actor, 'translations.import');
+    requireCsrf();
+
+    try {
+        $count = $translations->importJson($actor, (string) ($_POST['json'] ?? ''));
+        $_SESSION['translation_notice'] = 'Imported ' . $count . ' translation(s) as draft.';
+    } catch (Throwable $error) {
+        http_response_code(422);
+        echo View::page('Import failed', Ui::notice($error->getMessage(), 'error'), $actor->capabilities);
+        exit;
+    }
+
+    redirect('/translations');
+}
+
+if ($path === '/translations/export' && $method === 'GET') {
+    requireCapability($authorization, $actor, 'translations.export');
+
+    header('Content-Type: application/json; charset=utf-8');
+    header('Content-Disposition: attachment; filename="mgd-translations.json"');
+    echo $translations->exportJson($actor);
+    exit;
 }
 
 if ($path === '/service-principals' && $method === 'GET') {
