@@ -33,3 +33,53 @@ jobs:
           rm -rf /tmp/mgd-platform-smoke
           node ./bin/mgd-platform.js init --preset game --target /tmp/mgd-platform-smoke
           node ./bin/mgd-platform.js doctor /tmp/mgd-platform-smoke
+
+  php-reference:
+    runs-on: ubuntu-latest
+
+    services:
+      mariadb:
+        image: mariadb:11
+        env:
+          MARIADB_DATABASE: mgd_platform
+          MARIADB_USER: mgd
+          MARIADB_PASSWORD: mgdpass
+          MARIADB_ROOT_PASSWORD: rootpass
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          extensions: pdo_mysql, mbstring
+          coverage: none
+
+      - name: Validate Composer manifest
+        working-directory: reference/php-mariadb
+        run: composer validate --strict
+
+      - name: Install reference dependencies
+        working-directory: reference/php-mariadb
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: Lint PHP reference
+        run: find reference/php-mariadb -path "*/vendor/*" -prune -o -name "*.php" -print0 | xargs -0 -n1 php -l
+
+      - name: Run PHP/MariaDB reference smoke test
+        env:
+          MGD_TEST_DB_HOST: 127.0.0.1
+          MGD_TEST_DB_PORT: 3306
+          MGD_TEST_DB_NAME: mgd_platform
+          MGD_TEST_DB_USER: mgd
+          MGD_TEST_DB_PASSWORD: mgdpass
+        run: php reference/php-mariadb/tests/smoke.php
