@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace MGD\Platform\Core\Auth;
 
+use InvalidArgumentException;
 use MGD\Platform\Core\Audit\AuditLogger;
 use MGD\Platform\Core\Support\Id;
 use PDO;
-use InvalidArgumentException;
 
 final class ServicePrincipalManager
 {
@@ -50,29 +50,38 @@ final class ServicePrincipalManager
         $publicId = Id::uuidV4();
         $token = 'mgd_' . bin2hex(random_bytes(32));
 
-        $statement = $this->database->prepare(
-            'INSERT INTO service_principals
-                (public_id, name, description, token_hash, scopes_json, created_by_actor_id, expires_at, created_at)
-             VALUES
-                (:public_id, :name, :description, :token_hash, :scopes_json, :actor_id, :expires_at, UTC_TIMESTAMP())'
-        );
-        $statement->execute([
-            'public_id' => $publicId,
-            'name' => $name,
-            'description' => $description,
-            'token_hash' => hash('sha256', $token),
-            'scopes_json' => json_encode($scopes, JSON_THROW_ON_ERROR),
-            'actor_id' => $actor->id,
-            'expires_at' => $expiresAt?->format('Y-m-d H:i:s'),
-        ]);
+        $this->database->beginTransaction();
 
-        $this->audit->record(
-            $actor,
-            'service-principals.create',
-            'service_principal',
-            $publicId,
-            ['scopes' => $scopes]
-        );
+        try {
+            $statement = $this->database->prepare(
+                'INSERT INTO service_principals
+                    (public_id, name, description, token_hash, scopes_json, created_by_actor_id, expires_at, created_at)
+                 VALUES
+                    (:public_id, :name, :description, :token_hash, :scopes_json, :actor_id, :expires_at, UTC_TIMESTAMP())'
+            );
+            $statement->execute([
+                'public_id' => $publicId,
+                'name' => $name,
+                'description' => $description,
+                'token_hash' => hash('sha256', $token),
+                'scopes_json' => json_encode($scopes, JSON_THROW_ON_ERROR),
+                'actor_id' => $actor->id,
+                'expires_at' => $expiresAt?->format('Y-m-d H:i:s'),
+            ]);
+
+            $this->audit->record(
+                $actor,
+                'service-principals.create',
+                'service_principal',
+                $publicId,
+                ['scopes' => $scopes]
+            );
+
+            $this->database->commit();
+        } catch (\Throwable $error) {
+            $this->rollBackIfNeeded();
+            throw $error;
+        }
 
         return [
             'public_id' => $publicId,
@@ -84,53 +93,71 @@ final class ServicePrincipalManager
     {
         $token = 'mgd_' . bin2hex(random_bytes(32));
 
-        $statement = $this->database->prepare(
-            'UPDATE service_principals
-                SET token_hash = :token_hash,
-                    last_rotated_at = UTC_TIMESTAMP()
-              WHERE public_id = :public_id
-                AND revoked_at IS NULL
-                AND (expires_at IS NULL OR expires_at > UTC_TIMESTAMP())'
-        );
-        $statement->execute([
-            'token_hash' => hash('sha256', $token),
-            'public_id' => $publicId,
-        ]);
+        $this->database->beginTransaction();
 
-        if ($statement->rowCount() !== 1) {
-            throw new InvalidArgumentException('Active service principal not found.');
+        try {
+            $statement = $this->database->prepare(
+                'UPDATE service_principals
+                    SET token_hash = :token_hash,
+                        last_rotated_at = UTC_TIMESTAMP()
+                  WHERE public_id = :public_id
+                    AND revoked_at IS NULL
+                    AND (expires_at IS NULL OR expires_at > UTC_TIMESTAMP())'
+            );
+            $statement->execute([
+                'token_hash' => hash('sha256', $token),
+                'public_id' => $publicId,
+            ]);
+
+            if ($statement->rowCount() !== 1) {
+                throw new InvalidArgumentException('Active service principal not found.');
+            }
+
+            $this->audit->record(
+                $actor,
+                'service-principals.rotate',
+                'service_principal',
+                $publicId
+            );
+
+            $this->database->commit();
+        } catch (\Throwable $error) {
+            $this->rollBackIfNeeded();
+            throw $error;
         }
-
-        $this->audit->record(
-            $actor,
-            'service-principals.rotate',
-            'service_principal',
-            $publicId
-        );
 
         return $token;
     }
 
     public function revoke(Actor $actor, string $publicId): void
     {
-        $statement = $this->database->prepare(
-            'UPDATE service_principals
-                SET revoked_at = UTC_TIMESTAMP()
-              WHERE public_id = :public_id
-                AND revoked_at IS NULL'
-        );
-        $statement->execute(['public_id' => $publicId]);
+        $this->database->beginTransaction();
 
-        if ($statement->rowCount() !== 1) {
-            throw new InvalidArgumentException('Active service principal not found.');
+        try {
+            $statement = $this->database->prepare(
+                'UPDATE service_principals
+                    SET revoked_at = UTC_TIMESTAMP()
+                  WHERE public_id = :public_id
+                    AND revoked_at IS NULL'
+            );
+            $statement->execute(['public_id' => $publicId]);
+
+            if ($statement->rowCount() !== 1) {
+                throw new InvalidArgumentException('Active service principal not found.');
+            }
+
+            $this->audit->record(
+                $actor,
+                'service-principals.revoke',
+                'service_principal',
+                $publicId
+            );
+
+            $this->database->commit();
+        } catch (\Throwable $error) {
+            $this->rollBackIfNeeded();
+            throw $error;
         }
-
-        $this->audit->record(
-            $actor,
-            'service-principals.revoke',
-            'service_principal',
-            $publicId
-        );
     }
 
     private function assertKnownScopes(array $scopes): void
@@ -150,6 +177,13 @@ final class ServicePrincipalManager
 
         if ($unknown !== []) {
             throw new InvalidArgumentException('Unknown scope(s): ' . implode(', ', $unknown));
+        }
+    }
+
+    private function rollBackIfNeeded(): void
+    {
+        if ($this->database->inTransaction()) {
+            $this->database->rollBack();
         }
     }
 
