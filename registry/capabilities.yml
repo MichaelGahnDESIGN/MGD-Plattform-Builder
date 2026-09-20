@@ -1,4 +1,4 @@
-version: "0.2.0"
+version: "0.3.0"
 
 conventions:
   format: "<domain>.<resource>.<action>"
@@ -93,4 +93,19 @@ capabilities:
   jobs.manage:
     group: operations
     risk: high
+    audit: true
+
+  translations.review:
+    group: translations
+    risk: medium
+    audit: true
+
+  translations.import:
+    group: translations
+    risk: medium
+    audit: true
+
+  translations.export:
+    group: translations
+    risk: low
     audit: true
