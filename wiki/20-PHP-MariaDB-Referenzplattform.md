@@ -341,4 +341,4 @@ Capability prüfen
 
 Dadurch bekommen Menschen und Coding-Agenten ein konkretes Muster, ohne dass das gesamte MGD Project Platform System zu einem PHP-Framework wird.
 
-Weiter: [[21-Migrationen-I18n-Agenten-und-Jobs]] · [[18-CLI-Validator-und-Automatisierung]] · [[19-Referenzimplementierungen-und-Demos]] · [[05-Rollen-Berechtigungen-und-Backoffice]]
+Weiter: [[22-Translation-Review-Agenten-Historie-und-Idempotente-Jobs]] · [[21-Migrationen-I18n-Agenten-und-Jobs]] · [[18-CLI-Validator-und-Automatisierung]] · [[19-Referenzimplementierungen-und-Demos]] · [[05-Rollen-Berechtigungen-und-Backoffice]]
