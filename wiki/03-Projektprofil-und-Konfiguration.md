@@ -12,7 +12,7 @@ Typische Bereiche sind:
 project:
   name: "Example Platform"
   type: "community"
-  foundation_version: "0.1.0"
+  foundation_version: "0.2.0"
 
 market:
   countries: ["DE"]
@@ -62,6 +62,14 @@ Das Repository enthält ein JSON Schema unter:
 `schema/mgd-platform.schema.json`
 
 Damit kann das Projektprofil automatisiert validiert werden.
+
+Empfohlen:
+
+```bash
+mgd-platform validate
+```
+
+Die CLI prüft zusätzlich logische Zusammenhänge, die über reine Datentypen hinausgehen. Mehr dazu unter [[18-CLI-Validator-und-Automatisierung]].
 
 ## Source of Truth
 
