@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Legal Library Viewer</title>
+<style>
+:root{color-scheme:dark;--bg:#0d1117;--panel:#161b22;--line:#30363d;--text:#e6edf3;--muted:#8b949e;--accent:#58a6ff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 system-ui,sans-serif}
+main{width:min(1200px,calc(100% - 24px));margin:auto;padding:28px 0 60px}
+h1{margin:0 0 8px}.muted{color:var(--muted)}.controls{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:8px;margin:22px 0}
+input,select{padding:10px;border:1px solid var(--line);border-radius:7px;background:var(--panel);color:var(--text)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.card{border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:15px}
+.meta{display:flex;gap:6px;flex-wrap:wrap}.tag{font-size:11px;border:1px solid var(--line);border-radius:999px;padding:2px 7px;color:var(--muted)}
+a{color:var(--accent)}@media(max-width:800px){.controls,.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main>
+<h1>Legal Library Viewer</h1>
+<p class="muted">Generic viewer for a structured legal-source registry. Research aid only, not legal advice.</p>
+<div class="controls">
+<input id="q" type="search" placeholder="Search title, category, notes…">
+<select id="jurisdiction"><option value="">All jurisdictions</option></select>
+<select id="category"><option value="">All categories</option></select>
+<select id="status"><option value="">All statuses</option></select>
+</div>
+<p class="muted"><span id="count">0</span> source(s)</p>
+<div id="grid" class="grid"></div>
+</main>
+<script src="legal-sources.example.js"></script>
+<script>
+const data=(window.LEGAL_LIBRARY&&window.LEGAL_LIBRARY.sources)||[];
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uniq=k=>[...new Set(data.map(x=>x[k]).filter(Boolean))].sort();
+function fill(id,key){uniq(key).forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;$(id).appendChild(o)})}
+fill('jurisdiction','jurisdiction');fill('category','category');fill('status','status');
+function render(){
+ const q=$('q').value.toLowerCase().trim(),j=$('jurisdiction').value,c=$('category').value,s=$('status').value;
+ const rows=data.filter(x=>{
+  const hay=JSON.stringify(x).toLowerCase();
+  return (!q||hay.includes(q))&&(!j||x.jurisdiction===j)&&(!c||x.category===c)&&(!s||x.status===s);
+ });
+ $('count').textContent=rows.length;
+ $('grid').innerHTML=rows.map(x=>`<article class="card">
+   <h2>${esc(x.title)}</h2>
+   <div class="meta"><span class="tag">${esc(x.jurisdiction)}</span><span class="tag">${esc(x.category)}</span><span class="tag">${esc(x.status)}</span></div>
+   <p><strong>Relevance:</strong> ${esc(x.project_relevance||'')}</p>
+   <p class="muted">Verified: ${esc(x.verified_at||'not set')} · Next review: ${esc(x.next_review||'not set')}</p>
+   <p><a href="${esc(x.official_url)}" target="_blank" rel="noopener noreferrer">Official source</a></p>
+ </article>`).join('');
+}
+['q','jurisdiction','category','status'].forEach(id=>$(id).addEventListener(id==='q'?'input':'change',render));
+render();
+</script>
+</body>
+</html>
