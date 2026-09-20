@@ -322,6 +322,81 @@
         "type": "string"
       },
       "uniqueItems": true
+    },
+    "backoffice": {
+      "type": "object",
+      "description": "Project-specific internal backoffice shell and role-oriented UX views. Views never replace server-side authorization.",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "shared_shell": {
+          "type": "boolean",
+          "default": true
+        },
+        "default_route": {
+          "type": "string"
+        },
+        "role_views": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "label"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9-]{1,63}$"
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1
+              },
+              "actor_types": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "human",
+                    "service_principal",
+                    "ai_agent"
+                  ]
+                },
+                "uniqueItems": true
+              },
+              "roles": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "uniqueItems": true
+              },
+              "landing": {
+                "type": "string"
+              },
+              "navigation_groups": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "uniqueItems": true
+              },
+              "read_only": {
+                "type": "boolean",
+                "default": false
+              },
+              "notes": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": true
+          }
+        }
+      },
+      "additionalProperties": true
     }
   },
   "additionalProperties": true,
