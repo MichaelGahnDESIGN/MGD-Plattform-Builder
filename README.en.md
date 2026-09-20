@@ -296,9 +296,25 @@ Typical areas:
 - modules
 - settings
 
-Admin and moderator views can share one shell and differ only through capabilities.
+Admin, moderation, support, privacy/compliance, translation and operations can share one shell while exposing different role-focused navigation, dashboards, filters and actions.
 
-See [Backoffice](WIKI/02-ARCHITECTURE/BACKOFFICE.md).
+### Role-based backoffice views
+
+The foundation explicitly supports separate internal UX views for:
+
+- Administration
+- Moderation
+- Support
+- Privacy / Compliance
+- Translation / Editorial
+- Operations / Security
+- AI Operations / AI moderation supervision
+
+A view is presentation only. Authorization remains server-side through capabilities and policies, and server responses should minimize fields per role.
+
+See:
+- [Backoffice](WIKI/02-ARCHITECTURE/BACKOFFICE.md)
+- [Role-based Backoffice Views](WIKI/02-ARCHITECTURE/ROLE-BASED-BACKOFFICE-VIEWS.md).
 
 ---
 
