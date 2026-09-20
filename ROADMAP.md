@@ -15,72 +15,76 @@ The roadmap is intentionally capability-oriented. Dates are not promises.
 
 - `mgd-platform` CLI
 - project initialization with presets
-- `MGD_PLATFORM.yml` schema validation
+- project-profile schema validation
 - cross-field foundation rules
 - project doctor
-- automated gap audit and Markdown report
+- automated gap audit
 - machine-readable release evidence
-- release readiness check
+- release readiness checks
 - module skeleton generator
-- foundation version check
-- capability registry and schema
-- documentation link checker
-- automated GitHub Foundation Checks
-- bootstrap smoke tests
-- public Wiki documentation for CLI and tooling
+- capability registry
+- automated Foundation Checks
 
 ## 0.3 Runnable Reference Platform — completed
 
 - runnable PHP 8.3 / MariaDB reference platform
-- account login and hardened sessions
+- login and hardened sessions
 - CSRF protection
-- roles and capability resolution from MariaDB
-- capability-aware backoffice navigation
+- roles and capabilities
 - server-side authorization
-- account suspension example
-- audit and security-event dashboards
+- capability-driven backoffice
+- audit and security events
 - service-principal authentication
-- Bearer-token identity endpoint
 - database-backed jobs/outbox
-- local MariaDB Docker Compose profile
-- real MariaDB integration smoke test
+- real MariaDB integration tests
 
 ## 0.4 Operational Building Blocks — completed
 
 - checksum-verified database migration runner
 - migration history and baseline adoption
-- translation registry with draft/published state
+- translation registry
 - translation backoffice
-- published translation lookup with optional fallback locale
-- service-principal backoffice
-- validated service-principal scopes
-- one-time token display
+- service-principal management
 - token rotation and revocation
 - last-used tracking
-- jobs-specific capabilities
-- atomic outbox claim
-- worker identity and locking
-- exponential retry
-- maximum attempt count
-- dead-letter state
-- dead-letter retry from backoffice
+- atomic job claiming
+- retry and maximum attempts
+- dead-letter state and retry
+- stale-worker recovery
 - reusable backoffice UI helpers
-- extended MariaDB integration smoke test
-- complete public 0.4 Wiki documentation
+- migration policy foundations
 
-## 0.5 Reference Expansion
+## 0.5 Workflow Expansion — completed
+
+- translation draft/review/published/rejected workflow
+- separate translation review capability
+- translation JSON import
+- translation JSON export
+- safe export re-import as draft
+- translator starter role
+- service-principal detail view
+- dedicated service-principal lifecycle history
+- transactional principal create/rotate/revoke plus audit
+- job idempotency keys
+- duplicate job detection
+- job handler registry
+- dedicated handler classes
+- migration policy documentation
+- expanded MariaDB integration smoke tests
+- complete public Wiki documentation for 0.5
+
+## 0.6 Reference Expansion
 
 - Node/PostgreSQL reference
-- translation import/export
-- translation review workflow
-- migration rollback strategy examples
-- idempotency keys for jobs
-- richer job-handler registry
-- service-principal detail/history view
-- stronger reusable backoffice components
-- Docker staging example with app container
+- stronger reusable backoffice component set
+- translation CSV import/export
+- translation review queues and filters
+- job handler discovery
+- domain-level idempotency examples
+- Docker staging example with application container
+- migration rollback examples
 
-## 0.6 Compliance Tooling
+## 0.7 Compliance Tooling
 
 - machine-readable legal-source index
 - review-date reminders
@@ -90,7 +94,7 @@ The roadmap is intentionally capability-oriented. Dates are not promises.
 - release compliance checklist
 - evidence dashboard
 
-## 0.7 Agent Ecosystem
+## 0.8 Agent Ecosystem
 
 - richer Claude/Codex commands
 - guided project bootstrap assistant
