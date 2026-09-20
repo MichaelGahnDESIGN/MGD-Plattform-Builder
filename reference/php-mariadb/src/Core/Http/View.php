@@ -16,9 +16,11 @@ final class View
         $links = [
             ['/', 'Dashboard', null],
             ['/accounts', 'Accounts', 'accounts.suspend'],
+            ['/translations', 'Translations', 'translations.read'],
+            ['/service-principals', 'Agents / API', 'service-principals.read'],
             ['/audit', 'Audit', 'security.audit.read'],
             ['/security', 'Security', 'security.audit.read'],
-            ['/jobs', 'Jobs', 'security.audit.read'],
+            ['/jobs', 'Jobs', 'jobs.read'],
         ];
 
         $nav = '';
