@@ -232,6 +232,8 @@ Danach akzeptiert `ServicePrincipalAuth` seinen Token nicht mehr.
 
 Auch der Widerruf wird als Audit Event gespeichert.
 
+Erstellen, Rotieren und Widerrufen eines Service Principals werden zusammen mit dem jeweiligen Audit Event in einer Datenbanktransaktion ausgeführt. Schlägt das Audit fehl, soll nicht still eine hochprivilegierte Änderung ohne Nachweis übrig bleiben.
+
 ## Jobs und Outbox
 
 Das Job-System wurde in 0.4 deutlich robuster.
@@ -263,6 +265,8 @@ locked_by
 ```
 
 Dadurch können mehrere Worker parallel arbeiten, ohne absichtlich denselben verfügbaren Job zu übernehmen.
+
+Wenn ein Worker nach dem Claim abstürzt, bleibt der Lock nicht für immer wirksam. Ein `processing` Job mit einem ausreichend alten Lock kann von einem anderen Worker wieder übernommen werden.
 
 ## Retry
 
