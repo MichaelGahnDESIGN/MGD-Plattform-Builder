@@ -6,6 +6,10 @@
 * [[02-Schnellstart]]
 * [[03-Projektprofil-und-Konfiguration]]
 
+**Werkzeuge**
+* [[18-CLI-Validator-und-Automatisierung]]
+* [[19-Referenzimplementierungen-und-Demos]]
+
 **Architektur**
 * [[04-Architektur]]
 * [[05-Rollen-Berechtigungen-und-Backoffice]]
