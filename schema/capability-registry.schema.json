@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/schema/capability-registry.schema.json",
+  "title": "MGD Capability Registry",
+  "type": "object",
+  "required": ["version", "capabilities"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "conventions": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "capabilities": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[a-z0-9]+(?:\\.[a-z0-9-]+){1,4}$"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "required": ["group", "risk", "audit"],
+        "properties": {
+          "group": { "type": "string", "minLength": 1 },
+          "risk": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+          "audit": { "type": "boolean" },
+          "reauthentication": { "type": "boolean" },
+          "description": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
