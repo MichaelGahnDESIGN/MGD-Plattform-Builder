@@ -31,3 +31,15 @@ infrastructure:
   git_source: "github"
   backup: "local"
   monitoring: true
+agents:
+  enabled: true
+  read_project_rules_first: true
+  production_changes_require_approval: true
+  skills:
+    - "dev"
+    - "todo"
+    - "backup"
+release_gates:
+  - "privacy-reviewed"
+  - "security-reviewed"
+  - "restore-tested"
