@@ -51,7 +51,7 @@ Sie eignet sich unter anderem für:
 | Erweiterungen | Module, Domain Packs, Themes, Entitlements |
 | Governance | Dokumentation, Feature Governance, Release-Gates |
 | CLI & Automation | Init, Validator, Doctor, Audit, Module Generator, Release-Checks |
-| Referenzen | startbare PHP/MariaDB Plattform, lokales Backoffice-Demo und reale Integrationstests |
+| Referenzen | startbare PHP/MariaDB Plattform, Migrationen, I18n, Agentenverwaltung, Jobs und reale Integrationstests |
 
 ## Zentrale Idee
 
@@ -69,7 +69,7 @@ Die Foundation versucht nicht, jede Plattform gleich aussehen zu lassen. Sie sor
 
 ## Projektstatus
 
-Die Foundation befindet sich aktuell im **Early Foundation / 0.3.x** Stadium. Seit 0.2 besitzt sie eine eigene CLI, automatisierte Validierung, Release-Evidence und CI-Prüfungen. Mit 0.3 kommt eine startbare PHP/MariaDB Referenzplattform hinzu, die zentrale Foundation-Muster praktisch demonstriert und gegen eine echte MariaDB getestet wird. Vor Version 1.0 können sich Schemas und Empfehlungen noch verändern.
+Die Foundation befindet sich aktuell im **Early Foundation / 0.4.x** Stadium. Seit 0.2 besitzt sie eine eigene CLI und automatische Prüfungen. 0.3 brachte die startbare PHP/MariaDB Referenzplattform. Mit 0.4 kommen versionierte Datenbankmigrationen, eine Translation Registry, eine Backoffice-Verwaltung für AI-Agenten und API-Zugänge sowie Retry- und Dead-Letter-Mechanismen für Hintergrundjobs hinzu. Vor Version 1.0 können sich Schemas und Empfehlungen noch verändern.
 
 Adoptierende Projekte sollten die verwendete Foundation-Version im eigenen `MGD_PLATFORM.yml` dokumentieren.
 
@@ -92,6 +92,9 @@ Sie ist eine technische und organisatorische Grundlage, die hilft, relevante The
 
 **Du willst funktionierende Architekturbeispiele sehen?**  
 → [[19-Referenzimplementierungen-und-Demos]]
+
+**Du willst die neuen 0.4 Betriebsbausteine verstehen?**  
+→ [[21-Migrationen-I18n-Agenten-und-Jobs]]
 
 **Du willst ein bestehendes Projekt migrieren?**  
 → [[13-Migration-bestehender-Projekte]]
