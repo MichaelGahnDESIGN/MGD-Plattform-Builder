@@ -7,7 +7,8 @@ use MGD\Platform\Core\Jobs\Outbox;
 $container = require dirname(__DIR__) . '/bootstrap.php';
 $outbox = new Outbox($container['database']);
 
-$jobs = $outbox->next(25);
+$workerId = gethostname() . ':' . getmypid();
+$jobs = $outbox->claim($workerId, 25);
 
 if ($jobs === []) {
     fwrite(STDOUT, "No pending jobs.\n");
@@ -21,14 +22,15 @@ foreach ($jobs as $job) {
         fwrite(
             STDOUT,
             sprintf(
-                "Processing #%d %s %s\n",
+                "Processing #%d %s attempt %d/%d %s\n",
                 (int) $job['id'],
                 (string) $job['topic'],
+                (int) $job['attempts'] + 1,
+                (int) $job['max_attempts'],
                 json_encode($payload, JSON_UNESCAPED_SLASHES)
             )
         );
 
-        // Replace this switch with project-specific handlers.
         switch ((string) $job['topic']) {
             case 'demo.audit-export':
                 break;
@@ -39,7 +41,7 @@ foreach ($jobs as $job) {
 
         $outbox->markDone((int) $job['id']);
     } catch (Throwable $error) {
-        $outbox->markFailed((int) $job['id'], $error->getMessage());
-        fwrite(STDERR, "Job failed: {$error->getMessage()}\n");
+        $state = $outbox->markFailed((int) $job['id'], $error->getMessage());
+        fwrite(STDERR, "Job failed; next state: {$state}; {$error->getMessage()}\n");
     }
 }
