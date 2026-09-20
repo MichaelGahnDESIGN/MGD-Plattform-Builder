@@ -33,7 +33,17 @@ infrastructure:
   git_source: "github"
   backup: "hybrid"
   monitoring: true
+agents:
+  enabled: true
+  read_project_rules_first: true
+  production_changes_require_approval: true
+  skills:
+    - "dev"
+    - "todo"
+    - "backup"
 release_gates:
   - "anti-abuse-reviewed"
+  - "privacy-reviewed"
+  - "security-reviewed"
   - "payment-flow-tested"
   - "restore-tested"
