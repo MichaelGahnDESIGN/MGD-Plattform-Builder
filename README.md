@@ -401,9 +401,25 @@ Dashboard
 └── Einstellungen
 ```
 
-Admin und Moderator müssen dafür nicht zwei getrennte Anwendungen sein. Dieselbe Shell kann abhängig von Capabilities unterschiedliche Navigation, Listen, Aktionen und Daten zeigen.
+Admin, Moderator, Support, Datenschutz/Compliance, Übersetzung und Operations müssen dafür nicht als getrennte Anwendungen gebaut werden. Eine gemeinsame Shell kann je Rolle beziehungsweise Capability unterschiedliche Navigation, Dashboards, Filter, Tabellen und Aktionen zeigen.
 
-Mehr: [Backoffice-Konzept](WIKI/02-ARCHITECTURE/BACKOFFICE.md)
+### Rollenbasierte Backoffice-Ansichten
+
+Die Foundation unterstützt ausdrücklich unterschiedliche interne Ansichten pro Rolle:
+
+- Administration
+- Moderation
+- Support
+- Datenschutz / Compliance
+- Übersetzung / Redaktion
+- Operations / Security
+- AI Operations / AI-Moderationsaufsicht
+
+Die Ansicht ist nur UX. Berechtigungen werden immer serverseitig über Capabilities und Policies geprüft. Auch die zurückgegebenen Datenfelder sollen je Rolle minimiert werden.
+
+Mehr:
+- [Backoffice-Konzept](WIKI/02-ARCHITECTURE/BACKOFFICE.md)
+- [Rollenbasierte Backoffice-Ansichten](WIKI/02-ARCHITECTURE/ROLE-BASED-BACKOFFICE-VIEWS.md)
 
 ---
 
