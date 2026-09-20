@@ -11,11 +11,29 @@ final class View
         return htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     }
 
-    public static function page(string $title, string $body, bool $authenticated = false): string
+    public static function page(string $title, string $body, array $capabilities = []): string
     {
-        $nav = $authenticated
-            ? '<nav><a href="/">Dashboard</a><a href="/accounts">Accounts</a><a href="/audit">Audit</a><a href="/security">Security</a><a href="/jobs">Jobs</a></nav>'
-            : '';
+        $links = [
+            ['/', 'Dashboard', null],
+            ['/accounts', 'Accounts', 'accounts.suspend'],
+            ['/audit', 'Audit', 'security.audit.read'],
+            ['/security', 'Security', 'security.audit.read'],
+            ['/jobs', 'Jobs', 'security.audit.read'],
+        ];
+
+        $nav = '';
+
+        if ($capabilities !== []) {
+            $items = [];
+
+            foreach ($links as [$href, $label, $required]) {
+                if ($required === null || in_array($required, $capabilities, true)) {
+                    $items[] = '<a href="' . self::e($href) . '">' . self::e($label) . '</a>';
+                }
+            }
+
+            $nav = '<nav>' . implode('', $items) . '</nav>';
+        }
 
         return '<!doctype html>
 <html lang="en">
