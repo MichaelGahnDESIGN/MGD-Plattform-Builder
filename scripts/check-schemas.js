@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import Ajv2020 from "ajv/dist/2020.js";
+import Ajv2020 from "ajv/dist/2020.js";\nimport YAML from "yaml";
 
 const root = process.cwd();
 const ajv = new Ajv2020({ allErrors: true, strict: false });
@@ -38,4 +38,15 @@ if (!evidenceValid(evidenceExample)) {
   process.exitCode = 1;
 } else {
   console.log("✓ Evidence example matches schema");
+}
+
+
+const capabilityRegistry = YAML.parse(await fs.readFile(path.join(root, "registry/capabilities.yml"), "utf8"));
+const capabilityValid = compiled.get("schema/capability-registry.schema.json");
+if (!capabilityValid(capabilityRegistry)) {
+  console.error("✗ registry/capabilities.yml is invalid");
+  console.error(capabilityValid.errors);
+  process.exitCode = 1;
+} else {
+  console.log("✓ Capability registry matches schema");
 }
