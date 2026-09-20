@@ -1,0 +1,87 @@
+project:
+  name: "Example Platform"
+  type: "general"
+  foundation_version: "0.1.0"
+  description: "Project-neutral example profile"
+  public_repository: false
+
+market:
+  countries:
+    - "DE"
+  planned_countries:
+    - "AT"
+
+languages:
+  default: "de"
+  enabled:
+    - "de"
+  prepared:
+    - "en"
+
+stack:
+  backend: "choose-per-project"
+  database: "choose-per-project"
+  frontend: "choose-per-project"
+  client: "web"
+  hosting: "self-hosted-or-managed"
+
+features:
+  accounts: true
+  organizations: false
+  moderation: false
+  support: true
+  billing: false
+  uploads: false
+  cms: true
+  translations: true
+  public_profiles: false
+  notifications: true
+  store: false
+  themes: false
+  plugins: true
+  analytics: true
+  ai_agents: true
+
+privacy:
+  personal_data: true
+  sensitive_data: false
+  data_subject_portal: true
+  retention_policy: true
+  dpia_screening: true
+
+compliance:
+  packs:
+    - "DE"
+    - "EU"
+  legal_library: true
+  review_required_before_public_launch: true
+
+security:
+  mfa_privileged: true
+  audit_log: true
+  security_events: true
+  secret_management: true
+  incident_response: true
+
+infrastructure:
+  docker: true
+  staging: "local"
+  git_source: "github"
+  git_mirror: null
+  backup: "local"
+  monitoring: true
+
+agents:
+  enabled: true
+  read_project_rules_first: true
+  production_changes_require_approval: true
+  skills:
+    - "dev"
+    - "todo"
+    - "backup"
+
+release_gates:
+  - "privacy-reviewed"
+  - "security-reviewed"
+  - "backup-tested"
+  - "rollback-documented"
