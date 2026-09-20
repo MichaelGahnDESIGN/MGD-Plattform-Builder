@@ -19,6 +19,7 @@ Read-only first.
 Inspect the project and report:
 
 - current architecture
+- role-specific backoffice views and capability boundaries
 - project profile
 - missing foundation areas
 - privacy gaps
@@ -56,6 +57,24 @@ Plan a module using:
 - retention
 - tests
 - migration
+
+### /platform backoffice
+
+Audit or design the internal backoffice with role-based views.
+
+Check:
+
+- shared shell vs duplicated role-specific applications
+- roles, capabilities and policies
+- role-specific navigation and dashboards
+- server-side field projection / data minimization
+- admin, moderation, support, privacy, translation and operations views
+- AI/service-principal separation
+- direct URL/API authorization
+- multi-role view switching
+- audit and re-authentication for sensitive actions
+
+Do not treat hidden navigation as authorization.
 
 ### /platform compliance
 
