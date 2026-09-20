@@ -56,3 +56,9 @@ capabilities:
     risk: critical
     audit: true
     reauthentication: true
+
+  accounts.suspend:
+    group: accounts
+    risk: high
+    audit: true
+    reauthentication: true
