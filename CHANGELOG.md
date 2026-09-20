@@ -6,6 +6,13 @@ The format follows the spirit of Keep a Changelog and semantic versioning.
 
 ## [Unreleased]
 
+### Added
+
+- role-based backoffice view model for admin, moderation, support, privacy/compliance, translation/editorial, operations/security and AI supervision
+- machine-readable `backoffice.role_views` project profile schema
+- agent guidance for server-side role/capability enforcement and field-level data minimization
+- `/platform backoffice` audit/design mode
+
 ### Planned
 
 - Node/PostgreSQL reference implementation
