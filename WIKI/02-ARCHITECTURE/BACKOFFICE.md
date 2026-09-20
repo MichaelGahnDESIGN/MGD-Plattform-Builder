@@ -6,6 +6,28 @@ Admin, moderation, support, translation and privacy teams can share a common bac
 
 The server controls access through capabilities.
 
+## Role-based views
+
+The same shell can expose different task-oriented views for different roles without creating separate backend applications.
+
+Typical examples:
+
+- Administration
+- Moderation
+- Support
+- Privacy / Compliance
+- Translation / Editorial
+- Operations / Security
+- AI Operations / AI Moderation Supervision
+
+A role view may change navigation, dashboard widgets, default filters and visible columns, but it is **never** an authorization boundary.
+
+Server-side capabilities and policies remain authoritative.
+
+Projects with multi-role users may allow switching between permitted views without changing the user's capabilities.
+
+See [Role-based Backoffice Views](ROLE-BASED-BACKOFFICE-VIEWS.md).
+
 ## Suggested navigation
 
 - Dashboard
