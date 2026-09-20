@@ -31,6 +31,8 @@ Keep the foundation project-neutral, privacy-aware, secure and understandable.
 - do not claim legal certification
 - do not weaken least-privilege guidance for convenience
 - do not add arbitrary executable plugin-upload patterns as a default
+- treat role-specific backoffice views as presentation only; authorization remains server-side
+- minimize returned fields per role/capability instead of fetching sensitive fields and hiding them in the UI
 - distinguish examples from normative requirements
 
 ## Agent workflow
