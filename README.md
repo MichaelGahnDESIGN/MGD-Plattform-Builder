@@ -199,7 +199,7 @@ Beispiel:
 project:
   name: "Example Platform"
   type: "community"
-  foundation_version: "0.1.0"
+  foundation_version: "0.2.0"
 
 market:
   countries: ["DE"]
