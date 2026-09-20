@@ -18,7 +18,24 @@ Privacy, security, compliance, modular backends, administration, moderation, Doc
 
 ---
 
-## Neu in 0.3: startbare PHP/MariaDB Referenzplattform
+## Neu in 0.4: Migrationen, Übersetzungen, Agentenverwaltung und Dead Letter Jobs
+
+Version 0.4 macht die Referenzplattform deutlich betriebstauglicher. Datenbankänderungen laufen jetzt über einen checksum-geprüften Migration Runner, Übersetzungen werden zentral mit Draft- und Published-Status verwaltet, Service Principals können im Backoffice erstellt, rotiert und widerrufen werden und Jobs unterstützen Claiming, Retry und Dead Letter States.
+
+```bash
+cd reference/php-mariadb
+docker compose up -d db
+composer install
+cp config.example.php config.php
+php scripts/migrate.php
+php -S 127.0.0.1:8080 -t public
+```
+
+Mehr: [0.4 Migrationen, I18n, Agenten und Jobs](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki/21-Migrationen-I18n-Agenten-und-Jobs)
+
+---
+
+## Seit 0.3: startbare PHP/MariaDB Referenzplattform
 
 Version 0.3 ergänzt die ausführbare Foundation um eine **wirklich startbare Referenzplattform**. Sie zeigt Login, Sessions, Rollen, Capabilities, serverseitige Autorisierung, Adminbereich, Audit Log, Security Events, AI-Agenten-Zugänge und Hintergrundjobs in einer kleinen PHP/MariaDB Anwendung.
 
@@ -217,7 +234,7 @@ Beispiel:
 project:
   name: "Example Platform"
   type: "community"
-  foundation_version: "0.3.0"
+  foundation_version: "0.4.0"
 
 market:
   countries: ["DE"]
@@ -606,7 +623,7 @@ Projekt-Plattform-System/
 
 ## Reifegrad
 
-Aktueller Stand: **Early Foundation / 0.3.x**
+Aktueller Stand: **Early Foundation / 0.4.x**
 
 Vor 1.0 können sich Schemas und Empfehlungen noch ändern. Beiträge aus realen Projekten sind ausdrücklich erwünscht.
 
