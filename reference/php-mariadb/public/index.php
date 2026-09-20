@@ -287,6 +287,9 @@ if ($path === '/accounts/suspend' && $method === 'POST') {
 if ($path === '/translations' && $method === 'GET') {
     requireCapability($authorization, $actor, 'translations.read');
 
+    $translationNotice = $_SESSION['translation_notice'] ?? null;
+    unset($_SESSION['translation_notice']);
+
     $rows = [];
     foreach ($translations->list() as $row) {
         $actions = '';
@@ -357,9 +360,11 @@ if ($path === '/translations' && $method === 'GET') {
         $forms .= '<div class="panel"><h2>Export</h2><p><a href="/translations/export">Download all translations as JSON</a></p></div>';
     }
 
+    $notice = is_string($translationNotice) ? Ui::notice($translationNotice) : '';
+
     echo View::page(
         'Translations',
-        '<h1>Translations</h1>' . $forms . Ui::table(['Key', 'Locale', 'Value', 'Status', 'Review note', 'Actions'], $rows),
+        '<h1>Translations</h1>' . $notice . $forms . Ui::table(['Key', 'Locale', 'Value', 'Status', 'Review note', 'Actions'], $rows),
         $actor->capabilities
     );
     exit;
@@ -680,12 +685,16 @@ if ($path === '/jobs' && $method === 'GET') {
           LIMIT 100'
     )->fetchAll();
 
+    $jobNotice = $_SESSION['job_notice'] ?? null;
+    unset($_SESSION['job_notice']);
+
     $form = '';
 
     if (in_array('jobs.manage', $actor->capabilities, true)) {
         $form = '<form method="post" action="/jobs/demo" class="panel">
             <input type="hidden" name="_csrf" value="' . View::e(Csrf::token()) . '">
             <p>Create a harmless demo job, then process it with <code>php scripts/worker.php</code>.</p>
+            <label>Idempotency key (optional)<input name="idempotency_key" placeholder="audit-export-2026-09-20"></label>
             <button type="submit">Create demo job</button>
         </form>';
     }
@@ -713,9 +722,11 @@ if ($path === '/jobs' && $method === 'GET') {
         ];
     }
 
+    $notice = is_string($jobNotice) ? Ui::notice($jobNotice) : '';
+
     echo View::page(
         'Jobs',
-        '<h1>Jobs / Outbox</h1>' . $form . Ui::table(['ID', 'Topic', 'State', 'Attempts', 'Last error', 'Actions'], $tableRows),
+        '<h1>Jobs / Outbox</h1>' . $notice . $form . Ui::table(['ID', 'Topic', 'State', 'Attempts', 'Last error', 'Actions'], $tableRows),
         $actor->capabilities
     );
     exit;
@@ -725,11 +736,35 @@ if ($path === '/jobs/demo' && $method === 'POST') {
     requireCapability($authorization, $actor, 'jobs.manage');
     requireCsrf();
 
-    $outbox->enqueue('demo.audit-export', [
+    $payload = [
         'requested_by' => $actor->id,
         'requested_at' => gmdate(DATE_ATOM),
-    ]);
-    $audit->record($actor, 'jobs.demo.enqueue', 'job');
+    ];
+    $idempotencyKey = trim((string) ($_POST['idempotency_key'] ?? ''));
+
+    if ($idempotencyKey !== '') {
+        $result = $outbox->enqueueIdempotent(
+            'demo.audit-export',
+            $idempotencyKey,
+            $payload
+        );
+
+        $_SESSION['job_notice'] = $result['created']
+            ? 'Job #' . $result['id'] . ' created.'
+            : 'Duplicate request reused existing job #' . $result['id'] . '.';
+
+        $audit->record(
+            $actor,
+            $result['created'] ? 'jobs.demo.enqueue' : 'jobs.demo.duplicate',
+            'job',
+            (string) $result['id'],
+            ['idempotency_key_hash' => hash('sha256', $idempotencyKey)]
+        );
+    } else {
+        $jobId = $outbox->enqueue('demo.audit-export', $payload);
+        $_SESSION['job_notice'] = 'Job #' . $jobId . ' created without idempotency key.';
+        $audit->record($actor, 'jobs.demo.enqueue', 'job', (string) $jobId);
+    }
 
     redirect('/jobs');
 }
