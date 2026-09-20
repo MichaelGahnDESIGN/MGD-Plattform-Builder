@@ -29,6 +29,11 @@ Projekt-Plattform-System/
 │   └── capabilities.yml
 ├── reference/
 │   ├── php-mariadb/
+│   │   ├── database/migrations/
+│   │   ├── public/
+│   │   ├── scripts/
+│   │   ├── src/Core/
+│   │   └── tests/
 │   └── backoffice-demo/
 ├── platform/
 │   ├── SKILL.md
@@ -162,3 +167,21 @@ Die komplette Bedienung der ausführbaren Foundation ist unter [[18-CLI-Validato
 ## Referenzimplementierungen
 
 Konkrete Architekturbeispiele und das Backoffice-Demo werden unter [[19-Referenzimplementierungen-und-Demos]] erklärt.
+
+
+## Referenzplattform ab 0.5
+
+Die PHP/MariaDB Referenz enthält inzwischen zusätzlich:
+
+```text
+database/migrations/
+database/MIGRATION-POLICY.md
+src/Core/I18n/TranslationRegistry.php
+src/Core/Jobs/JobHandlerRegistry.php
+src/Core/Jobs/Handlers/
+src/Core/Auth/ServicePrincipalManager.php
+scripts/import-translations.php
+scripts/export-translations.php
+```
+
+Die ausführliche Beschreibung steht unter [[22-Translation-Review-Agenten-Historie-und-Idempotente-Jobs]].
