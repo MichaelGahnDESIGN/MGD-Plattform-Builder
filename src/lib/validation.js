@@ -1,0 +1,95 @@
+import fs from "node:fs/promises";
+import path from "node:path";
+import Ajv2020 from "ajv/dist/2020.js";
+import { foundationRoot } from "./paths.js";
+
+export async function loadProfileSchema() {
+  const schemaPath = path.join(foundationRoot, "schema", "mgd-platform.schema.json");
+  return JSON.parse(await fs.readFile(schemaPath, "utf8"));
+}
+
+function formatAjvError(error) {
+  const location = error.instancePath || "/";
+  return location + " " + (error.message || "is invalid");
+}
+
+export async function validateProfileSchema(profile) {
+  const schema = await loadProfileSchema();
+  const ajv = new Ajv2020({ allErrors: true, strict: false });
+  const validate = ajv.compile(schema);
+  const valid = validate(profile);
+
+  return {
+    valid: Boolean(valid),
+    errors: valid ? [] : (validate.errors || []).map(formatAjvError)
+  };
+}
+
+export function validateProfileRules(profile) {
+  const errors = [];
+  const warnings = [];
+  const enabledLanguages = profile.languages && profile.languages.enabled ? profile.languages.enabled : [];
+  const releaseGates = new Set(profile.release_gates || []);
+
+  if (profile.languages && profile.languages.default && !enabledLanguages.includes(profile.languages.default)) {
+    errors.push("languages.default must also be listed in languages.enabled");
+  }
+
+  if (profile.features && profile.features.ai_agents && (!profile.agents || profile.agents.enabled !== true)) {
+    errors.push("features.ai_agents is true, but agents.enabled is not true");
+  }
+
+  if (profile.privacy && profile.privacy.sensitive_data) {
+    if (!profile.security || !profile.security.audit_log) {
+      errors.push("Sensitive data requires security.audit_log=true");
+    }
+    if (!profile.security || !profile.security.mfa_privileged) {
+      warnings.push("Sensitive data should normally use MFA for privileged roles");
+    }
+    if (!profile.security || !profile.security.incident_response) {
+      warnings.push("Sensitive data should have an incident-response process");
+    }
+  }
+
+  if (profile.privacy && profile.privacy.personal_data && !profile.privacy.retention_policy) {
+    warnings.push("Personal data is enabled but no retention policy is declared");
+  }
+
+  if (profile.features && profile.features.billing && (!profile.security || !profile.security.audit_log)) {
+    errors.push("Billing requires security.audit_log=true");
+  }
+
+  if (profile.features && profile.features.billing && !releaseGates.has("payment-flow-tested")) {
+    warnings.push("Billing is enabled; consider the payment-flow-tested release gate");
+  }
+
+  if (profile.privacy && profile.privacy.personal_data && !releaseGates.has("privacy-reviewed")) {
+    warnings.push("Personal data is enabled; consider the privacy-reviewed release gate");
+  }
+
+  if (profile.infrastructure && profile.infrastructure.backup === "none") {
+    warnings.push("No backup strategy is declared");
+  }
+
+  if (profile.infrastructure && profile.infrastructure.staging === "none") {
+    warnings.push("No staging environment is declared");
+  }
+
+  if (profile.features && profile.features.uploads && (!profile.security || !profile.security.security_events)) {
+    warnings.push("Uploads are enabled without security event tracking");
+  }
+
+  return { errors, warnings };
+}
+
+export async function validateProfile(profile) {
+  const schema = await validateProfileSchema(profile);
+  const rules = validateProfileRules(profile);
+
+  return {
+    valid: schema.valid && rules.errors.length === 0,
+    schemaErrors: schema.errors,
+    ruleErrors: rules.errors,
+    warnings: rules.warnings
+  };
+}
