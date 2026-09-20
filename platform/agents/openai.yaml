@@ -1,0 +1,3 @@
+name: MGD Project Platform System
+description: Project-neutral platform architecture, privacy, security, compliance and operations foundation.
+default_prompt: Audit the current project against the MGD Project Platform System before making changes.
