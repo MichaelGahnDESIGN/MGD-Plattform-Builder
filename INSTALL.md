@@ -165,3 +165,56 @@ Point it to:
 - `mgd-platform audit`
 
 The core method does not depend on proprietary agent features.
+
+
+## Runnable PHP/MariaDB reference
+
+The reference platform is located in:
+
+```text
+reference/php-mariadb/
+```
+
+Local setup:
+
+```bash
+cd reference/php-mariadb
+docker compose up -d db
+composer install
+cp config.example.php config.php
+php scripts/migrate.php
+```
+
+Create the first administrator, then start:
+
+```bash
+php -S 127.0.0.1:8080 -t public
+```
+
+### Translation exchange
+
+Import:
+
+```bash
+php scripts/import-translations.php translations-de.json
+```
+
+Export one locale:
+
+```bash
+php scripts/export-translations.php de > translations-de.json
+```
+
+Imported entries always become drafts and must pass the translation review workflow before publication.
+
+### Background worker
+
+```bash
+php scripts/worker.php
+```
+
+The 0.5 reference supports atomic job claiming, retries, dead letters, stale-worker recovery, idempotency keys and a handler registry.
+
+Full reference documentation:
+
+https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki/22-Translation-Review-Agenten-Historie-und-Idempotente-Jobs
