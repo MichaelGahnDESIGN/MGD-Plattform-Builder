@@ -126,6 +126,26 @@ final class ServicePrincipalManager
         );
     }
 
+    private function assertKnownScopes(array $scopes): void
+    {
+        $placeholders = implode(',', array_fill(0, count($scopes), '?'));
+        $statement = $this->database->prepare(
+            "SELECT capability_key FROM capabilities WHERE capability_key IN ({$placeholders})"
+        );
+        $statement->execute($scopes);
+
+        $known = array_map(
+            static fn (array $row): string => (string) $row['capability_key'],
+            $statement->fetchAll()
+        );
+
+        $unknown = array_values(array_diff($scopes, $known));
+
+        if ($unknown !== []) {
+            throw new InvalidArgumentException('Unknown scope(s): ' . implode(', ', $unknown));
+        }
+    }
+
     public function list(): array
     {
         return $this->database->query(
