@@ -10,6 +10,7 @@
 * [[18-CLI-Validator-und-Automatisierung]]
 * [[19-Referenzimplementierungen-und-Demos]]
 * [[20-PHP-MariaDB-Referenzplattform]]
+* [[21-Migrationen-I18n-Agenten-und-Jobs]]
 
 **Architektur**
 * [[04-Architektur]]
