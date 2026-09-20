@@ -11,7 +11,7 @@ Privacy, security, compliance, modular backends, administration, moderation, Doc
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-compatible-6B5CE7?style=flat-square)](AGENTS.md)
 [![ChatGPT Codex](https://img.shields.io/badge/ChatGPT%20Codex-compatible-10A37F?style=flat-square)](AGENTS.md)
 
-[Deutsch](README.md) · **English** · [Wiki](WIKI/README.md) · [Roadmap](ROADMAP.md) · [Contributing](CONTRIBUTING.md)
+[Deutsch](README.md) · **English** · [Installation](INSTALL.md) · [Wiki](WIKI/README.md) · [Roadmap](ROADMAP.md) · [Contributing](CONTRIBUTING.md)
 
 </div>
 
