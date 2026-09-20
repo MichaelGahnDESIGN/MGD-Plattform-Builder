@@ -1,0 +1,2 @@
+provider_id,provider,service,role,purpose,data_categories,region,third_country,transfer_mechanism,dpa_status,subprocessors,last_review,next_review,status
+example,Example Provider,Example Service,processor,Example purpose,account metadata,EU,no,,review-required,,YYYY-MM-DD,YYYY-MM-DD,review-required
