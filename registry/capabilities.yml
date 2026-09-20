@@ -1,4 +1,4 @@
-version: "0.1.0"
+version: "0.2.0"
 
 conventions:
   format: "<domain>.<resource>.<action>"
@@ -62,3 +62,35 @@ capabilities:
     risk: high
     audit: true
     reauthentication: true
+
+  translations.read:
+    group: translations
+    risk: low
+    audit: false
+
+  translations.manage:
+    group: translations
+    risk: medium
+    audit: true
+
+  service-principals.read:
+    group: security
+    risk: high
+    audit: true
+    reauthentication: true
+
+  service-principals.manage:
+    group: security
+    risk: critical
+    audit: true
+    reauthentication: true
+
+  jobs.read:
+    group: operations
+    risk: medium
+    audit: false
+
+  jobs.manage:
+    group: operations
+    risk: high
+    audit: true
