@@ -31,6 +31,30 @@ infrastructure:
   git_source: "github"
   backup: "local"
   monitoring: true
+backoffice:
+  enabled: true
+  shared_shell: true
+  default_route: "/backoffice"
+  role_views:
+    - id: "admin"
+      label: "Administration"
+      actor_types: ["human"]
+      roles: ["admin"]
+      landing: "/backoffice"
+      navigation_groups: ["dashboard", "content", "users", "system"]
+    - id: "moderation"
+      label: "Moderation"
+      actor_types: ["human"]
+      roles: ["moderator"]
+      landing: "/backoffice/moderation"
+      navigation_groups: ["dashboard", "moderation"]
+    - id: "support"
+      label: "Support"
+      actor_types: ["human"]
+      roles: ["support"]
+      landing: "/backoffice/support"
+      navigation_groups: ["dashboard", "support"]
+
 agents:
   enabled: true
   read_project_rules_first: true
