@@ -11,6 +11,7 @@
 * [[19-Referenzimplementierungen-und-Demos]]
 * [[20-PHP-MariaDB-Referenzplattform]]
 * [[21-Migrationen-I18n-Agenten-und-Jobs]]
+* [[22-Translation-Review-Agenten-Historie-und-Idempotente-Jobs]]
 
 **Architektur**
 * [[04-Architektur]]
