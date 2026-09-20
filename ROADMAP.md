@@ -29,26 +29,37 @@ The roadmap is intentionally capability-oriented. Dates are not promises.
 - bootstrap smoke tests
 - public Wiki documentation for CLI and tooling
 
-## 0.3 Reference Implementations — in progress
+## 0.3 Runnable Reference Platform — completed
 
-Completed:
+- runnable PHP 8.3 / MariaDB reference platform
+- account login and hardened sessions
+- CSRF protection
+- roles and capability resolution from MariaDB
+- capability-aware backoffice navigation
+- server-side authorization
+- account suspension example
+- audit-event dashboard
+- security-event dashboard
+- service-principal authentication for AI agents and automation
+- Bearer-token identity endpoint
+- database-backed jobs/outbox
+- CLI worker example
+- local MariaDB Docker Compose profile
+- real MariaDB integration smoke test in GitHub Actions
+- complete public Wiki guide
 
-- PHP/MariaDB modular-monolith starter reference
-- capability authorization example
-- audit-event example
-- service-principal data model
-- local capability-driven backoffice demo
-
-Next:
+## 0.4 Reference Expansion
 
 - Node/PostgreSQL reference
-- jobs/outbox implementation
-- translation registry example
-- audit/security event dashboard
-- generic reusable backoffice components
-- Docker staging profile
+- translation registry
+- database migration runner
+- reusable backoffice components
+- richer jobs/outbox handlers and dead-letter pattern
+- service-principal management UI
+- generic audit/security event components
+- Docker staging example with app container
 
-## 0.4 Compliance Tooling
+## 0.5 Compliance Tooling
 
 - machine-readable legal-source index
 - review-date reminders
@@ -58,7 +69,7 @@ Next:
 - release compliance checklist
 - evidence dashboard
 
-## 0.5 Agent Ecosystem
+## 0.6 Agent Ecosystem
 
 - richer Claude/Codex commands
 - guided project bootstrap assistant
