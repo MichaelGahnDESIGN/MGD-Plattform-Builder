@@ -177,43 +177,74 @@ final class TranslationRegistry
         $this->requireCapability($actor, 'translations.import');
 
         $data = json_decode($json, true, flags: JSON_THROW_ON_ERROR);
+        $batches = [];
 
-        if (!is_array($data) || !isset($data['locale'], $data['translations']) || !is_array($data['translations'])) {
-            throw new InvalidArgumentException('Import must contain locale and translations.');
+        if (
+            is_array($data)
+            && isset($data['locale'], $data['translations'])
+            && is_array($data['translations'])
+        ) {
+            $batches[(string) $data['locale']] = $data['translations'];
+        } elseif (
+            is_array($data)
+            && ($data['format'] ?? null) === 'mgd-translations-v1'
+            && isset($data['locales'])
+            && is_array($data['locales'])
+        ) {
+            $batches = $data['locales'];
+        } else {
+            throw new InvalidArgumentException(
+                'Import must contain locale/translations or use the mgd-translations-v1 export format.'
+            );
         }
 
-        $locale = trim((string) $data['locale']);
-        $this->validateLocale($locale);
-
         $count = 0;
+        $importedLocales = [];
 
-        foreach ($data['translations'] as $key => $entry) {
-            if (is_string($entry)) {
-                $value = $entry;
-                $description = null;
-            } elseif (is_array($entry) && isset($entry['value'])) {
-                $value = (string) $entry['value'];
-                $description = isset($entry['description']) ? (string) $entry['description'] : null;
-            } else {
-                throw new InvalidArgumentException('Invalid translation import entry for key: ' . $key);
+        foreach ($batches as $locale => $entries) {
+            $locale = trim((string) $locale);
+            $this->validateLocale($locale);
+
+            if (!is_array($entries)) {
+                throw new InvalidArgumentException('Translations for locale must be an object: ' . $locale);
             }
 
-            $this->saveImportedDraft(
-                $actor,
-                (string) $key,
-                $locale,
-                $value,
-                $description
-            );
-            $count++;
+            foreach ($entries as $key => $entry) {
+                if (is_string($entry)) {
+                    $value = $entry;
+                    $description = null;
+                } elseif (is_array($entry) && isset($entry['value'])) {
+                    $value = (string) $entry['value'];
+                    $description = isset($entry['description']) && $entry['description'] !== null
+                        ? (string) $entry['description']
+                        : null;
+                } else {
+                    throw new InvalidArgumentException('Invalid translation import entry for key: ' . $key);
+                }
+
+                $this->saveImportedDraft(
+                    $actor,
+                    (string) $key,
+                    $locale,
+                    $value,
+                    $description
+                );
+
+                $count++;
+            }
+
+            $importedLocales[] = $locale;
         }
 
         $this->audit->record(
             $actor,
             'translations.import',
             'translation_batch',
-            $locale,
-            ['count' => $count]
+            null,
+            [
+                'count' => $count,
+                'locales' => array_values(array_unique($importedLocales)),
+            ]
         );
 
         return $count;
