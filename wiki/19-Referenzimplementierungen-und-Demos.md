@@ -12,6 +12,8 @@ Pfad:
 reference/php-mariadb/
 ```
 
+Die vollständige Installations- und Bedienungsanleitung steht unter [[20-PHP-MariaDB-Referenzplattform]].
+
 Die Referenz zeigt eine framework-neutrale Umsetzung für PHP 8.x und MariaDB.
 
 Enthalten sind unter anderem:
@@ -145,4 +147,4 @@ Vorgesehen sind unter anderem:
 * Docker Staging Beispiel
 * Release Evidence Dashboard
 
-Weiter: [[18-CLI-Validator-und-Automatisierung]] · [[04-Architektur]]
+Weiter: [[20-PHP-MariaDB-Referenzplattform]] · [[18-CLI-Validator-und-Automatisierung]] · [[04-Architektur]]
