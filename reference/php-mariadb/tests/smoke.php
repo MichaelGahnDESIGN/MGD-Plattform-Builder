@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use InvalidArgumentException;
 use MGD\Platform\Core\Audit\AuditLogger;
 use MGD\Platform\Core\Auth\Actor;
 use MGD\Platform\Core\Auth\ServicePrincipalAuth;
@@ -9,10 +10,12 @@ use MGD\Platform\Core\Auth\ServicePrincipalManager;
 use MGD\Platform\Core\Database\Connection;
 use MGD\Platform\Core\Database\MigrationRunner;
 use MGD\Platform\Core\I18n\TranslationRegistry;
+use MGD\Platform\Core\Jobs\JobHandlerRegistry;
 use MGD\Platform\Core\Jobs\Outbox;
 use MGD\Platform\Core\Permissions\Authorization;
 use MGD\Platform\Core\Permissions\CapabilityRepository;
 use MGD\Platform\Modules\Accounts\AccountService;
+use RuntimeException;
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 
@@ -34,8 +37,8 @@ $migrations = new MigrationRunner(
 
 $results = $migrations->migrate();
 
-if (count($results) < 5) {
-    throw new RuntimeException('Expected at least five migrations.');
+if (count($results) < 8) {
+    throw new RuntimeException('Expected at least eight migrations.');
 }
 
 $secondRun = $migrations->migrate();
@@ -73,6 +76,9 @@ $actor = new Actor(
 foreach ([
     'accounts.suspend',
     'translations.manage',
+    'translations.review',
+    'translations.import',
+    'translations.export',
     'service-principals.manage',
     'jobs.manage',
 ] as $requiredCapability) {
@@ -111,18 +117,50 @@ if ($status !== 'suspended') {
 }
 
 $translations = new TranslationRegistry($database, $audit);
-$translations->save(
+$translations->saveDraft(
     $actor,
     'dashboard.welcome',
     'de',
     'Willkommen',
-    'published',
     'Smoke-test translation'
 );
 
-if ($translations->published('dashboard.welcome', 'de') !== 'Willkommen') {
-    throw new RuntimeException('Published translation lookup failed.');
+if ($translations->published('dashboard.welcome', 'de') !== null) {
+    throw new RuntimeException('Draft translation was visible as published.');
 }
+
+$translations->submitForReview($actor, 'dashboard.welcome', 'de');
+$translations->review(
+    $actor,
+    'dashboard.welcome',
+    'de',
+    true,
+    'Smoke-test approval'
+);
+
+if ($translations->published('dashboard.welcome', 'de') !== 'Willkommen') {
+    throw new RuntimeException('Reviewed translation lookup failed.');
+}
+
+$exportJson = $translations->exportJson($actor, 'de');
+$exportData = json_decode($exportJson, true, flags: JSON_THROW_ON_ERROR);
+
+if (($exportData['format'] ?? null) !== 'mgd-translations-v1') {
+    throw new RuntimeException('Translation export format is invalid.');
+}
+
+$importCount = $translations->importJson($actor, $exportJson);
+
+if ($importCount !== 1) {
+    throw new RuntimeException('Translation re-import count is wrong.');
+}
+
+if ($translations->published('dashboard.welcome', 'de') !== null) {
+    throw new RuntimeException('Imported translation bypassed review and remained published.');
+}
+
+$translations->submitForReview($actor, 'dashboard.welcome', 'de');
+$translations->review($actor, 'dashboard.welcome', 'de', true);
 
 $principals = new ServicePrincipalManager($database, $audit);
 $created = $principals->create(
@@ -153,18 +191,25 @@ if (!in_array('support.case.read', $serviceActor->capabilities, true)) {
     throw new RuntimeException('Service-principal scopes were not loaded.');
 }
 
-$lastUsed = $database->prepare(
-    'SELECT last_used_at FROM service_principals WHERE public_id = :public_id'
-);
-$lastUsed->execute(['public_id' => $created['public_id']]);
+$rotatedToken = $principals->rotate($actor, $created['public_id']);
 
-if (!$lastUsed->fetchColumn()) {
-    throw new RuntimeException('Service-principal last_used_at was not recorded.');
+if ($principalAuth->authenticateBearer('Bearer ' . $created['token']) !== null) {
+    throw new RuntimeException('Old token still authenticates after rotation.');
+}
+
+if (!$principalAuth->authenticateBearer('Bearer ' . $rotatedToken)) {
+    throw new RuntimeException('Rotated token does not authenticate.');
+}
+
+$history = $principals->history($created['public_id']);
+
+if (count($history) < 2) {
+    throw new RuntimeException('Service-principal history is incomplete after rotation.');
 }
 
 $principals->revoke($actor, $created['public_id']);
 
-if ($principalAuth->authenticateBearer('Bearer ' . $created['token']) !== null) {
+if ($principalAuth->authenticateBearer('Bearer ' . $rotatedToken) !== null) {
     throw new RuntimeException('Revoked service-principal token still authenticates.');
 }
 
@@ -175,15 +220,73 @@ try {
     // Expected.
 }
 
-$outbox = new Outbox($database);
-$outbox->enqueue('demo.audit-export', ['test' => true]);
-$jobs = $outbox->claim('smoke-worker', 10);
+$history = $principals->history($created['public_id']);
 
-if (count($jobs) !== 1 || $jobs[0]['topic'] !== 'demo.audit-export') {
-    throw new RuntimeException('Outbox claim failed.');
+if (count($history) < 3) {
+    throw new RuntimeException('Service-principal revoke history is missing.');
 }
 
-$outbox->markDone((int) $jobs[0]['id']);
+$outbox = new Outbox($database);
+
+$firstIdempotent = $outbox->enqueueIdempotent(
+    'demo.audit-export',
+    'same-business-operation',
+    ['requested_by' => $actor->id]
+);
+$secondIdempotent = $outbox->enqueueIdempotent(
+    'demo.audit-export',
+    'same-business-operation',
+    ['requested_by' => $actor->id, 'duplicate' => true]
+);
+
+if (!$firstIdempotent['created']) {
+    throw new RuntimeException('First idempotent job was not created.');
+}
+
+if ($secondIdempotent['created'] || $secondIdempotent['id'] !== $firstIdempotent['id']) {
+    throw new RuntimeException('Idempotency key did not deduplicate the job.');
+}
+
+$handlers = new JobHandlerRegistry();
+$handled = false;
+
+$handlers->register('demo.audit-export', static function (array $payload) use (&$handled): void {
+    if (!isset($payload['requested_by'])) {
+        throw new RuntimeException('Handler payload is missing requested_by.');
+    }
+
+    $handled = true;
+});
+
+$jobs = $outbox->claim('smoke-worker', 10);
+$idempotentJob = array_values(array_filter(
+    $jobs,
+    static fn (array $job): bool => $job['topic'] === 'demo.audit-export'
+))[0] ?? null;
+
+if (!$idempotentJob) {
+    throw new RuntimeException('Idempotent job was not claimed.');
+}
+
+$handlers->handle(
+    (string) $idempotentJob['topic'],
+    json_decode((string) $idempotentJob['payload_json'], true, flags: JSON_THROW_ON_ERROR)
+);
+
+if (!$handled) {
+    throw new RuntimeException('Registered job handler was not executed.');
+}
+
+$outbox->markDone((int) $idempotentJob['id']);
+
+try {
+    $handlers->handle('unknown.topic', []);
+    throw new RuntimeException('Missing job handler did not fail.');
+} catch (RuntimeException $error) {
+    if (!str_contains($error->getMessage(), 'No handler registered')) {
+        throw $error;
+    }
+}
 
 $outbox->enqueue('demo.stale-worker', ['test' => true]);
 $staleClaim = $outbox->claim('worker-that-crashes', 10);
@@ -214,11 +317,6 @@ if (!$recoveredJob) {
 
 $outbox->markDone((int) $recoveredJob['id']);
 
-$done = (int) $database->query("SELECT COUNT(*) FROM jobs_outbox WHERE status = 'done'")->fetchColumn();
-if ($done !== 2) {
-    throw new RuntimeException('Outbox completion failed.');
-}
-
 $outbox->enqueue('demo.must-fail', ['test' => true], null, 1);
 $failedJobs = $outbox->claim('smoke-worker', 10);
 $failedJob = array_values(array_filter(
@@ -235,6 +333,7 @@ if ($outbox->markFailed((int) $failedJob['id'], 'Expected smoke-test failure') !
 }
 
 $deadCount = (int) $database->query("SELECT COUNT(*) FROM jobs_outbox WHERE status = 'dead'")->fetchColumn();
+
 if ($deadCount !== 1) {
     throw new RuntimeException('Dead-letter state was not persisted.');
 }
@@ -250,8 +349,9 @@ if ($pendingAgain < 1) {
 }
 
 $auditCount = (int) $database->query('SELECT COUNT(*) FROM audit_events')->fetchColumn();
-if ($auditCount < 5) {
+
+if ($auditCount < 10) {
     throw new RuntimeException('Expected audit events were not created.');
 }
 
-fwrite(STDOUT, "PHP/MariaDB 0.4 reference smoke test passed.\n");
+fwrite(STDOUT, "PHP/MariaDB 0.5 reference smoke test passed.\n");
