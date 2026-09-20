@@ -69,6 +69,18 @@ final class ServicePrincipalManager
                 'expires_at' => $expiresAt?->format('Y-m-d H:i:s'),
             ]);
 
+            $this->recordHistory(
+                $publicId,
+                $actor,
+                'created',
+                [
+                    'name' => $name,
+                    'description' => $description,
+                    'scopes' => $scopes,
+                    'expires_at' => $expiresAt?->format(DATE_ATOM),
+                ]
+            );
+
             $this->audit->record(
                 $actor,
                 'service-principals.create',
@@ -113,6 +125,8 @@ final class ServicePrincipalManager
                 throw new InvalidArgumentException('Active service principal not found.');
             }
 
+            $this->recordHistory($publicId, $actor, 'token_rotated');
+
             $this->audit->record(
                 $actor,
                 'service-principals.rotate',
@@ -146,6 +160,8 @@ final class ServicePrincipalManager
                 throw new InvalidArgumentException('Active service principal not found.');
             }
 
+            $this->recordHistory($publicId, $actor, 'revoked');
+
             $this->audit->record(
                 $actor,
                 'service-principals.revoke',
@@ -158,6 +174,84 @@ final class ServicePrincipalManager
             $this->rollBackIfNeeded();
             throw $error;
         }
+    }
+
+    public function get(string $publicId): ?array
+    {
+        $statement = $this->database->prepare(
+            'SELECT public_id,
+                    name,
+                    description,
+                    scopes_json,
+                    created_by_actor_id,
+                    expires_at,
+                    revoked_at,
+                    created_at,
+                    last_rotated_at,
+                    last_used_at
+               FROM service_principals
+              WHERE public_id = :public_id
+              LIMIT 1'
+        );
+        $statement->execute(['public_id' => $publicId]);
+
+        $row = $statement->fetch();
+
+        return $row ?: null;
+    }
+
+    public function history(string $publicId, int $limit = 100): array
+    {
+        $limit = max(1, min($limit, 500));
+
+        $statement = $this->database->prepare(
+            "SELECT actor_id, event_type, metadata_json, created_at
+               FROM service_principal_events
+              WHERE service_principal_public_id = :public_id
+              ORDER BY id DESC
+              LIMIT {$limit}"
+        );
+        $statement->execute(['public_id' => $publicId]);
+
+        return $statement->fetchAll();
+    }
+
+    public function list(): array
+    {
+        return $this->database->query(
+            'SELECT public_id,
+                    name,
+                    description,
+                    scopes_json,
+                    expires_at,
+                    revoked_at,
+                    created_at,
+                    last_rotated_at,
+                    last_used_at
+               FROM service_principals
+              ORDER BY id DESC
+              LIMIT 200'
+        )->fetchAll();
+    }
+
+    private function recordHistory(
+        string $publicId,
+        Actor $actor,
+        string $eventType,
+        array $metadata = [],
+    ): void {
+        $statement = $this->database->prepare(
+            'INSERT INTO service_principal_events
+                (service_principal_public_id, actor_id, event_type, metadata_json, created_at)
+             VALUES
+                (:public_id, :actor_id, :event_type, :metadata_json, UTC_TIMESTAMP())'
+        );
+        $statement->execute([
+            'public_id' => $publicId,
+            'actor_id' => $actor->id,
+            'event_type' => $eventType,
+            'metadata_json' => json_encode($metadata, JSON_THROW_ON_ERROR),
+        ]);
     }
 
     private function assertKnownScopes(array $scopes): void
@@ -185,15 +279,5 @@ final class ServicePrincipalManager
         if ($this->database->inTransaction()) {
             $this->database->rollBack();
         }
-    }
-
-    public function list(): array
-    {
-        return $this->database->query(
-            'SELECT public_id, name, description, scopes_json, expires_at, revoked_at, created_at, last_rotated_at, last_used_at
-               FROM service_principals
-              ORDER BY id DESC
-              LIMIT 200'
-        )->fetchAll();
     }
 }
