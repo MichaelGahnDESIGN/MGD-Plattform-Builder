@@ -12,7 +12,7 @@ Privacy, security, compliance, modular backends, administration, moderation, Doc
 [![ChatGPT Codex](https://img.shields.io/badge/ChatGPT%20Codex-compatible-10A37F?style=flat-square)](AGENTS.md)
 [![Docker](https://img.shields.io/badge/Docker-ready-2496ED?style=flat-square)](WIKI/06-OPERATIONS/DOCKER-STAGING.md)
 
-**Deutsch** · [English](README.en.md) · [Wiki](WIKI/README.md) · [Roadmap](ROADMAP.md) · [Mitmachen](CONTRIBUTING.md)
+**Deutsch** · [English](README.en.md) · [Installation](INSTALL.md) · [Wiki](WIKI/README.md) · [Roadmap](ROADMAP.md) · [Mitmachen](CONTRIBUTING.md)
 
 </div>
 
