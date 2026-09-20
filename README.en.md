@@ -17,7 +17,30 @@ Privacy, security, compliance, modular backends, administration, moderation, Doc
 
 ---
 
-## New in 0.4: migrations, translations, agent management and dead-letter jobs
+## New in 0.5: translation review, agent history and idempotent jobs
+
+Version 0.5 adds team and operational workflows. Translations now move through draft, review, published or rejected states. JSON exports can be imported again and intentionally return to draft. Service principals have dedicated detail/history views. Background jobs can use idempotency keys and modular handler registration.
+
+```text
+Translation:
+draft → review → published
+              ↘ rejected
+
+Agent:
+created → token_rotated → revoked
+
+Job:
+request + idempotency key
+→ one job
+→ handler registry
+→ done / retry / dead
+```
+
+More: [0.5 translation review, agent history and idempotent jobs](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki/22-Translation-Review-Agenten-Historie-und-Idempotente-Jobs)
+
+---
+
+## Since 0.4: migrations, translations, agent management and dead-letter jobs
 
 Version 0.4 adds operational building blocks to the runnable reference platform: checksum-verified database migrations, a draft/published translation registry, backoffice management for service principals, token rotation and revocation, plus job claiming, retries and dead-letter handling.
 
@@ -373,7 +396,7 @@ See [Domain Packs](WIKI/10-DOMAIN-PACKS/README.md).
 
 ## Maturity
 
-Current status: **Early Foundation / 0.4.x**
+Current status: **Early Foundation / 0.5.x**
 
 Schemas and recommendations may change before 1.0. Real-world feedback and contributions are welcome.
 
