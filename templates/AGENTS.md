@@ -16,6 +16,8 @@ This project follows the MGD Project Platform System.
 - do not expose secrets or personal data
 - do not use production data as test fixtures
 - server-side authorization is mandatory
+- role-specific backoffice views must be capability/policy driven
+- do not fetch sensitive fields for a role merely to hide them in the frontend
 - document privacy/security impact for new features
 - create or verify a rollback path before risky changes
 - update project documentation with implementation changes
