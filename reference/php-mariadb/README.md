@@ -67,13 +67,14 @@ reference/php-mariadb/
 
 ### Option A: MariaDB with Docker
 
-The included development profile starts MariaDB and imports the schema automatically:
+The included development profile starts MariaDB. The application schema is then created by the migration runner:
 
 ```bash
 cd reference/php-mariadb
 docker compose up -d db
 composer install
 cp config.example.php config.php
+php scripts/migrate.php
 ```
 
 For this local Docker profile, adjust `config.php` to:
@@ -98,11 +99,13 @@ cp config.example.php config.php
 
 Edit `config.php` for your local development database.
 
-Import:
+Run the migration runner:
 
-```text
-database/schema.sql
+```bash
+php scripts/migrate.php
 ```
+
+`database/schema.sql` remains as a readable baseline snapshot for reference and backwards compatibility. New installations and updates should use the migration runner.
 
 Never commit real credentials in `config.php`.
 
@@ -131,10 +134,12 @@ Open:
 http://127.0.0.1:8080/login
 ```
 
-The backoffice exposes:
+The backoffice exposes, depending on capabilities:
 
 - Dashboard
 - Accounts
+- Translations
+- Agents / API
 - Audit
 - Security events
 - Jobs / Outbox
@@ -170,6 +175,43 @@ support.case.read
 
 Roles are bundles. Authorization uses capabilities.
 
+## Database migrations
+
+Migrations are stored in:
+
+```text
+database/migrations/
+```
+
+Run:
+
+```bash
+php scripts/migrate.php
+```
+
+The runner stores applied versions and SHA-256 checksums in `schema_migrations`.
+
+If an already applied migration file changes later, the runner stops instead of silently continuing. This makes migration history tamper-evident and protects projects from accidentally rewriting database history.
+
+The first migration can also adopt an existing 0.3 baseline database. This allows the reference to move from the old schema-import workflow to proper migrations without requiring a destructive rebuild.
+
+## Translation registry
+
+The backoffice contains a translation registry with:
+
+- translation keys
+- locales
+- draft and published state
+- descriptions
+- audit events
+- fallback-ready lookup service
+
+The service lives in:
+
+```text
+src/Core/I18n/TranslationRegistry.php
+```
+
 ## Service principals
 
 Create an automation or AI-agent identity:
@@ -201,7 +243,11 @@ Process pending jobs:
 php scripts/worker.php
 ```
 
-The reference keeps the worker intentionally small. Real projects should add explicit handlers, idempotency rules, retry limits, observability and dead-letter handling when needed.
+The 0.4 worker claims jobs atomically before processing them. Multiple workers therefore do not intentionally pick the same pending record.
+
+Failed jobs use exponential retry delays. Each job has a maximum attempt count. Once that limit is reached, the job moves to the `dead` state and can be retried manually from the backoffice.
+
+Real projects should additionally consider idempotency keys, handler-specific retry policies, observability and dedicated queues when scale requires them.
 
 ## Audit and security events
 
@@ -248,8 +294,8 @@ A real public product still needs project-specific controls such as:
 - session storage strategy
 - richer validation and error handling
 - monitoring and alerting
-- database migrations instead of direct schema import
-- dedicated queue concurrency controls
+- production-grade migration review and rollback procedures
+- stronger queue concurrency and idempotency controls
 - security review and penetration testing where appropriate
 
 The purpose of this reference is to make the Foundation architecture concrete without pretending that a small example is automatically production-safe.
