@@ -9,11 +9,51 @@ The format follows the spirit of Keep a Changelog and semantic versioning.
 ### Planned
 
 - Node/PostgreSQL reference implementation
-- translation import/export and review workflow
-- migration rollback strategy examples
-- job idempotency patterns
-- richer compliance automation
+- stronger reusable backoffice components
+- translation CSV workflows and review queues
+- domain-level job idempotency examples
+- compliance automation
 - richer agent integration
+
+## [0.5.0] - 2026-09-20
+
+### Added
+
+- translation draft, review, published and rejected workflow
+- separate `translations.review`, `translations.import` and `translations.export` capabilities
+- translator starter role
+- JSON translation import
+- JSON translation export
+- reusable `mgd-translations-v1` exchange format
+- CLI translation import and export scripts
+- translation review actions in the backoffice
+- service-principal detail pages
+- dedicated `service_principal_events` lifecycle history
+- creation, rotation and revocation history records
+- job idempotency hashes and unique database constraint
+- `enqueueIdempotent()` duplicate protection
+- explicit `JobHandlerRegistry`
+- dedicated demonstration job-handler class
+- database migration policy documentation
+- expanded integration tests for review, import/export, agent history, token rotation, idempotency and handler dispatch
+- complete public Wiki guide for Foundation 0.5
+
+### Changed
+
+- imported translations always enter draft state
+- exported translation JSON can be imported again
+- workers dispatch through registered handlers instead of a hard-coded switch
+- job enqueue now returns the created job ID
+- service-principal lifecycle information is available independently of the global audit log
+- capability registry version aligned with Foundation 0.5
+
+### Security
+
+- translation import cannot bypass publication review
+- old service-principal tokens become unusable after rotation
+- revoked service principals remain unusable
+- repeated business requests can deduplicate jobs through idempotency keys
+- idempotency keys are stored only as SHA-256 derived hashes
 
 ## [0.4.0] - 2026-09-20
 
