@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-use MGD\Platform\Core\Support\Id;
+use MGD\Platform\Core\Audit\AuditLogger;
+use MGD\Platform\Core\Auth\Actor;
+use MGD\Platform\Core\Auth\ServicePrincipalManager;
 
 $container = require dirname(__DIR__) . '/bootstrap.php';
 $database = $container['database'];
@@ -12,6 +14,7 @@ $scopes = array_values(array_filter(array_map(
     'trim',
     explode(',', (string) getenv('MGD_SP_SCOPES'))
 )));
+$description = trim((string) getenv('MGD_SP_DESCRIPTION'));
 
 if ($name === '') {
     fwrite(STDERR, "Set MGD_SP_NAME.\n");
@@ -23,21 +26,31 @@ if ($scopes === []) {
     exit(1);
 }
 
-$token = 'mgd_' . bin2hex(random_bytes(32));
-
-$statement = $database->prepare(
-    'INSERT INTO service_principals
-        (public_id, name, token_hash, scopes_json, created_at)
-     VALUES
-        (:public_id, :name, :token_hash, :scopes_json, UTC_TIMESTAMP())'
+$bootstrapActor = new Actor(
+    'bootstrap-cli',
+    'bootstrap',
+    ['service-principals.manage']
 );
-$statement->execute([
-    'public_id' => Id::uuidV4(),
-    'name' => $name,
-    'token_hash' => hash('sha256', $token),
-    'scopes_json' => json_encode($scopes, JSON_THROW_ON_ERROR),
-]);
 
-fwrite(STDOUT, "Service principal created.\n");
-fwrite(STDOUT, "Token (shown once): {$token}\n");
-fwrite(STDOUT, "Store it securely. Only the hash is stored in MariaDB.\n");
+$manager = new ServicePrincipalManager(
+    $database,
+    new AuditLogger($database)
+);
+
+try {
+    $created = $manager->create(
+        $bootstrapActor,
+        $name,
+        $scopes,
+        null,
+        $description !== '' ? $description : null,
+    );
+
+    fwrite(STDOUT, "Service principal created.\n");
+    fwrite(STDOUT, "Public ID: {$created['public_id']}\n");
+    fwrite(STDOUT, "Token (shown once): {$created['token']}\n");
+    fwrite(STDOUT, "Store it securely. Only the hash is stored in MariaDB.\n");
+} catch (Throwable $error) {
+    fwrite(STDERR, "Could not create service principal: {$error->getMessage()}\n");
+    exit(1);
+}
