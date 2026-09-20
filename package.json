@@ -1,6 +1,6 @@
 {
   "name": "@michaelgahndesign/mgd-platform",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "CLI and validation tooling for the MGD Project Platform System",
   "type": "module",
   "bin": {
@@ -17,7 +17,15 @@
   "engines": {
     "node": ">=20"
   },
-  "files": ["bin/", "src/", "schema/", "templates/", "examples/", "registry/", "VERSION"],
+  "files": [
+    "bin/",
+    "src/",
+    "schema/",
+    "templates/",
+    "examples/",
+    "registry/",
+    "VERSION"
+  ],
   "dependencies": {
     "ajv": "^8.17.1",
     "yaml": "^2.8.1"
