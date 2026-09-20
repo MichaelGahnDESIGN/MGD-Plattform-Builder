@@ -1,0 +1,328 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/schema/mgd-platform.schema.json",
+  "title": "MGD Project Platform Profile",
+  "description": "Project-neutral profile consumed by humans and coding agents.",
+  "type": "object",
+  "required": [
+    "project",
+    "market",
+    "languages",
+    "features",
+    "infrastructure"
+  ],
+  "properties": {
+    "project": {
+      "type": "object",
+      "required": [
+        "name",
+        "type",
+        "foundation_version"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "general",
+            "game",
+            "community",
+            "creator",
+            "ecommerce",
+            "internal",
+            "custom"
+          ]
+        },
+        "foundation_version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "description": {
+          "type": "string"
+        },
+        "public_repository": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": true
+    },
+    "market": {
+      "type": "object",
+      "required": [
+        "countries"
+      ],
+      "properties": {
+        "countries": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 2
+          },
+          "uniqueItems": true
+        },
+        "planned_countries": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 2
+          },
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "languages": {
+      "type": "object",
+      "required": [
+        "default",
+        "enabled"
+      ],
+      "properties": {
+        "default": {
+          "type": "string",
+          "minLength": 2
+        },
+        "enabled": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 2
+          },
+          "uniqueItems": true
+        },
+        "prepared": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 2
+          },
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "stack": {
+      "type": "object",
+      "properties": {
+        "backend": {
+          "type": "string"
+        },
+        "database": {
+          "type": "string"
+        },
+        "frontend": {
+          "type": "string"
+        },
+        "client": {
+          "type": "string"
+        },
+        "hosting": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "features": {
+      "type": "object",
+      "properties": {
+        "accounts": {
+          "type": "boolean"
+        },
+        "organizations": {
+          "type": "boolean"
+        },
+        "moderation": {
+          "type": "boolean"
+        },
+        "support": {
+          "type": "boolean"
+        },
+        "billing": {
+          "type": "boolean"
+        },
+        "uploads": {
+          "type": "boolean"
+        },
+        "cms": {
+          "type": "boolean"
+        },
+        "translations": {
+          "type": "boolean"
+        },
+        "public_profiles": {
+          "type": "boolean"
+        },
+        "notifications": {
+          "type": "boolean"
+        },
+        "store": {
+          "type": "boolean"
+        },
+        "themes": {
+          "type": "boolean"
+        },
+        "plugins": {
+          "type": "boolean"
+        },
+        "analytics": {
+          "type": "boolean"
+        },
+        "ai_agents": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": true
+    },
+    "privacy": {
+      "type": "object",
+      "properties": {
+        "personal_data": {
+          "type": "boolean"
+        },
+        "sensitive_data": {
+          "type": "boolean"
+        },
+        "data_subject_portal": {
+          "type": "boolean"
+        },
+        "retention_policy": {
+          "type": "boolean"
+        },
+        "dpia_screening": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": true
+    },
+    "compliance": {
+      "type": "object",
+      "properties": {
+        "packs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "legal_library": {
+          "type": "boolean"
+        },
+        "review_required_before_public_launch": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": true
+    },
+    "security": {
+      "type": "object",
+      "properties": {
+        "mfa_privileged": {
+          "type": "boolean"
+        },
+        "audit_log": {
+          "type": "boolean"
+        },
+        "security_events": {
+          "type": "boolean"
+        },
+        "secret_management": {
+          "type": "boolean"
+        },
+        "incident_response": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": true
+    },
+    "infrastructure": {
+      "type": "object",
+      "required": [
+        "docker",
+        "staging",
+        "git_source"
+      ],
+      "properties": {
+        "docker": {
+          "type": "boolean"
+        },
+        "staging": {
+          "type": "string",
+          "enum": [
+            "none",
+            "local",
+            "nas",
+            "cloud",
+            "managed",
+            "custom"
+          ]
+        },
+        "git_source": {
+          "type": "string",
+          "enum": [
+            "github",
+            "gitea",
+            "gitlab",
+            "other"
+          ]
+        },
+        "git_mirror": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "backup": {
+          "type": "string",
+          "enum": [
+            "none",
+            "local",
+            "nas",
+            "cloud",
+            "hybrid",
+            "custom"
+          ]
+        },
+        "monitoring": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": true
+    },
+    "agents": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "read_project_rules_first": {
+          "type": "boolean"
+        },
+        "production_changes_require_approval": {
+          "type": "boolean"
+        },
+        "skills": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "release_gates": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    }
+  },
+  "additionalProperties": true
+}
