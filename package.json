@@ -1,0 +1,23 @@
+{
+  "name": "@michaelgahndesign/mgd-platform",
+  "version": "0.2.0",
+  "description": "CLI and validation tooling for the MGD Project Platform System",
+  "type": "module",
+  "bin": {
+    "mgd-platform": "./bin/mgd-platform.js"
+  },
+  "scripts": {
+    "test": "node --test",
+    "validate:examples": "node ./bin/mgd-platform.js validate ./examples/general-platform.yml && node ./bin/mgd-platform.js validate ./examples/game.yml && node ./bin/mgd-platform.js validate ./examples/community.yml && node ./bin/mgd-platform.js validate ./examples/creator.yml && node ./bin/mgd-platform.js validate ./examples/ecommerce.yml",
+    "doctor": "node ./bin/mgd-platform.js doctor ."
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "files": ["bin/", "src/", "schema/", "templates/", "examples/", "VERSION"],
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "yaml": "^2.8.1"
+  },
+  "license": "MIT"
+}
