@@ -11,9 +11,31 @@ Privacy, security, compliance, modular backends, administration, moderation, Doc
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-compatible-6B5CE7?style=flat-square)](AGENTS.md)
 [![ChatGPT Codex](https://img.shields.io/badge/ChatGPT%20Codex-compatible-10A37F?style=flat-square)](AGENTS.md)
 
-[Deutsch](README.md) · **English** · [Installation](INSTALL.md) · [Wiki](WIKI/README.md) · [Roadmap](ROADMAP.md) · [Contributing](CONTRIBUTING.md)
+[Deutsch](README.md) · **English** · [Installation](INSTALL.md) · [GitHub Wiki](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki) · [CLI documentation](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki/18-CLI-Validator-und-Automatisierung) · [Roadmap](ROADMAP.md) · [Contributing](CONTRIBUTING.md)
 
 </div>
+
+---
+
+## New in 0.2: CLI, validation and executable foundation
+
+The Foundation now includes its own **`mgd-platform` CLI**. Projects can be initialized, validated, audited and checked for release readiness instead of relying on documentation alone.
+
+```bash
+mgd-platform init --preset game --target ./my-project
+mgd-platform validate ./my-project
+mgd-platform doctor ./my-project
+mgd-platform audit ./my-project --write
+mgd-platform release-check ./my-project
+mgd-platform module create "Notifications" --target ./my-project
+mgd-platform update ./my-project
+```
+
+Version 0.2 also adds a central capability registry, machine-readable release evidence, automated GitHub Foundation Checks, a PHP/MariaDB reference implementation and a local backoffice demo.
+
+Full CLI documentation: [CLI, Validator and Automation](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki/18-CLI-Validator-und-Automatisierung)
+
+Reference implementations: [Reference Implementations and Demos](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki/19-Referenzimplementierungen-und-Demos)
 
 ---
 
@@ -115,12 +137,20 @@ The foundation moves these concerns to the beginning of the project instead of t
 ```bash
 git clone https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System.git
 cd Projekt-Plattform-System
-cp templates/MGD_PLATFORM.example.yml MGD_PLATFORM.yml
-cp templates/AGENTS.md ./AGENTS.md
-cp templates/CLAUDE.md ./CLAUDE.md
+npm install
+npm link
+mgd-platform init --preset general --target ../my-project
+cd ../my-project
+mgd-platform doctor
+mgd-platform audit --write
 ```
 
-Then customize `MGD_PLATFORM.yml` and ask your coding agent to run a read-only foundation audit first.
+Then customize `MGD_PLATFORM.yml`. Before release, run:
+
+```bash
+mgd-platform validate
+mgd-platform release-check
+```
 
 ```text
 /platform audit
@@ -308,7 +338,7 @@ See [Domain Packs](WIKI/10-DOMAIN-PACKS/README.md).
 
 ## Maturity
 
-Current status: **Early Foundation / 0.1.x**
+Current status: **Early Foundation / 0.2.x**
 
 Schemas and recommendations may change before 1.0. Real-world feedback and contributions are welcome.
 
