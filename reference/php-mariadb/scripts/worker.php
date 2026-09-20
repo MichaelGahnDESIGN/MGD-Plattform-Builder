@@ -2,10 +2,20 @@
 
 declare(strict_types=1);
 
+use MGD\Platform\Core\Jobs\JobHandlerRegistry;
 use MGD\Platform\Core\Jobs\Outbox;
 
 $container = require dirname(__DIR__) . '/bootstrap.php';
 $outbox = new Outbox($container['database']);
+$handlers = new JobHandlerRegistry();
+
+$handlers->register('demo.audit-export', static function (array $payload): void {
+    if (!isset($payload['requested_by'])) {
+        throw new RuntimeException('demo.audit-export requires requested_by.');
+    }
+
+    // Replace this demonstration with a real export handler in a project.
+});
 
 $workerId = gethostname() . ':' . getmypid();
 $jobs = $outbox->claim($workerId, 25);
@@ -31,14 +41,7 @@ foreach ($jobs as $job) {
             )
         );
 
-        switch ((string) $job['topic']) {
-            case 'demo.audit-export':
-                break;
-
-            default:
-                throw new RuntimeException('No handler registered for topic: ' . $job['topic']);
-        }
-
+        $handlers->handle((string) $job['topic'], $payload);
         $outbox->markDone((int) $job['id']);
     } catch (Throwable $error) {
         $state = $outbox->markFailed((int) $job['id'], $error->getMessage());
