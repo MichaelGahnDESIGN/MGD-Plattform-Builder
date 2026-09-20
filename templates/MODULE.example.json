@@ -1,0 +1,29 @@
+{
+  "id": "example-module",
+  "name": "Example Module",
+  "version": "0.1.0",
+  "type": "feature",
+  "description": "Project-neutral module example.",
+  "requires": [
+    "core-auth"
+  ],
+  "permissions": [
+    "example.read",
+    "example.manage"
+  ],
+  "events_subscribed": [
+    "user.created"
+  ],
+  "events_emitted": [
+    "example.changed"
+  ],
+  "translations": [
+    "de",
+    "en"
+  ],
+  "backoffice": true,
+  "entitlement": null,
+  "data_classification": [
+    "internal"
+  ]
+}
