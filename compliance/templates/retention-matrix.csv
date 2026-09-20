@@ -1,0 +1,2 @@
+data_class,purpose,system,retention_trigger,retention_period,delete_method,anonymization,legal_hold,owner,last_review
+example,example purpose,example system,purpose ends,define-per-project,delete-or-anonymize,yes,no,project owner,YYYY-MM-DD
