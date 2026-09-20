@@ -1,0 +1,9 @@
+{
+  "gate": "backup-tested",
+  "status": "pass",
+  "checked_at": "2026-09-20T00:00:00Z",
+  "expires_at": "2026-12-20T00:00:00Z",
+  "source": "restore test report or CI run",
+  "reviewer": "project owner",
+  "notes": "Example only. Replace with real project evidence."
+}
