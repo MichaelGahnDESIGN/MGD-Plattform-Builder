@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 use MGD\Platform\Core\Audit\AuditLogger;
 use MGD\Platform\Core\Auth\Actor;
+use MGD\Platform\Core\Auth\ServicePrincipalAuth;
+use MGD\Platform\Core\Auth\ServicePrincipalManager;
 use MGD\Platform\Core\Database\Connection;
+use MGD\Platform\Core\Database\MigrationRunner;
+use MGD\Platform\Core\I18n\TranslationRegistry;
 use MGD\Platform\Core\Jobs\Outbox;
 use MGD\Platform\Core\Permissions\Authorization;
 use MGD\Platform\Core\Permissions\CapabilityRepository;
@@ -23,12 +27,24 @@ $database = Connection::create([
     'password' => getenv('MGD_TEST_DB_PASSWORD') ?: 'mgdpass',
 ]);
 
-$schema = file_get_contents(dirname(__DIR__) . '/database/schema.sql');
-if ($schema === false) {
-    throw new RuntimeException('Could not read schema.sql');
+$migrations = new MigrationRunner(
+    $database,
+    dirname(__DIR__) . '/database/migrations'
+);
+
+$results = $migrations->migrate();
+
+if (count($results) < 5) {
+    throw new RuntimeException('Expected at least five migrations.');
 }
 
-$database->exec($schema);
+$secondRun = $migrations->migrate();
+
+foreach ($secondRun as [, $status]) {
+    if ($status !== 'already-applied') {
+        throw new RuntimeException('Migration runner is not idempotent.');
+    }
+}
 
 $account = $database->prepare(
     'INSERT INTO accounts (public_id, email, password_hash, status)
@@ -54,8 +70,15 @@ $actor = new Actor(
     $capabilities->forAccountId($accountId)
 );
 
-if (!in_array('accounts.suspend', $actor->capabilities, true)) {
-    throw new RuntimeException('Admin capability resolution failed.');
+foreach ([
+    'accounts.suspend',
+    'translations.manage',
+    'service-principals.manage',
+    'jobs.manage',
+] as $requiredCapability) {
+    if (!in_array($requiredCapability, $actor->capabilities, true)) {
+        throw new RuntimeException('Admin capability missing: ' . $requiredCapability);
+    }
 }
 
 $audit = new AuditLogger($database);
@@ -87,17 +110,53 @@ if ($status !== 'suspended') {
     throw new RuntimeException('Account suspension did not persist.');
 }
 
-$auditCount = (int) $database->query('SELECT COUNT(*) FROM audit_events')->fetchColumn();
-if ($auditCount < 1) {
-    throw new RuntimeException('Audit event was not created.');
+$translations = new TranslationRegistry($database, $audit);
+$translations->save(
+    $actor,
+    'dashboard.welcome',
+    'de',
+    'Willkommen',
+    'published',
+    'Smoke-test translation'
+);
+
+if ($translations->published('dashboard.welcome', 'de') !== 'Willkommen') {
+    throw new RuntimeException('Published translation lookup failed.');
+}
+
+$principals = new ServicePrincipalManager($database, $audit);
+$created = $principals->create(
+    $actor,
+    'Smoke Test Agent',
+    ['content.read', 'support.case.read']
+);
+
+$principalAuth = new ServicePrincipalAuth($database);
+$serviceActor = $principalAuth->authenticateBearer('Bearer ' . $created['token']);
+
+if (!$serviceActor || $serviceActor->type !== 'service_principal') {
+    throw new RuntimeException('Service-principal authentication failed.');
+}
+
+if (!in_array('support.case.read', $serviceActor->capabilities, true)) {
+    throw new RuntimeException('Service-principal scopes were not loaded.');
+}
+
+$lastUsed = $database->prepare(
+    'SELECT last_used_at FROM service_principals WHERE public_id = :public_id'
+);
+$lastUsed->execute(['public_id' => $created['public_id']]);
+
+if (!$lastUsed->fetchColumn()) {
+    throw new RuntimeException('Service-principal last_used_at was not recorded.');
 }
 
 $outbox = new Outbox($database);
 $outbox->enqueue('demo.audit-export', ['test' => true]);
-$jobs = $outbox->next(10);
+$jobs = $outbox->claim('smoke-worker', 10);
 
 if (count($jobs) !== 1 || $jobs[0]['topic'] !== 'demo.audit-export') {
-    throw new RuntimeException('Outbox enqueue/read failed.');
+    throw new RuntimeException('Outbox claim failed.');
 }
 
 $outbox->markDone((int) $jobs[0]['id']);
@@ -107,4 +166,39 @@ if ($done !== 1) {
     throw new RuntimeException('Outbox completion failed.');
 }
 
-fwrite(STDOUT, "PHP/MariaDB reference smoke test passed.\n");
+$outbox->enqueue('demo.must-fail', ['test' => true], null, 1);
+$failedJobs = $outbox->claim('smoke-worker', 10);
+$failedJob = array_values(array_filter(
+    $failedJobs,
+    static fn (array $job): bool => $job['topic'] === 'demo.must-fail'
+))[0] ?? null;
+
+if (!$failedJob) {
+    throw new RuntimeException('Dead-letter test job was not claimed.');
+}
+
+if ($outbox->markFailed((int) $failedJob['id'], 'Expected smoke-test failure') !== 'dead') {
+    throw new RuntimeException('Job did not enter dead-letter state.');
+}
+
+$deadCount = (int) $database->query("SELECT COUNT(*) FROM jobs_outbox WHERE status = 'dead'")->fetchColumn();
+if ($deadCount !== 1) {
+    throw new RuntimeException('Dead-letter state was not persisted.');
+}
+
+$outbox->retryDead((int) $failedJob['id']);
+
+$pendingAgain = (int) $database->query(
+    "SELECT COUNT(*) FROM jobs_outbox WHERE status = 'pending' AND attempts = 0"
+)->fetchColumn();
+
+if ($pendingAgain < 1) {
+    throw new RuntimeException('Dead-letter retry failed.');
+}
+
+$auditCount = (int) $database->query('SELECT COUNT(*) FROM audit_events')->fetchColumn();
+if ($auditCount < 4) {
+    throw new RuntimeException('Expected audit events were not created.');
+}
+
+fwrite(STDOUT, "PHP/MariaDB 0.4 reference smoke test passed.\n");
