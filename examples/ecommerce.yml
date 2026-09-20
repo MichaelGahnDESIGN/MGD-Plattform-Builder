@@ -1,0 +1,37 @@
+project:
+  name: "Example Store"
+  type: "ecommerce"
+  foundation_version: "0.1.0"
+market:
+  countries: ["DE"]
+languages:
+  default: "de"
+  enabled: ["de"]
+  prepared: ["en"]
+features:
+  accounts: true
+  support: true
+  billing: true
+  cms: true
+  translations: true
+  store: true
+privacy:
+  personal_data: true
+  sensitive_data: true
+  data_subject_portal: true
+  retention_policy: true
+security:
+  mfa_privileged: true
+  audit_log: true
+  security_events: true
+  incident_response: true
+infrastructure:
+  docker: true
+  staging: "local"
+  git_source: "github"
+  backup: "hybrid"
+  monitoring: true
+release_gates:
+  - "consumer-flow-reviewed"
+  - "payment-flow-tested"
+  - "restore-tested"
