@@ -9,12 +9,15 @@
   "scripts": {
     "test": "node --test",
     "validate:examples": "node ./bin/mgd-platform.js validate ./examples/general-platform.yml && node ./bin/mgd-platform.js validate ./examples/game.yml && node ./bin/mgd-platform.js validate ./examples/community.yml && node ./bin/mgd-platform.js validate ./examples/creator.yml && node ./bin/mgd-platform.js validate ./examples/ecommerce.yml",
+    "check:schemas": "node ./scripts/check-schemas.js",
+    "check:docs": "node ./scripts/check-doc-links.js",
+    "check": "npm test && npm run check:schemas && npm run validate:examples && npm run check:docs",
     "doctor": "node ./bin/mgd-platform.js doctor ."
   },
   "engines": {
     "node": ">=20"
   },
-  "files": ["bin/", "src/", "schema/", "templates/", "examples/", "VERSION"],
+  "files": ["bin/", "src/", "schema/", "templates/", "examples/", "registry/", "VERSION"],
   "dependencies": {
     "ajv": "^8.17.1",
     "yaml": "^2.8.1"
