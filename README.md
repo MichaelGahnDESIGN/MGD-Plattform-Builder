@@ -12,9 +12,43 @@ Privacy, security, compliance, modular backends, administration, moderation, Doc
 [![ChatGPT Codex](https://img.shields.io/badge/ChatGPT%20Codex-compatible-10A37F?style=flat-square)](AGENTS.md)
 [![Docker](https://img.shields.io/badge/Docker-ready-2496ED?style=flat-square)](WIKI/06-OPERATIONS/DOCKER-STAGING.md)
 
-**Deutsch** · [English](README.en.md) · [Installation](INSTALL.md) · [Wiki](WIKI/README.md) · [Roadmap](ROADMAP.md) · [Mitmachen](CONTRIBUTING.md)
+**Deutsch** · [English](README.en.md) · [Installation](INSTALL.md) · [GitHub Wiki](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki) · [CLI-Dokumentation](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki/18-CLI-Validator-und-Automatisierung) · [Roadmap](ROADMAP.md) · [Mitmachen](CONTRIBUTING.md)
 
 </div>
+
+---
+
+## Neu in 0.2: CLI, automatische Prüfungen und ausführbare Foundation
+
+Die Foundation besitzt jetzt mit **`mgd-platform` eine eigene CLI**. Damit können Projekte nicht mehr nur anhand der Dokumentation geplant werden. Sie lassen sich initialisieren, validieren, auditieren und vor einem Release automatisch prüfen.
+
+```bash
+mgd-platform init --preset game --target ./mein-projekt
+mgd-platform validate ./mein-projekt
+mgd-platform doctor ./mein-projekt
+mgd-platform audit ./mein-projekt --write
+mgd-platform release-check ./mein-projekt
+mgd-platform module create "Notifications" --target ./mein-projekt
+mgd-platform update ./mein-projekt
+```
+
+Die wichtigsten Funktionen:
+
+| Befehl | Aufgabe |
+|---|---|
+| `init` | Neues Projekt aus einem Preset vorbereiten |
+| `validate` | `MGD_PLATFORM.yml` gegen Schema und Foundation-Regeln prüfen |
+| `doctor` | Grundstruktur, Regeln und Evidence-Verzeichnis prüfen |
+| `audit` | Gap Report mit priorisierten Findings erzeugen |
+| `release-check` | Release-Gates gegen echte Evidence-Dateien prüfen |
+| `module create` | Modulmanifest und Dokumentationsgerüst erzeugen |
+| `update` | Foundation-Version vergleichen und Migration anstoßen |
+
+Zusätzlich enthält das Projekt jetzt eine zentrale **Capability Registry**, maschinenlesbare **Release Evidence**, automatische **GitHub Foundation Checks**, eine **PHP/MariaDB Referenzimplementierung** und ein lokales **Backoffice-Demo**.
+
+Ausführliche Erklärung: [CLI, Validator und Automatisierung](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki/18-CLI-Validator-und-Automatisierung)
+
+Referenzcode und Demos: [Referenzimplementierungen und Demos](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki/19-Referenzimplementierungen-und-Demos)
 
 ---
 
@@ -113,6 +147,9 @@ Dieses Projekt dreht die Reihenfolge um:
 | Erweiterungen | Module, Themes, Skins, Entitlements |
 | Agenten | AGENTS.md, CLAUDE.md, Skill-Integration, Dokumentationsworkflow |
 | Governance | Feature-Check, Entscheidungen, Roadmap, Releases |
+| CLI & Validation | Init, Validator, Doctor, Audit, Module Generator, Release Check |
+| Evidence | maschinenlesbare Release-Nachweise mit Ablaufdatum |
+| Referenzen | PHP/MariaDB Architektur und lokales Backoffice-Demo |
 
 ---
 
@@ -132,14 +169,25 @@ Die Foundation beschreibt **Schnittstellen, Prinzipien, Prüfpunkte und Template
 
 ## Schnellstart
 
-### 1. Repository klonen
+### 1. Repository klonen und CLI vorbereiten
 
 ```bash
 git clone https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System.git
 cd Projekt-Plattform-System
+npm install
+npm link
 ```
 
-### 2. Projektprofil kopieren
+Danach steht lokal der Befehl `mgd-platform` zur Verfügung.
+
+### 2. Projekt mit der CLI initialisieren
+
+```bash
+mgd-platform init --preset general --target ../mein-projekt
+cd ../mein-projekt
+```
+
+Alternativ kann das Projektprofil weiterhin manuell kopiert werden:
 
 ```bash
 cp templates/MGD_PLATFORM.example.yml MGD_PLATFORM.yml
@@ -181,7 +229,21 @@ cp templates/AGENTS.md ./AGENTS.md
 cp templates/CLAUDE.md ./CLAUDE.md
 ```
 
-### 4. Erstes Foundation-Audit
+### 4. Foundation automatisch prüfen
+
+```bash
+mgd-platform validate
+mgd-platform doctor
+mgd-platform audit --write
+```
+
+Vor einem Release:
+
+```bash
+mgd-platform release-check
+```
+
+### 5. Optionales Agenten-Audit
 
 Mit installiertem Platform-Skill:
 
@@ -489,11 +551,24 @@ Projekt-Plattform-System/
 ├── CHANGELOG.md
 ├── IMPRESSUM.md
 │
+├── bin/
+│   └── mgd-platform.js
+├── src/
+│   ├── commands/
+│   └── lib/
+├── registry/
+│   └── capabilities.yml
+├── reference/
+│   ├── php-mariadb/
+│   └── backoffice-demo/
 ├── platform/
 │   └── SKILL.md
 │
 ├── schema/
-│   └── mgd-platform.schema.json
+│   ├── mgd-platform.schema.json
+│   ├── module-manifest.schema.json
+│   ├── evidence.schema.json
+│   └── capability-registry.schema.json
 │
 ├── templates/
 │   ├── MGD_PLATFORM.example.yml
@@ -513,7 +588,7 @@ Projekt-Plattform-System/
 
 ## Reifegrad
 
-Aktueller Stand: **Early Foundation / 0.1.x**
+Aktueller Stand: **Early Foundation / 0.2.x**
 
 Vor 1.0 können sich Schemas und Empfehlungen noch ändern. Beiträge aus realen Projekten sind ausdrücklich erwünscht.
 
