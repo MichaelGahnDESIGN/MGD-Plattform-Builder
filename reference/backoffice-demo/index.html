@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MGD Backoffice Reference</title>
+  <style>
+    :root{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color-scheme:dark;background:#0c0d10;color:#f5f5f5}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh}.app{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+    aside{padding:24px;border-right:1px solid #262932;background:#111318}.brand{font-weight:800;font-size:18px;margin-bottom:28px}.brand span{display:block;color:#9ba1ad;font-size:12px;font-weight:500;margin-top:5px}
+    nav button{display:block;width:100%;text-align:left;border:0;background:transparent;color:#cfd3dc;padding:11px 12px;border-radius:8px;margin:3px 0;cursor:pointer}nav button:hover{background:#1c2028;color:white}
+    main{padding:30px;max-width:1400px}.top{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;margin-bottom:30px}.top h1{margin:0 0 8px;font-size:28px}.muted{color:#9198a5}
+    select{background:#171a20;color:white;border:1px solid #303540;border-radius:8px;padding:9px 12px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.card{background:#15181e;border:1px solid #292d36;border-radius:12px;padding:18px}.card h2{font-size:15px;margin:0 0 8px}.number{font-size:30px;font-weight:800;margin-top:14px}.panel{margin-top:22px;background:#15181e;border:1px solid #292d36;border-radius:12px;overflow:hidden}.panel header{padding:17px 20px;border-bottom:1px solid #292d36;font-weight:700}.row{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:12px;padding:14px 20px;border-bottom:1px solid #22262e}.badge{display:inline-block;padding:3px 8px;border-radius:999px;background:#242935;color:#d7dbe3;font-size:12px}.notice{margin-top:24px;padding:15px 17px;border:1px solid #3a3f49;border-radius:10px;color:#b6bdc9;background:#12151a}.hidden{display:none!important}
+    @media(max-width:800px){.app{grid-template-columns:1fr}aside{border-right:0;border-bottom:1px solid #262932}nav{display:flex;gap:6px;overflow:auto}nav button{white-space:nowrap;width:auto}.top{flex-direction:column}.row{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside>
+    <div class="brand">MGD Backoffice<span>Capability-driven reference UI</span></div>
+    <nav>
+      <button data-nav="dashboard">Dashboard</button>
+      <button data-capability="content.read">Content</button>
+      <button data-capability="moderation.case.read">Moderation</button>
+      <button data-capability="support.case.read">Support</button>
+      <button data-capability="privacy.request.manage">Privacy</button>
+      <button data-capability="security.audit.read">Security & Audit</button>
+      <button data-capability="permissions.manage">Permissions</button>
+    </nav>
+  </aside>
+  <main>
+    <div class="top">
+      <div>
+        <h1>Backoffice Dashboard</h1>
+        <div class="muted">Visual reference for roles, capabilities and least privilege.</div>
+      </div>
+      <label>
+        <span class="muted">Preview role</span><br>
+        <select id="role">
+          <option value="admin">Admin</option>
+          <option value="moderator">Moderator</option>
+          <option value="support">Support</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="grid">
+      <section class="card" data-capability="content.read"><h2>Content</h2><div class="muted">Published and draft records</div><div class="number">128</div></section>
+      <section class="card" data-capability="moderation.case.read"><h2>Moderation</h2><div class="muted">Open review cases</div><div class="number">7</div></section>
+      <section class="card" data-capability="support.case.read"><h2>Support</h2><div class="muted">Active support cases</div><div class="number">12</div></section>
+      <section class="card" data-capability="security.audit.read"><h2>Security</h2><div class="muted">Events requiring review</div><div class="number">2</div></section>
+    </div>
+
+    <section class="panel" data-capability="moderation.case.read">
+      <header>Moderation queue</header>
+      <div class="row"><strong>Reported content #1042</strong><span><span class="badge">medium</span></span><span>open</span></div>
+      <div class="row"><strong>Account report #1038</strong><span><span class="badge">high</span></span><span>review</span></div>
+    </section>
+
+    <section class="panel" data-capability="support.case.read">
+      <header>Support queue</header>
+      <div class="row"><strong>Login problem</strong><span><span class="badge">normal</span></span><span>assigned</span></div>
+      <div class="row"><strong>Data export question</strong><span><span class="badge">privacy</span></span><span>open</span></div>
+    </section>
+
+    <div class="notice">
+      This demo only changes the visible UI. Real authorization must always be enforced server-side through policies and capabilities.
+    </div>
+  </main>
+</div>
+<script>
+const roles={
+  admin:["content.read","content.publish","moderation.case.read","moderation.case.decide","support.case.read","privacy.request.manage","security.audit.read","permissions.manage","accounts.suspend"],
+  moderator:["content.read","moderation.case.read","moderation.case.decide"],
+  support:["content.read","support.case.read"]
+};
+function applyRole(role){
+  const caps=new Set(roles[role]||[]);
+  document.querySelectorAll("[data-capability]").forEach(el=>{
+    el.classList.toggle("hidden",!caps.has(el.dataset.capability));
+  });
+}
+document.getElementById("role").addEventListener("change",e=>applyRole(e.target.value));
+applyRole("admin");
+</script>
+</body>
+</html>
