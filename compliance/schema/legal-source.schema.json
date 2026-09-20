@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Legal Source Record",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "jurisdiction",
+    "category",
+    "source_type",
+    "official_url",
+    "verified_at",
+    "status"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "jurisdiction": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string"
+    },
+    "source_type": {
+      "type": "string"
+    },
+    "authority": {
+      "type": "string"
+    },
+    "official_url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "verified_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "next_review": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "reference",
+        "relevant",
+        "review-required",
+        "not-applicable",
+        "archived"
+      ]
+    },
+    "project_relevance": {
+      "type": "string"
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}
