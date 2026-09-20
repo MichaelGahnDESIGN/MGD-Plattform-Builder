@@ -482,7 +482,7 @@ if ($path === '/service-principals' && $method === 'GET') {
         $scopes = json_decode((string) $row['scopes_json'], true) ?: [];
         $scopeHtml = implode(' ', array_map(static fn ($scope) => Ui::badge((string) $scope), $scopes));
         $state = $row['revoked_at'] ? 'revoked' : (($row['expires_at'] && strtotime((string) $row['expires_at']) < time()) ? 'expired' : 'active');
-        $actions = '';
+        $actions = '<a href="/service-principals/detail?id=' . rawurlencode((string) $row['public_id']) . '">Details</a> ';
 
         if (in_array('service-principals.manage', $actor->capabilities, true) && $state !== 'revoked') {
             $actions = '<form class="inline" method="post" action="/service-principals/rotate">
@@ -511,6 +511,58 @@ if ($path === '/service-principals' && $method === 'GET') {
         '<h1>Agents / API</h1>' . $notice . $form . Ui::table(['Principal', 'Scopes', 'State', 'Last used', 'Actions'], $rows),
         $actor->capabilities
     );
+    exit;
+}
+
+if ($path === '/service-principals/detail' && $method === 'GET') {
+    requireCapability($authorization, $actor, 'service-principals.read');
+
+    $publicId = trim((string) ($_GET['id'] ?? ''));
+    $principal = $servicePrincipals->get($publicId);
+
+    if (!$principal) {
+        http_response_code(404);
+        echo View::page('Agent not found', Ui::notice('Service principal not found.', 'error'), $actor->capabilities);
+        exit;
+    }
+
+    $scopes = json_decode((string) $principal['scopes_json'], true) ?: [];
+    $scopeHtml = implode(' ', array_map(static fn ($scope) => Ui::badge((string) $scope), $scopes));
+    $state = $principal['revoked_at']
+        ? 'revoked'
+        : (($principal['expires_at'] && strtotime((string) $principal['expires_at']) < time()) ? 'expired' : 'active');
+
+    $historyRows = [];
+
+    foreach ($servicePrincipals->history($publicId) as $event) {
+        $metadata = json_decode((string) $event['metadata_json'], true) ?: [];
+        $historyRows[] = [
+            View::e((string) $event['created_at']),
+            Ui::badge((string) $event['event_type']),
+            '<code>' . View::e((string) $event['actor_id']) . '</code>',
+            '<code>' . View::e(json_encode($metadata, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)) . '</code>',
+        ];
+    }
+
+    $body = '<p><a href="/service-principals">← Back to Agents / API</a></p>
+        <h1>' . View::e((string) $principal['name']) . '</h1>
+        <div class="panel">
+            <p><strong>Public ID:</strong> <code>' . View::e((string) $principal['public_id']) . '</code></p>
+            <p><strong>State:</strong> ' . Ui::badge($state) . '</p>
+            <p><strong>Description:</strong> ' . View::e((string) ($principal['description'] ?? '')) . '</p>
+            <p><strong>Scopes:</strong> ' . $scopeHtml . '</p>
+            <p><strong>Created:</strong> ' . View::e((string) $principal['created_at']) . '</p>
+            <p><strong>Expires:</strong> ' . View::e((string) ($principal['expires_at'] ?? 'never')) . '</p>
+            <p><strong>Last rotated:</strong> ' . View::e((string) ($principal['last_rotated_at'] ?? 'never')) . '</p>
+            <p><strong>Last used:</strong> ' . View::e((string) ($principal['last_used_at'] ?? 'never')) . '</p>
+            <p><strong>Created by:</strong> <code>' . View::e((string) ($principal['created_by_actor_id'] ?? 'unknown')) . '</code></p>
+        </div>
+        <h2>History</h2>' .
+        ($historyRows !== []
+            ? Ui::table(['Time', 'Event', 'Actor', 'Metadata'], $historyRows)
+            : Ui::emptyState('No history events recorded.'));
+
+    echo View::page('Agent details', $body, $actor->capabilities);
     exit;
 }
 
