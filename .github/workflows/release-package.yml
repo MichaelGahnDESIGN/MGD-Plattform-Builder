@@ -1,0 +1,84 @@
+name: Release Package
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "VERSION"
+      - "package.json"
+      - "CHANGELOG.md"
+      - ".github/workflows/release-package.yml"
+      - "scripts/create-github-release.mjs"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-package
+  cancel-in-progress: true
+
+jobs:
+  release:
+    runs-on: [self-hosted, Linux]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Read version
+        id: version
+        shell: bash
+        run: |
+          VERSION="$(tr -d '[:space:]' < VERSION)"
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Invalid VERSION: $VERSION" >&2
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          test "$(node -p "require('./package.json').version")" = "$VERSION"
+
+      - name: Build release packages
+        shell: bash
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          rm -rf dist
+          mkdir -p dist
+
+          git archive             --format=zip             --prefix="MGD-Project-Platform-System-v${VERSION}/"             --output="dist/MGD-Project-Platform-System-${VERSION}.zip"             HEAD
+
+          CLI_PACKAGE="$(npm pack --pack-destination dist --silent)"
+          mv "dist/${CLI_PACKAGE}" "dist/MGD-Platform-CLI-${VERSION}.tgz"
+
+          awk -v version="$VERSION" '
+            $0 == "## [" version "] - 2026-09-20" { found=1; print "# MGD Project Platform System v" version; print ""; next }
+            found && /^## \[/ { exit }
+            found { print }
+          ' CHANGELOG.md > dist/RELEASE_NOTES.md
+
+          if ! grep -q "Foundation 0.5" dist/RELEASE_NOTES.md && [[ "$VERSION" == "0.5.0" ]]; then
+            echo "Release notes extraction failed." >&2
+            exit 1
+          fi
+
+          (
+            cd dist
+            sha256sum               "MGD-Project-Platform-System-${VERSION}.zip"               "MGD-Platform-CLI-${VERSION}.tgz"               > SHA256SUMS.txt
+          )
+
+          echo "Release assets:"
+          ls -lh dist
+
+      - name: Publish GitHub release
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+          DIST_DIR: dist
+        run: node scripts/create-github-release.mjs
