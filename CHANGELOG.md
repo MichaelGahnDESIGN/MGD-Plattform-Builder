@@ -32,6 +32,7 @@ The format follows the spirit of Keep a Changelog and semantic versioning.
 - one-time token display in the backoffice
 - jobs-specific read/manage capabilities
 - atomic database job claiming with worker identity
+- stale processing-job recovery after abandoned worker locks
 - exponential retry delays
 - per-job maximum attempt counts
 - dead-letter state and manual retry
@@ -46,6 +47,7 @@ The format follows the spirit of Keep a Changelog and semantic versioning.
 - CLI-created service principals now validate requested scopes against registered capabilities
 - jobs no longer use the security-audit capability as their operational permission
 - revoked service principals cannot be accidentally reactivated by token rotation
+- service-principal create/rotate/revoke actions and their audit events are transactional
 
 ### Security
 
