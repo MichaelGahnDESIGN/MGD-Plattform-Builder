@@ -52,9 +52,14 @@ final class Outbox
             $rows = $this->database->query(
                 "SELECT id, topic, payload_json, attempts, max_attempts
                    FROM jobs_outbox
-                  WHERE status = 'pending'
+                  WHERE (
+                        status = 'pending'
+                        OR (
+                            status = 'processing'
+                            AND locked_at < DATE_SUB(UTC_TIMESTAMP(), INTERVAL 15 MINUTE)
+                        )
+                    )
                     AND available_at <= UTC_TIMESTAMP()
-                    AND (locked_at IS NULL OR locked_at < DATE_SUB(UTC_TIMESTAMP(), INTERVAL 15 MINUTE))
                   ORDER BY id
                   LIMIT {$limit}
                   FOR UPDATE SKIP LOCKED"
