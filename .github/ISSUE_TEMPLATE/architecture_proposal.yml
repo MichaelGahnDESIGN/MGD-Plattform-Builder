@@ -1,0 +1,35 @@
+name: Architecture proposal
+description: Propose a substantial change to foundation architecture or conventions.
+title: "[Architecture] "
+labels: ["architecture"]
+body:
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+    validations:
+      required: true
+  - type: textarea
+    id: decision
+    attributes:
+      label: Proposed decision
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives
+    validations:
+      required: true
+  - type: textarea
+    id: consequences
+    attributes:
+      label: Consequences and migration impact
+    validations:
+      required: true
+  - type: textarea
+    id: safety
+    attributes:
+      label: Privacy and security considerations
+    validations:
+      required: true
