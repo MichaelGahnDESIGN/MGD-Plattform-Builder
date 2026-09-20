@@ -9,13 +9,15 @@ use PDO;
 
 final class SessionAuth
 {
+    private const DUMMY_HASH = '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2uheWG/igi.';
+
     public function __construct(
         private readonly PDO $database,
         private readonly CapabilityRepository $capabilities,
     ) {
     }
 
-    public function attempt(string $email, string $password): bool
+    public function attempt(string $email, string $password): ?Actor
     {
         $statement = $this->database->prepare(
             'SELECT id, public_id, password_hash, status
@@ -27,19 +29,28 @@ final class SessionAuth
         $account = $statement->fetch();
 
         if (!$account || $account['status'] !== 'active') {
-            password_verify($password, '$2y$12$usesomesillystringforsalt$');
-            return false;
+            password_verify($password, self::DUMMY_HASH);
+            return null;
         }
 
         if (!password_verify($password, (string) $account['password_hash'])) {
-            return false;
+            return null;
         }
 
         session_regenerate_id(true);
         $_SESSION['account_id'] = (int) $account['id'];
         Csrf::rotate();
 
-        return true;
+        $update = $this->database->prepare(
+            'UPDATE accounts SET last_login_at = UTC_TIMESTAMP() WHERE id = :id'
+        );
+        $update->execute(['id' => (int) $account['id']]);
+
+        return new Actor(
+            (string) $account['public_id'],
+            'account',
+            $this->capabilities->forAccountId((int) $account['id'])
+        );
     }
 
     public function currentActor(): ?Actor
