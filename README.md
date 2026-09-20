@@ -18,7 +18,25 @@ Privacy, security, compliance, modular backends, administration, moderation, Doc
 
 ---
 
-## Neu in 0.2: CLI, automatische Prüfungen und ausführbare Foundation
+## Neu in 0.3: startbare PHP/MariaDB Referenzplattform
+
+Version 0.3 ergänzt die ausführbare Foundation um eine **wirklich startbare Referenzplattform**. Sie zeigt Login, Sessions, Rollen, Capabilities, serverseitige Autorisierung, Adminbereich, Audit Log, Security Events, AI-Agenten-Zugänge und Hintergrundjobs in einer kleinen PHP/MariaDB Anwendung.
+
+```bash
+cd reference/php-mariadb
+docker compose up -d db
+composer install
+cp config.example.php config.php
+php -S 127.0.0.1:8080 -t public
+```
+
+Die Referenz wird in GitHub Actions gegen eine echte MariaDB getestet.
+
+[PHP/MariaDB Referenz im Wiki](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki/20-PHP-MariaDB-Referenzplattform)
+
+---
+
+## Seit 0.2: CLI, automatische Prüfungen und ausführbare Foundation
 
 Die Foundation besitzt jetzt mit **`mgd-platform` eine eigene CLI**. Damit können Projekte nicht mehr nur anhand der Dokumentation geplant werden. Sie lassen sich initialisieren, validieren, auditieren und vor einem Release automatisch prüfen.
 
@@ -199,7 +217,7 @@ Beispiel:
 project:
   name: "Example Platform"
   type: "community"
-  foundation_version: "0.2.0"
+  foundation_version: "0.3.0"
 
 market:
   countries: ["DE"]
@@ -588,7 +606,7 @@ Projekt-Plattform-System/
 
 ## Reifegrad
 
-Aktueller Stand: **Early Foundation / 0.2.x**
+Aktueller Stand: **Early Foundation / 0.3.x**
 
 Vor 1.0 können sich Schemas und Empfehlungen noch ändern. Beiträge aus realen Projekten sind ausdrücklich erwünscht.
 
