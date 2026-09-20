@@ -195,6 +195,64 @@ If an already applied migration file changes later, the runner stops instead of 
 
 The first migration can also adopt an existing 0.3 baseline database. This allows the reference to move from the old schema-import workflow to proper migrations without requiring a destructive rebuild.
 
+## Translation workflow
+
+The translation registry now uses a review workflow:
+
+```text
+draft
+→ review
+→ published
+       ↘ rejected
+```
+
+A translator can prepare or import drafts without receiving publish authority.
+
+Capabilities are separated:
+
+```text
+translations.read
+translations.manage
+translations.review
+translations.import
+translations.export
+```
+
+### Import translations
+
+Simple import format:
+
+```json
+{
+  "locale": "de",
+  "translations": {
+    "dashboard.welcome": "Willkommen",
+    "dashboard.logout": {
+      "value": "Abmelden",
+      "description": "Dashboard logout action"
+    }
+  }
+}
+```
+
+CLI:
+
+```bash
+php scripts/import-translations.php ./translations-de.json
+```
+
+Imports always become drafts.
+
+### Export translations
+
+```bash
+php scripts/export-translations.php de > translations-de.json
+```
+
+Without a locale argument, all locales are exported.
+
+The exported `mgd-translations-v1` format can be imported again. Re-imported entries intentionally return to draft state and must pass review again.
+
 ## Translation registry
 
 The backoffice contains a translation registry with:
@@ -211,6 +269,21 @@ The service lives in:
 ```text
 src/Core/I18n/TranslationRegistry.php
 ```
+
+## Service-principal history
+
+Each technical identity now has its own lifecycle history in addition to the global audit log.
+
+The history records:
+
+- creation
+- token rotation
+- revocation
+- responsible actor
+- event metadata
+- timestamp
+
+The backoffice links every service principal to a detail page showing its configuration and history.
 
 ## Service principals
 
@@ -232,6 +305,39 @@ curl -H "Authorization: Bearer YOUR_TOKEN" \
 ```
 
 The response contains the technical actor ID, actor type and scopes/capabilities.
+
+## Job idempotency
+
+Repeated requests can safely reuse one business-operation key.
+
+Example:
+
+```php
+$result = $outbox->enqueueIdempotent(
+    'demo.audit-export',
+    'audit-export-order-123',
+    ['requested_by' => $actor->id]
+);
+```
+
+The same topic and key resolve to the same existing job instead of creating a duplicate.
+
+Only the SHA-256 derived idempotency hash is stored.
+
+## Job handler registry
+
+Workers no longer require a growing `switch` statement.
+
+Handlers are registered explicitly:
+
+```php
+$handlers->register(
+    'demo.audit-export',
+    new DemoAuditExportHandler()
+);
+```
+
+This keeps queue infrastructure separate from project-specific job logic.
 
 ## Jobs / Outbox
 
@@ -265,6 +371,16 @@ Security Event
 = what may indicate misuse, attack or abnormal behavior?
 ```
 
+## Migration policy
+
+The reference includes:
+
+```text
+database/MIGRATION-POLICY.md
+```
+
+The policy explains additive migration patterns, rollback limits, forward fixes, review questions and immutable checksums.
+
 ## Automated test
 
 The repository CI starts a real MariaDB service and runs:
@@ -278,7 +394,13 @@ The smoke test imports the schema and verifies:
 - capability resolution
 - account suspension
 - audit-event creation
-- jobs/outbox enqueue and completion
+- translation draft/review/publish workflow
+- translation JSON export and safe re-import
+- service-principal rotation, revocation and history
+- idempotent job enqueueing
+- handler-registry dispatch
+- stale-worker recovery
+- dead-letter retry
 
 ## Security limits of the reference
 
