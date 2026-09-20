@@ -45,3 +45,14 @@ Do not silently keep old interpretations when a law or tariff changes.
 Store full legal texts only when useful and lawful.
 
 In many cases, an official link + relevant sections + project notes is easier to maintain than a stale local copy.
+
+
+## Searchable viewer
+
+A reusable static viewer is included under:
+
+`tools/legal-library/`
+
+It can search and filter a structured legal-source registry without a build process.
+
+The bundled dataset is synthetic. Projects should replace it with reviewed source records and keep review dates current.
