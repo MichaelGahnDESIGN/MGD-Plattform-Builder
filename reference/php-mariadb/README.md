@@ -65,6 +65,31 @@ reference/php-mariadb/
 
 ## Setup
 
+### Option A: MariaDB with Docker
+
+The included development profile starts MariaDB and imports the schema automatically:
+
+```bash
+cd reference/php-mariadb
+docker compose up -d db
+composer install
+cp config.example.php config.php
+```
+
+For this local Docker profile, adjust `config.php` to:
+
+```text
+database: mgd_platform
+user: mgd
+password: mgd-local-only
+host: 127.0.0.1
+port: 3306
+```
+
+The passwords in `compose.yml` are development-only defaults and must not be reused in production.
+
+### Option B: Existing local MariaDB
+
 ```bash
 cd reference/php-mariadb
 composer install
