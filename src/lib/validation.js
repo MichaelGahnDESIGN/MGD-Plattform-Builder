@@ -79,6 +79,54 @@ export function validateProfileRules(profile) {
     warnings.push("Uploads are enabled without security event tracking");
   }
 
+  const backoffice = profile.backoffice || {};
+  const roleViews = Array.isArray(backoffice.role_views) ? backoffice.role_views : [];
+
+  if (backoffice.enabled === true && roleViews.length === 0) {
+    warnings.push("Backoffice is enabled but no role-specific views are declared");
+  }
+
+  const seenViewIds = new Set();
+  for (const view of roleViews) {
+    const id = view && view.id ? String(view.id) : "";
+    if (id && seenViewIds.has(id)) {
+      errors.push("Duplicate backoffice role view id: " + id);
+    }
+    if (id) seenViewIds.add(id);
+
+    const actorTypes = Array.isArray(view && view.actor_types) ? view.actor_types : [];
+    if (actorTypes.includes("ai_agent") || actorTypes.includes("service_principal")) {
+      warnings.push(
+        "Backoffice view " + (id || "<unnamed>") +
+        " targets a non-human actor; prefer scoped APIs and a separate human supervision view"
+      );
+    }
+  }
+
+  if (backoffice.shared_shell === false && roleViews.length > 1) {
+    warnings.push("Multiple role views use separate backoffice shells; consider a shared shell to reduce duplication");
+  }
+
+  if (profile.features && profile.features.moderation) {
+    const hasModerationView = roleViews.some((view) =>
+      (Array.isArray(view.roles) && view.roles.includes("moderator")) ||
+      (Array.isArray(view.navigation_groups) && view.navigation_groups.includes("moderation"))
+    );
+    if (!hasModerationView) {
+      warnings.push("Moderation is enabled but no moderation-focused backoffice view is declared");
+    }
+  }
+
+  if (profile.features && profile.features.support) {
+    const hasSupportView = roleViews.some((view) =>
+      (Array.isArray(view.roles) && view.roles.includes("support")) ||
+      (Array.isArray(view.navigation_groups) && view.navigation_groups.includes("support"))
+    );
+    if (!hasSupportView) {
+      warnings.push("Support is enabled but no support-focused backoffice view is declared");
+    }
+  }
+
   return { errors, warnings };
 }
 
