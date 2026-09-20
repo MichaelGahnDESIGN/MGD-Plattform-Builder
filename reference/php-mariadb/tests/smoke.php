@@ -131,6 +131,17 @@ $created = $principals->create(
     ['content.read', 'support.case.read']
 );
 
+try {
+    $principals->create(
+        $actor,
+        'Invalid Scope Agent',
+        ['not-a-real.capability']
+    );
+    throw new RuntimeException('Unknown service-principal scope was accepted.');
+} catch (InvalidArgumentException) {
+    // Expected.
+}
+
 $principalAuth = new ServicePrincipalAuth($database);
 $serviceActor = $principalAuth->authenticateBearer('Bearer ' . $created['token']);
 
@@ -151,6 +162,19 @@ if (!$lastUsed->fetchColumn()) {
     throw new RuntimeException('Service-principal last_used_at was not recorded.');
 }
 
+$principals->revoke($actor, $created['public_id']);
+
+if ($principalAuth->authenticateBearer('Bearer ' . $created['token']) !== null) {
+    throw new RuntimeException('Revoked service-principal token still authenticates.');
+}
+
+try {
+    $principals->rotate($actor, $created['public_id']);
+    throw new RuntimeException('Revoked service principal was rotated/reactivated.');
+} catch (InvalidArgumentException) {
+    // Expected.
+}
+
 $outbox = new Outbox($database);
 $outbox->enqueue('demo.audit-export', ['test' => true]);
 $jobs = $outbox->claim('smoke-worker', 10);
@@ -161,8 +185,37 @@ if (count($jobs) !== 1 || $jobs[0]['topic'] !== 'demo.audit-export') {
 
 $outbox->markDone((int) $jobs[0]['id']);
 
+$outbox->enqueue('demo.stale-worker', ['test' => true]);
+$staleClaim = $outbox->claim('worker-that-crashes', 10);
+$staleJob = array_values(array_filter(
+    $staleClaim,
+    static fn (array $job): bool => $job['topic'] === 'demo.stale-worker'
+))[0] ?? null;
+
+if (!$staleJob) {
+    throw new RuntimeException('Stale-worker test job was not initially claimed.');
+}
+
+$database->prepare(
+    "UPDATE jobs_outbox
+        SET locked_at = DATE_SUB(UTC_TIMESTAMP(), INTERVAL 20 MINUTE)
+      WHERE id = :id"
+)->execute(['id' => (int) $staleJob['id']]);
+
+$recovered = $outbox->claim('replacement-worker', 10);
+$recoveredJob = array_values(array_filter(
+    $recovered,
+    static fn (array $job): bool => $job['topic'] === 'demo.stale-worker'
+))[0] ?? null;
+
+if (!$recoveredJob) {
+    throw new RuntimeException('Stale processing job was not recovered.');
+}
+
+$outbox->markDone((int) $recoveredJob['id']);
+
 $done = (int) $database->query("SELECT COUNT(*) FROM jobs_outbox WHERE status = 'done'")->fetchColumn();
-if ($done !== 1) {
+if ($done !== 2) {
     throw new RuntimeException('Outbox completion failed.');
 }
 
@@ -197,7 +250,7 @@ if ($pendingAgain < 1) {
 }
 
 $auditCount = (int) $database->query('SELECT COUNT(*) FROM audit_events')->fetchColumn();
-if ($auditCount < 4) {
+if ($auditCount < 5) {
     throw new RuntimeException('Expected audit events were not created.');
 }
 
