@@ -18,7 +18,7 @@ final class Outbox
         array $payload,
         ?\DateTimeImmutable $availableAt = null,
         int $maxAttempts = 5,
-    ): void {
+    ): int {
         $maxAttempts = max(1, min($maxAttempts, 25));
 
         $statement = $this->database->prepare(
@@ -35,6 +35,63 @@ final class Outbox
             'available_at' => ($availableAt ?? new \DateTimeImmutable())->format('Y-m-d H:i:s'),
             'max_attempts' => $maxAttempts,
         ]);
+
+        return (int) $this->database->lastInsertId();
+    }
+
+    public function enqueueIdempotent(
+        string $topic,
+        string $idempotencyKey,
+        array $payload,
+        ?\DateTimeImmutable $availableAt = null,
+        int $maxAttempts = 5,
+    ): array {
+        $topic = trim($topic);
+        $idempotencyKey = trim($idempotencyKey);
+
+        if ($topic === '' || $idempotencyKey === '') {
+            throw new RuntimeException('Topic and idempotency key are required.');
+        }
+
+        $maxAttempts = max(1, min($maxAttempts, 25));
+        $hash = hash('sha256', $topic . "\0" . $idempotencyKey);
+
+        $statement = $this->database->prepare(
+            'INSERT IGNORE INTO jobs_outbox
+                (topic, idempotency_hash, payload_json, status, available_at, attempts, max_attempts, created_at)
+             VALUES
+                (:topic, :idempotency_hash, :payload_json, :status, :available_at, 0, :max_attempts, UTC_TIMESTAMP())'
+        );
+        $statement->execute([
+            'topic' => $topic,
+            'idempotency_hash' => $hash,
+            'payload_json' => json_encode($payload, JSON_THROW_ON_ERROR),
+            'status' => 'pending',
+            'available_at' => ($availableAt ?? new \DateTimeImmutable())->format('Y-m-d H:i:s'),
+            'max_attempts' => $maxAttempts,
+        ]);
+
+        if ($statement->rowCount() === 1) {
+            return [
+                'id' => (int) $this->database->lastInsertId(),
+                'created' => true,
+            ];
+        }
+
+        $existing = $this->database->prepare(
+            'SELECT id FROM jobs_outbox WHERE idempotency_hash = :idempotency_hash LIMIT 1'
+        );
+        $existing->execute(['idempotency_hash' => $hash]);
+        $id = (int) $existing->fetchColumn();
+
+        if ($id < 1) {
+            throw new RuntimeException('Could not resolve idempotent job.');
+        }
+
+        return [
+            'id' => $id,
+            'created' => false,
+        ];
     }
 
     public function claim(string $workerId, int $limit = 10): array
