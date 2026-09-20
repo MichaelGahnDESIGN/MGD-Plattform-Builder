@@ -17,7 +17,24 @@ Privacy, security, compliance, modular backends, administration, moderation, Doc
 
 ---
 
-## New in 0.3: runnable PHP/MariaDB reference platform
+## New in 0.4: migrations, translations, agent management and dead-letter jobs
+
+Version 0.4 adds operational building blocks to the runnable reference platform: checksum-verified database migrations, a draft/published translation registry, backoffice management for service principals, token rotation and revocation, plus job claiming, retries and dead-letter handling.
+
+```bash
+cd reference/php-mariadb
+docker compose up -d db
+composer install
+cp config.example.php config.php
+php scripts/migrate.php
+php -S 127.0.0.1:8080 -t public
+```
+
+More: [0.4 migrations, i18n, agents and jobs](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki/21-Migrationen-I18n-Agenten-und-Jobs)
+
+---
+
+## Since 0.3: runnable PHP/MariaDB reference platform
 
 Version 0.3 adds a **runnable reference platform** with login, sessions, roles, capabilities, server-side authorization, backoffice screens, audit events, security events, AI-agent service principals and a database-backed jobs/outbox pattern.
 
@@ -356,7 +373,7 @@ See [Domain Packs](WIKI/10-DOMAIN-PACKS/README.md).
 
 ## Maturity
 
-Current status: **Early Foundation / 0.3.x**
+Current status: **Early Foundation / 0.4.x**
 
 Schemas and recommendations may change before 1.0. Real-world feedback and contributions are welcome.
 
