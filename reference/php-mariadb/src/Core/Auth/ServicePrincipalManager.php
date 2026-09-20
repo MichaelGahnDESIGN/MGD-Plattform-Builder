@@ -41,6 +41,8 @@ final class ServicePrincipalManager
             }
         }
 
+        $this->assertKnownScopes($scopes);
+
         if ($expiresAt && $expiresAt <= new \DateTimeImmutable()) {
             throw new InvalidArgumentException('Expiration must be in the future.');
         }
