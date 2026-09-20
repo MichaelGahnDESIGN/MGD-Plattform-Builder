@@ -48,6 +48,35 @@ Repository klonen und in die Referenz wechseln:
 ```bash
 git clone https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System.git
 cd Projekt-Plattform-System/reference/php-mariadb
+```
+
+### Einfachster Weg mit Docker
+
+Die enthaltene `compose.yml` startet eine lokale MariaDB und importiert das Beispielschema automatisch:
+
+```bash
+docker compose up -d db
+composer install
+cp config.example.php config.php
+```
+
+Für das lokale Docker-Profil werden in `config.php` diese Entwicklungsdaten verwendet:
+
+```text
+Host: 127.0.0.1
+Port: 3306
+Datenbank: mgd_platform
+Benutzer: mgd
+Passwort: mgd-local-only
+```
+
+Diese Zugangsdaten sind ausschließlich lokale Demo-Defaults und dürfen nicht für Produktion übernommen werden.
+
+### Ohne Docker
+
+Alternativ kann eine vorhandene lokale MariaDB verwendet werden:
+
+```bash
 composer install
 cp config.example.php config.php
 ```
