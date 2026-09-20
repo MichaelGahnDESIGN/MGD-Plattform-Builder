@@ -38,28 +38,49 @@ The roadmap is intentionally capability-oriented. Dates are not promises.
 - capability-aware backoffice navigation
 - server-side authorization
 - account suspension example
-- audit-event dashboard
-- security-event dashboard
-- service-principal authentication for AI agents and automation
+- audit and security-event dashboards
+- service-principal authentication
 - Bearer-token identity endpoint
 - database-backed jobs/outbox
-- CLI worker example
 - local MariaDB Docker Compose profile
-- real MariaDB integration smoke test in GitHub Actions
-- complete public Wiki guide
+- real MariaDB integration smoke test
 
-## 0.4 Reference Expansion
+## 0.4 Operational Building Blocks — completed
+
+- checksum-verified database migration runner
+- migration history and baseline adoption
+- translation registry with draft/published state
+- translation backoffice
+- published translation lookup with optional fallback locale
+- service-principal backoffice
+- validated service-principal scopes
+- one-time token display
+- token rotation and revocation
+- last-used tracking
+- jobs-specific capabilities
+- atomic outbox claim
+- worker identity and locking
+- exponential retry
+- maximum attempt count
+- dead-letter state
+- dead-letter retry from backoffice
+- reusable backoffice UI helpers
+- extended MariaDB integration smoke test
+- complete public 0.4 Wiki documentation
+
+## 0.5 Reference Expansion
 
 - Node/PostgreSQL reference
-- translation registry
-- database migration runner
-- reusable backoffice components
-- richer jobs/outbox handlers and dead-letter pattern
-- service-principal management UI
-- generic audit/security event components
+- translation import/export
+- translation review workflow
+- migration rollback strategy examples
+- idempotency keys for jobs
+- richer job-handler registry
+- service-principal detail/history view
+- stronger reusable backoffice components
 - Docker staging example with app container
 
-## 0.5 Compliance Tooling
+## 0.6 Compliance Tooling
 
 - machine-readable legal-source index
 - review-date reminders
@@ -69,7 +90,7 @@ The roadmap is intentionally capability-oriented. Dates are not promises.
 - release compliance checklist
 - evidence dashboard
 
-## 0.6 Agent Ecosystem
+## 0.7 Agent Ecosystem
 
 - richer Claude/Codex commands
 - guided project bootstrap assistant
