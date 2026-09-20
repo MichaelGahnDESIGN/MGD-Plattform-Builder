@@ -9,11 +9,51 @@ The format follows the spirit of Keep a Changelog and semantic versioning.
 ### Planned
 
 - Node/PostgreSQL reference implementation
-- translation registry
-- database migration runner
-- reusable backoffice components
+- translation import/export and review workflow
+- migration rollback strategy examples
+- job idempotency patterns
 - richer compliance automation
 - richer agent integration
+
+## [0.4.0] - 2026-09-20
+
+### Added
+
+- checksum-aware MariaDB migration runner
+- `schema_migrations` history with immutable migration checks
+- adoption path for existing 0.3 baseline databases
+- translation-key registry
+- locale-specific draft and published translations
+- translation backoffice and audit events
+- service-principal management backoffice
+- registered-scope validation for service principals
+- service-principal token rotation and revocation
+- service-principal last-used tracking
+- one-time token display in the backoffice
+- jobs-specific read/manage capabilities
+- atomic database job claiming with worker identity
+- exponential retry delays
+- per-job maximum attempt counts
+- dead-letter state and manual retry
+- reusable backoffice UI helpers for tables, badges and notices
+- extended integration tests covering migrations, translations, service principals and dead letters
+- full public Wiki guide for 0.4
+
+### Changed
+
+- new reference installations now use `php scripts/migrate.php`
+- Docker MariaDB setup no longer auto-imports a mutable schema snapshot
+- CLI-created service principals now validate requested scopes against registered capabilities
+- jobs no longer use the security-audit capability as their operational permission
+- revoked service principals cannot be accidentally reactivated by token rotation
+
+### Security
+
+- migration checksums detect modified historical migrations
+- arbitrary service-principal scope names are rejected
+- expired or revoked service principals cannot rotate tokens
+- token usage updates `last_used_at`
+- dead-letter failures remain visible instead of disappearing from the worker loop
 
 ## [0.3.0] - 2026-09-20
 
