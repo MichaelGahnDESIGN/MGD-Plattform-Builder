@@ -325,7 +325,7 @@
     },
     "backoffice": {
       "type": "object",
-      "description": "Project-specific internal backoffice shell and role-oriented UX views. Views never replace server-side authorization.",
+      "description": "Internal backoffice shell and role-oriented UX views. Views never replace server-side authorization.",
       "properties": {
         "enabled": {
           "type": "boolean",
