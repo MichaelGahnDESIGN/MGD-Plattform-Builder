@@ -52,12 +52,13 @@ cd Projekt-Plattform-System/reference/php-mariadb
 
 ### Einfachster Weg mit Docker
 
-Die enthaltene `compose.yml` startet eine lokale MariaDB und importiert das Beispielschema automatisch:
+Die enthaltene `compose.yml` startet eine lokale MariaDB. Das Schema wird anschließend über die versionierten Migrationen aufgebaut:
 
 ```bash
 docker compose up -d db
 composer install
 cp config.example.php config.php
+php scripts/migrate.php
 ```
 
 Für das lokale Docker-Profil werden in `config.php` diese Entwicklungsdaten verwendet:
@@ -83,13 +84,11 @@ cp config.example.php config.php
 
 Danach werden in `config.php` die Daten der lokalen Entwicklungsdatenbank eingetragen.
 
-Das Datenbankschema befindet sich unter:
+Die laufende Datenbankstruktur wird ab 0.4 über `database/migrations/` verwaltet.
 
-```text
-database/schema.sql
-```
+`database/schema.sql` bleibt als lesbare Baseline-Referenz erhalten. Für neue Installationen und Updates ist `php scripts/migrate.php` der vorgesehene Weg.
 
-Die Datei enthält Tabellen und Beispielrollen für Accounts, Rollen, Capabilities, Service Principals, Audit Events, Security Events und Jobs.
+Die Details zu Migrationen, Translation Registry, Agentenverwaltung und Dead Letter Jobs stehen unter [[21-Migrationen-I18n-Agenten-und-Jobs]].
 
 ## Ersten Administrator anlegen
 
@@ -127,6 +126,8 @@ Der Admin sieht beispielsweise:
 ```text
 Dashboard
 Accounts
+Translations
+Agents / API
 Audit
 Security
 Jobs
@@ -312,8 +313,8 @@ Für ein öffentliches Produkt wären je nach Projekt zusätzlich nötig:
 * HTTPS-Konfiguration
 * produktive Session-Infrastruktur
 * Monitoring und Alerts
-* Datenbankmigrationen
-* Queue-Concurrency
+* produktionsspezifische Rollback- und Migration-Reviews
+* weitergehende Queue-Idempotenz und Concurrency-Kontrollen
 * weitere Eingabevalidierung
 * projektspezifisches Threat Modeling
 * Security Review
@@ -340,4 +341,4 @@ Capability prüfen
 
 Dadurch bekommen Menschen und Coding-Agenten ein konkretes Muster, ohne dass das gesamte MGD Project Platform System zu einem PHP-Framework wird.
 
-Weiter: [[18-CLI-Validator-und-Automatisierung]] · [[19-Referenzimplementierungen-und-Demos]] · [[05-Rollen-Berechtigungen-und-Backoffice]]
+Weiter: [[21-Migrationen-I18n-Agenten-und-Jobs]] · [[18-CLI-Validator-und-Automatisierung]] · [[19-Referenzimplementierungen-und-Demos]] · [[05-Rollen-Berechtigungen-und-Backoffice]]
