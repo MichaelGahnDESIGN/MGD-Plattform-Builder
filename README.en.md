@@ -17,7 +17,25 @@ Privacy, security, compliance, modular backends, administration, moderation, Doc
 
 ---
 
-## New in 0.2: CLI, validation and executable foundation
+## New in 0.3: runnable PHP/MariaDB reference platform
+
+Version 0.3 adds a **runnable reference platform** with login, sessions, roles, capabilities, server-side authorization, backoffice screens, audit events, security events, AI-agent service principals and a database-backed jobs/outbox pattern.
+
+```bash
+cd reference/php-mariadb
+docker compose up -d db
+composer install
+cp config.example.php config.php
+php -S 127.0.0.1:8080 -t public
+```
+
+The reference is integration-tested against a real MariaDB instance in GitHub Actions.
+
+[PHP/MariaDB reference Wiki guide](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki/20-PHP-MariaDB-Referenzplattform)
+
+---
+
+## Since 0.2: CLI, validation and executable foundation
 
 The Foundation now includes its own **`mgd-platform` CLI**. Projects can be initialized, validated, audited and checked for release readiness instead of relying on documentation alone.
 
@@ -338,7 +356,7 @@ See [Domain Packs](WIKI/10-DOMAIN-PACKS/README.md).
 
 ## Maturity
 
-Current status: **Early Foundation / 0.2.x**
+Current status: **Early Foundation / 0.3.x**
 
 Schemas and recommendations may change before 1.0. Real-world feedback and contributions are welcome.
 
