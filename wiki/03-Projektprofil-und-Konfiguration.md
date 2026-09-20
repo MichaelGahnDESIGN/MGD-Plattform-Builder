@@ -1,0 +1,72 @@
+# Projektprofil und Konfiguration
+
+Das Herzstück der Adoption ist die Datei `MGD_PLATFORM.yml`. Sie beschreibt ein konkretes Projekt, ohne die Foundation selbst projektspezifisch zu machen.
+
+## Zweck
+
+Das Profil beantwortet zentrale Fragen maschinenlesbar und für Menschen nachvollziehbar. Coding-Agenten können dadurch schneller erkennen, welche Regeln für ein Projekt gelten.
+
+Typische Bereiche sind:
+
+```yaml
+project:
+  name: "Example Platform"
+  type: "community"
+  foundation_version: "0.1.0"
+
+market:
+  countries: ["DE"]
+
+languages:
+  default: "de"
+  enabled: ["de"]
+  prepared: ["en"]
+
+features:
+  accounts: true
+  moderation: true
+  support: true
+  billing: false
+  translations: true
+
+privacy:
+  personal_data: true
+  data_subject_portal: true
+
+security:
+  mfa_privileged: true
+  audit_log: true
+
+infrastructure:
+  docker: true
+  staging: "local"
+  git_source: "github"
+
+release_gates:
+  - "restore-tested"
+  - "permission-review-complete"
+```
+
+## Welche Informationen gehören hinein?
+
+Das Projektprofil soll Projekttyp, Zielmärkte, Sprachen, relevante Features, Datenschutzanforderungen, Security-Baseline, Infrastruktur, Staging, Backupmodell, Repository-Strategie, AI-Agenten-Nutzung und Release-Gates beschreiben.
+
+## Was gehört nicht hinein?
+
+Keine Passwörter, API-Keys, Tokens, personenbezogenen Produktionsdaten, private Serverzugänge oder vertrauliche Kundeninformationen.
+
+## Schema
+
+Das Repository enthält ein JSON Schema unter:
+
+`schema/mgd-platform.schema.json`
+
+Damit kann das Projektprofil automatisiert validiert werden.
+
+## Source of Truth
+
+Das Profil beschreibt den beabsichtigten Zustand. Die Implementierung, Architektur-Dokumentation und tatsächliche Produktionskonfiguration müssen dazu passen. Abweichungen sollen nicht stillschweigend bestehen bleiben.
+
+Wenn eine Änderung am Produkt das Profil beeinflusst, wird das Profil im selben Change aktualisiert.
+
+Weiter: [[04-Architektur]] · [[14-Governance-Dokumentation-und-Releases]]
