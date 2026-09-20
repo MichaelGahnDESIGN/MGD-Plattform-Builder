@@ -41,6 +41,10 @@ final class ServicePrincipalManager
             }
         }
 
+        if ($expiresAt && $expiresAt <= new \DateTimeImmutable()) {
+            throw new InvalidArgumentException('Expiration must be in the future.');
+        }
+
         $publicId = Id::uuidV4();
         $token = 'mgd_' . bin2hex(random_bytes(32));
 
@@ -81,9 +85,10 @@ final class ServicePrincipalManager
         $statement = $this->database->prepare(
             'UPDATE service_principals
                 SET token_hash = :token_hash,
-                    last_rotated_at = UTC_TIMESTAMP(),
-                    revoked_at = NULL
-              WHERE public_id = :public_id'
+                    last_rotated_at = UTC_TIMESTAMP()
+              WHERE public_id = :public_id
+                AND revoked_at IS NULL
+                AND (expires_at IS NULL OR expires_at > UTC_TIMESTAMP())'
         );
         $statement->execute([
             'token_hash' => hash('sha256', $token),
@@ -91,7 +96,7 @@ final class ServicePrincipalManager
         ]);
 
         if ($statement->rowCount() !== 1) {
-            throw new InvalidArgumentException('Service principal not found.');
+            throw new InvalidArgumentException('Active service principal not found.');
         }
 
         $this->audit->record(
