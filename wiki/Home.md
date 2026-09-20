@@ -51,7 +51,7 @@ Sie eignet sich unter anderem für:
 | Erweiterungen | Module, Domain Packs, Themes, Entitlements |
 | Governance | Dokumentation, Feature Governance, Release-Gates |
 | CLI & Automation | Init, Validator, Doctor, Audit, Module Generator, Release-Checks |
-| Referenzen | PHP/MariaDB Beispiel und lokales Backoffice-Demo |
+| Referenzen | startbare PHP/MariaDB Plattform, lokales Backoffice-Demo und reale Integrationstests |
 
 ## Zentrale Idee
 
@@ -69,7 +69,7 @@ Die Foundation versucht nicht, jede Plattform gleich aussehen zu lassen. Sie sor
 
 ## Projektstatus
 
-Die Foundation befindet sich aktuell im **Early Foundation / 0.2.x** Stadium. Mit 0.2 ist die Foundation nicht mehr nur dokumentiert, sondern besitzt eine eigene CLI, automatisierte Validierung, Release-Evidence und CI-Prüfungen. Vor Version 1.0 können sich Schemas und Empfehlungen noch verändern.
+Die Foundation befindet sich aktuell im **Early Foundation / 0.3.x** Stadium. Seit 0.2 besitzt sie eine eigene CLI, automatisierte Validierung, Release-Evidence und CI-Prüfungen. Mit 0.3 kommt eine startbare PHP/MariaDB Referenzplattform hinzu, die zentrale Foundation-Muster praktisch demonstriert und gegen eine echte MariaDB getestet wird. Vor Version 1.0 können sich Schemas und Empfehlungen noch verändern.
 
 Adoptierende Projekte sollten die verwendete Foundation-Version im eigenen `MGD_PLATFORM.yml` dokumentieren.
 
