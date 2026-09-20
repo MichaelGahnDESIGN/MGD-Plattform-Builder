@@ -17,6 +17,7 @@ It is organized so humans and coding agents can enter at different depths withou
 - [Modular Monolith](02-ARCHITECTURE/MODULAR-MONOLITH.md)
 - [Data Architecture](02-ARCHITECTURE/DATA-ARCHITECTURE.md)
 - [Backoffice: CMS + CRM + PIM](02-ARCHITECTURE/BACKOFFICE.md)
+- [Role-based Backoffice Views](02-ARCHITECTURE/ROLE-BASED-BACKOFFICE-VIEWS.md)
 - [Modules and Plugins](02-ARCHITECTURE/MODULES-PLUGINS.md)
 - [Roles, Capabilities and Policies](02-ARCHITECTURE/PERMISSIONS.md)
 - [Files and Storage](02-ARCHITECTURE/FILES-STORAGE.md)
