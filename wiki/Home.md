@@ -17,7 +17,8 @@ Wenn du das System zum ersten Mal siehst, lies in dieser Reihenfolge:
 5. [[05-Rollen-Berechtigungen-und-Backoffice]]
 6. [[07-Datenschutz-und-Compliance]]
 7. [[08-Sicherheit-und-Threat-Model]]
-8. [[11-Betrieb-Staging-Deployment-Backup-und-Monitoring]]
+8. [[18-CLI-Validator-und-Automatisierung]]
+9. [[11-Betrieb-Staging-Deployment-Backup-und-Monitoring]]
 
 Danach kannst du über die Sidebar gezielt in einzelne Themen einsteigen. Auf jeder Wiki-Seite stellt außerdem der globale Footer die wichtigsten Projekt- und Rechtshinweise bereit.
 
@@ -49,6 +50,8 @@ Sie eignet sich unter anderem für:
 | AI-Agenten | Service Principals, Scopes, Agent Workflow |
 | Erweiterungen | Module, Domain Packs, Themes, Entitlements |
 | Governance | Dokumentation, Feature Governance, Release-Gates |
+| CLI & Automation | Init, Validator, Doctor, Audit, Module Generator, Release-Checks |
+| Referenzen | PHP/MariaDB Beispiel und lokales Backoffice-Demo |
 
 ## Zentrale Idee
 
@@ -66,7 +69,7 @@ Die Foundation versucht nicht, jede Plattform gleich aussehen zu lassen. Sie sor
 
 ## Projektstatus
 
-Die Foundation befindet sich aktuell im **Early Foundation / 0.1.x** Stadium. Vor Version 1.0 können sich Schemas und Empfehlungen noch verändern.
+Die Foundation befindet sich aktuell im **Early Foundation / 0.2.x** Stadium. Mit 0.2 ist die Foundation nicht mehr nur dokumentiert, sondern besitzt eine eigene CLI, automatisierte Validierung, Release-Evidence und CI-Prüfungen. Vor Version 1.0 können sich Schemas und Empfehlungen noch verändern.
 
 Adoptierende Projekte sollten die verwendete Foundation-Version im eigenen `MGD_PLATFORM.yml` dokumentieren.
 
@@ -83,6 +86,12 @@ Sie ist eine technische und organisatorische Grundlage, die hilft, relevante The
 
 **Du willst ein Projekt starten?**  
 → [[02-Schnellstart]]
+
+**Du willst die CLI verwenden oder dein Projekt automatisch prüfen?**  
+→ [[18-CLI-Validator-und-Automatisierung]]
+
+**Du willst funktionierende Architekturbeispiele sehen?**  
+→ [[19-Referenzimplementierungen-und-Demos]]
 
 **Du willst ein bestehendes Projekt migrieren?**  
 → [[13-Migration-bestehender-Projekte]]
