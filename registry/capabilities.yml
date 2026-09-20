@@ -1,0 +1,58 @@
+version: "0.1.0"
+
+conventions:
+  format: "<domain>.<resource>.<action>"
+  notes:
+    - "Use lowercase dot-separated identifiers."
+    - "Capabilities authorize actions. Roles only bundle capabilities."
+    - "High-risk capabilities should normally generate audit events."
+
+capabilities:
+  content.read:
+    group: content
+    risk: low
+    audit: false
+
+  content.publish:
+    group: content
+    risk: medium
+    audit: true
+
+  moderation.case.read:
+    group: moderation
+    risk: medium
+    audit: false
+
+  moderation.case.decide:
+    group: moderation
+    risk: high
+    audit: true
+    reauthentication: false
+
+  support.case.read:
+    group: support
+    risk: medium
+    audit: true
+
+  privacy.request.manage:
+    group: privacy
+    risk: high
+    audit: true
+    reauthentication: true
+
+  translations.publish:
+    group: translations
+    risk: medium
+    audit: true
+
+  security.audit.read:
+    group: security
+    risk: high
+    audit: true
+    reauthentication: true
+
+  permissions.manage:
+    group: security
+    risk: critical
+    audit: true
+    reauthentication: true
