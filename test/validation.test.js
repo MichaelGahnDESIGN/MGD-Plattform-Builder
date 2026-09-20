@@ -43,3 +43,45 @@ test("sensitive data warns when privileged MFA is disabled", () => {
   const result = validateProfileRules(profile);
   assert.ok(result.warnings.some((item) => item.includes("MFA")));
 });
+
+
+test("duplicate backoffice role view ids are rejected", () => {
+  const profile = baseProfile();
+  profile.backoffice = {
+    enabled: true,
+    shared_shell: true,
+    role_views: [
+      { id: "admin", label: "Admin" },
+      { id: "admin", label: "Another Admin" }
+    ]
+  };
+  const result = validateProfileRules(profile);
+  assert.ok(result.errors.some((item) => item.includes("Duplicate backoffice role view id")));
+});
+
+test("moderation feature warns without moderation-focused view", () => {
+  const profile = baseProfile();
+  profile.features.moderation = true;
+  profile.backoffice = {
+    enabled: true,
+    shared_shell: true,
+    role_views: [
+      { id: "admin", label: "Admin", roles: ["admin"], navigation_groups: ["system"] }
+    ]
+  };
+  const result = validateProfileRules(profile);
+  assert.ok(result.warnings.some((item) => item.includes("Moderation is enabled")));
+});
+
+test("non-human backoffice actors produce a supervision warning", () => {
+  const profile = baseProfile();
+  profile.backoffice = {
+    enabled: true,
+    shared_shell: true,
+    role_views: [
+      { id: "ai", label: "AI", actor_types: ["ai_agent"] }
+    ]
+  };
+  const result = validateProfileRules(profile);
+  assert.ok(result.warnings.some((item) => item.includes("scoped APIs")));
+});
