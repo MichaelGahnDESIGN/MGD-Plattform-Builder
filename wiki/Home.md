@@ -19,7 +19,7 @@ Wenn du das System zum ersten Mal siehst, lies in dieser Reihenfolge:
 7. [[08-Sicherheit-und-Threat-Model]]
 8. [[11-Betrieb-Staging-Deployment-Backup-und-Monitoring]]
 
-Danach kannst du über die Sidebar gezielt in einzelne Themen einsteigen.
+Danach kannst du über die Sidebar gezielt in einzelne Themen einsteigen. Auf jeder Wiki-Seite stellt außerdem der globale Footer die wichtigsten Projekt- und Rechtshinweise bereit.
 
 ## Für wen ist die Foundation gedacht?
 
