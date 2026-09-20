@@ -400,4 +400,4 @@ Nach 0.4 sind besonders interessant:
 * Translation Review Workflow
 * stärkere wiederverwendbare Backoffice Komponenten
 
-Weiter: [[20-PHP-MariaDB-Referenzplattform]] · [[18-CLI-Validator-und-Automatisierung]] · [[11-Betrieb-Staging-Deployment-Backup-und-Monitoring]]
+Weiter: [[22-Translation-Review-Agenten-Historie-und-Idempotente-Jobs]] · [[20-PHP-MariaDB-Referenzplattform]] · [[18-CLI-Validator-und-Automatisierung]] · [[11-Betrieb-Staging-Deployment-Backup-und-Monitoring]]
