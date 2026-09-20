@@ -324,5 +324,156 @@
       "uniqueItems": true
     }
   },
-  "additionalProperties": true
+  "additionalProperties": true,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "features": {
+            "properties": {
+              "ai_agents": {
+                "const": true
+              }
+            },
+            "required": [
+              "ai_agents"
+            ]
+          }
+        },
+        "required": [
+          "features"
+        ]
+      },
+      "then": {
+        "required": [
+          "agents"
+        ],
+        "properties": {
+          "agents": {
+            "required": [
+              "enabled"
+            ],
+            "properties": {
+              "enabled": {
+                "const": true
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "features": {
+            "properties": {
+              "billing": {
+                "const": true
+              }
+            },
+            "required": [
+              "billing"
+            ]
+          }
+        },
+        "required": [
+          "features"
+        ]
+      },
+      "then": {
+        "required": [
+          "security"
+        ],
+        "properties": {
+          "security": {
+            "required": [
+              "audit_log"
+            ],
+            "properties": {
+              "audit_log": {
+                "const": true
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "privacy": {
+            "properties": {
+              "sensitive_data": {
+                "const": true
+              }
+            },
+            "required": [
+              "sensitive_data"
+            ]
+          }
+        },
+        "required": [
+          "privacy"
+        ]
+      },
+      "then": {
+        "required": [
+          "security"
+        ],
+        "properties": {
+          "security": {
+            "required": [
+              "audit_log",
+              "mfa_privileged",
+              "incident_response"
+            ],
+            "properties": {
+              "audit_log": {
+                "const": true
+              },
+              "mfa_privileged": {
+                "const": true
+              },
+              "incident_response": {
+                "const": true
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "privacy": {
+            "properties": {
+              "personal_data": {
+                "const": true
+              }
+            },
+            "required": [
+              "personal_data"
+            ]
+          }
+        },
+        "required": [
+          "privacy"
+        ]
+      },
+      "then": {
+        "properties": {
+          "privacy": {
+            "required": [
+              "retention_policy"
+            ],
+            "properties": {
+              "retention_policy": {
+                "const": true
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
 }
