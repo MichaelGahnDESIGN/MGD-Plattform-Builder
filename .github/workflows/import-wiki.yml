@@ -43,3 +43,5 @@ jobs:
             git commit -m "docs: import existing GitHub wiki"
             git push
           fi
+
+# bootstrap trigger after workflow creation
