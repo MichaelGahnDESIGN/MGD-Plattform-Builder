@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/schema/evidence.schema.json",
+  "title": "MGD Release Evidence Record",
+  "type": "object",
+  "required": ["gate", "status", "checked_at"],
+  "properties": {
+    "gate": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{1,63}$"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pass", "fail", "pending"]
+    },
+    "checked_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expires_at": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "source": {
+      "type": ["string", "null"]
+    },
+    "reviewer": {
+      "type": ["string", "null"]
+    },
+    "notes": {
+      "type": ["string", "null"]
+    }
+  },
+  "additionalProperties": false
+}
