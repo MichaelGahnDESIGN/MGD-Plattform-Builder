@@ -26,7 +26,7 @@ final class ServicePrincipalAuth
         $tokenHash = hash('sha256', $token);
 
         $statement = $this->database->prepare(
-            'SELECT public_id, scopes_json
+            'SELECT id, public_id, scopes_json
                FROM service_principals
               WHERE token_hash = :token_hash
                 AND revoked_at IS NULL
@@ -39,6 +39,11 @@ final class ServicePrincipalAuth
         if (!$principal) {
             return null;
         }
+
+        $touch = $this->database->prepare(
+            'UPDATE service_principals SET last_used_at = UTC_TIMESTAMP() WHERE id = :id'
+        );
+        $touch->execute(['id' => (int) $principal['id']]);
 
         $scopes = json_decode((string) $principal['scopes_json'], true, flags: JSON_THROW_ON_ERROR);
 
