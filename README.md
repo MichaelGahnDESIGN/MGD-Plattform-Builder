@@ -573,6 +573,16 @@ Mehr: [Agent Workflow](WIKI/07-AGENTS/AGENT-WORKFLOW.md)
 
 ---
 
+## Codex Workstation Installer
+
+Für die Einrichtung eines neuen Entwicklungs-Macs gibt es einen inventarbasierten Installer-Prompt. Er ermittelt eigene MGD Skills, referenzierte Tools und wichtige externe Skills aus GitHub, dieser Foundation und der vorhandenen lokalen Codex-/Claude-Konfiguration.
+
+[Codex Workstation Installer](tools/CODEX-WORKSTATION-INSTALLER.md)
+
+Er berücksichtigt unter anderem Graphiphy, Godot, WordPress, Divi 5, Elementor, WooCommerce, Shopware 6, JTL Shop 5, Shopify sowie PHP/Symfony/MariaDB.
+
+---
+
 ## Zusammenspiel mit den MGD Skills
 
 Die Foundation dupliziert vorhandene Skills nicht, sondern kann sie orchestrieren.
