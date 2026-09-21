@@ -1,0 +1,29 @@
+# Generic Codex Workstation Profile Example
+
+profile:
+  name: example-workstation
+
+skill_groups:
+  general: true
+  ui_ux: true
+  web_development: false
+  wordpress: false
+  ecommerce: false
+  php_backend: false
+  flutter: false
+  godot: true
+  game_development: true
+
+sources:
+  github_accounts: []
+  foundations: []
+
+external_required: []
+
+discovery:
+  scan_existing_local_environment: true
+
+safety:
+  allow_paid_actions: false
+  allow_unreviewed_sudo: false
+  overwrite_dirty_repositories: false
