@@ -573,6 +573,23 @@ Mehr: [Agent Workflow](WIKI/07-AGENTS/AGENT-WORKFLOW.md)
 
 ---
 
+## Codex Workstation Installer
+
+Die Foundation enthält einen allgemeinen, profilbasierten Installer-Prompt für neue ChatGPT-Codex-Entwicklungsrechner:
+
+[Codex Workstation Installer](tools/CODEX-WORKSTATION-INSTALLER.md)
+
+Er ist nicht an Michael oder ein bestimmtes Projekt gebunden. Nutzer können kombinierbare Presets für UI/UX, WordPress, E-Commerce, PHP-Backend, Flutter, Godot, Game Development und weitere Bereiche verwenden.
+
+Mitgeliefert werden:
+
+- [generisches Profil-Beispiel](templates/workstation/workstation.example.yml)
+- [optionales MGD Workstation Preset](templates/workstation/mgd-workstation.yml)
+
+Das MGD Preset berücksichtigt ausdrücklich ui-ux-pro-max, Graphiphy, frontend-design sowie Flutter/Dart- und Godot-Toolchains und inventarisiert zusätzlich alle passenden MGD Skills dynamisch über GitHub.
+
+---
+
 ## Zusammenspiel mit den MGD Skills
 
 Die Foundation dupliziert vorhandene Skills nicht, sondern kann sie orchestrieren.
