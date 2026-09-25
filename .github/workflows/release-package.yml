@@ -54,7 +54,7 @@ jobs:
           rm -rf dist
           mkdir -p dist
 
-          git archive             --format=zip             --prefix="MGD-Project-Platform-System-v${VERSION}/"             --output="dist/MGD-Project-Platform-System-${VERSION}.zip"             HEAD
+          git archive             --format=zip             --prefix="MGD-Plattform-Builder-v${VERSION}/"             --output="dist/MGD-Plattform-Builder-${VERSION}.zip"             HEAD
 
           CLI_PACKAGE="$(npm pack --pack-destination dist --silent)"
           mv "dist/${CLI_PACKAGE}" "dist/MGD-Platform-CLI-${VERSION}.tgz"
@@ -73,7 +73,7 @@ jobs:
 
           (
             cd dist
-            sha256sum               "MGD-Project-Platform-System-${VERSION}.zip"               "MGD-Platform-CLI-${VERSION}.tgz"               > SHA256SUMS.txt
+            sha256sum               "MGD-Plattform-Builder-${VERSION}.zip"               "MGD-Platform-CLI-${VERSION}.tgz"               > SHA256SUMS.txt
           )
 
           echo "Release assets:"
