@@ -60,12 +60,13 @@ jobs:
           mv "dist/${CLI_PACKAGE}" "dist/MGD-Platform-CLI-${VERSION}.tgz"
 
           awk -v version="$VERSION" '
-            $0 == "## [" version "] - 2026-09-20" { found=1; print "# MGD-Plattform-Builder v" version; print ""; next }
+            BEGIN { prefix = "## [" version }
+            !found && substr($0, 1, length(prefix)) == prefix && (substr($0, length(prefix) + 1, 1) == "]" || substr($0, length(prefix) + 1, 1) == " ") { found=1; print "# MGD-Plattform-Builder v" version; print ""; next }
             found && /^## \[/ { exit }
             found { print }
           ' CHANGELOG.md > dist/RELEASE_NOTES.md
 
-          if ! grep -q "Foundation 0.5" dist/RELEASE_NOTES.md && [[ "$VERSION" == "0.5.0" ]]; then
+          if [[ "$(wc -l < dist/RELEASE_NOTES.md)" -lt 4 ]]; then
             echo "Release notes extraction failed." >&2
             exit 1
           fi

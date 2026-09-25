@@ -40,6 +40,7 @@ The format follows the spirit of Keep a Changelog and semantic versioning.
 
 ### Fixed
 
+- review fixes: license host check uses `app.url`; `sodium` and `fileinfo` are required extensions (GD optional); images are rejected instead of silently keeping EXIF data when GD is missing; module `requires.starter` is enforced against `template.json`; GrapesJS respects an explicitly chosen content format; release notes extraction matches versioned headings
 - starter database migrations, the code-editor backup folder and the editor vendor README were excluded by the root `.gitignore` (`*.sql`, `backups/`, `vendor/`) and never reached the repository; targeted exceptions added
 - CI and wiki/release workflows run on GitHub-hosted runners (`ubuntu-latest`); no self-hosted runner was registered, so required checks never ran
 - local PHP dev server (`php -S … public/index.php`) now serves CSS, JS and images of the starter

@@ -196,7 +196,7 @@ final class App
         return $this->licenses ??= new LicenseService(
             new LicenseRepository($this->databases->core()),
             new LicenseKey(),
-            LicenseService::hostFrom($this->config->string('app.base_url'), (string) ($_SERVER['HTTP_HOST'] ?? '')),
+            LicenseService::hostFrom($this->config->string('app.url'), (string) ($_SERVER['HTTP_HOST'] ?? '')),
             $this->config->string('license.whitelabel_key'),
         );
     }

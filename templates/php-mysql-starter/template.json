@@ -1,14 +1,16 @@
 {
   "id": "php-mysql-starter",
   "name": "MGD PHP/MySQL Starter",
-  "version": "0.0.1",
+  "version": "0.6.0",
   "status": "pre-alpha",
   "requirements": {
     "php": ">=8.2",
     "extensions": [
       "pdo_mysql",
       "mbstring",
-      "dom"
+      "dom",
+      "sodium",
+      "fileinfo"
     ],
     "databases": {
       "core": {
@@ -25,6 +27,9 @@
     "deployment": [
       "ftp",
       "ftps"
+    ],
+    "optional_extensions": [
+      "gd"
     ]
   },
   "variants": {

@@ -76,8 +76,35 @@ final class ModuleManager
         return !$module->paid || $this->app->licenses()->moduleGrant($module->id) !== null;
     }
 
+    /**
+     * Version des installierten Starters laut template.json (nicht die Projektversion).
+     */
+    public function starterVersion(): ?string
+    {
+        $file = $this->app->pathOr('template_manifest', 'template.json');
+        $data = is_file($file) ? json_decode((string) file_get_contents($file), true) : null;
+
+        return is_array($data) && is_string($data['version'] ?? null) ? $data['version'] : null;
+    }
+
+    public function isCompatible(ModuleManifest $module): bool
+    {
+        if ($module->requiresStarter === '') {
+            return true;
+        }
+
+        $version = $this->starterVersion();
+
+        return $version !== null && ModuleManifest::satisfies($module->requiresStarter, $version);
+    }
+
     public function enable(ModuleManifest $module, User $user): void
     {
+        if (!$this->isCompatible($module)) {
+            throw new RuntimeException('Das Modul verlangt Starter ' . $module->requiresStarter
+                . ', installiert ist ' . ($this->starterVersion() ?? 'eine unbekannte Version') . '.');
+        }
+
         if (!$this->isLicensed($module)) {
             throw new RuntimeException('Für dieses kostenpflichtige Modul fehlt ein gültiger Lizenzschlüssel.');
         }
@@ -133,7 +160,7 @@ final class ModuleManager
     {
         return array_values(array_filter(
             $this->discover(),
-            fn (ModuleManifest $module): bool => $this->isEnabled($module->id) && $this->isLicensed($module),
+            fn (ModuleManifest $module): bool => $this->isEnabled($module->id) && $this->isLicensed($module) && $this->isCompatible($module),
         ));
     }
 

@@ -82,8 +82,13 @@ final class MediaStore
         @chmod($target, 0644);
 
         try {
-            if ($this->reencodeImages && $info['mime'] !== 'application/pdf') {
-                MediaValidator::reencode($target, $info['mime']);
+            $metadataFormats = ['image/jpeg', 'image/png', 'image/webp'];
+
+            if ($this->reencodeImages && $info['mime'] !== 'application/pdf'
+                && !MediaValidator::reencode($target, $info['mime']) && in_array($info['mime'], $metadataFormats, true)) {
+                // Zusage "ohne Metadaten" nicht still brechen: ohne GD wird das Bild abgelehnt.
+                throw new InvalidArgumentException('Metadaten (z. B. EXIF/GPS) konnten nicht entfernt werden, weil die PHP-Erweiterung GD fehlt. '
+                    . 'Bitte GD aktivieren oder media.reencode_images in config.php bewusst auf false setzen.');
             }
 
             clearstatcache(true, $target);

@@ -34,6 +34,35 @@ final class ModuleManifest
     ) {
     }
 
+    /**
+     * Prüft eine Versionsbedingung wie ">=0.6.0", ">=0.6.0 <1.0.0" oder "0.6.0" gegen eine Version.
+     */
+    public static function satisfies(string $constraint, string $version): bool
+    {
+        $parts = preg_split('/[\s,]+/', trim($constraint), -1, PREG_SPLIT_NO_EMPTY) ?: [];
+
+        if ($parts === [] || preg_match(self::VERSION_PATTERN, $version) !== 1) {
+            return $parts === [];
+        }
+
+        foreach ($parts as $part) {
+            if (preg_match('/^(>=|<=|>|<|==|=)?(\d+\.\d+\.\d+)$/', $part, $match) !== 1) {
+                return false;
+            }
+
+            $operator = match ($match[1]) {
+                '', '=', '==' => '==',
+                default => $match[1],
+            };
+
+            if (!version_compare($version, $match[2], $operator)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public static function fromDirectory(string $directory): self
     {
         $file = $directory . '/module.json';

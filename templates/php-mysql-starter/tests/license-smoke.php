@@ -63,6 +63,9 @@ file_put_contents($moduleDir . '/module.json', json_encode([
     'menu' => [['href' => '/admin/smoke', 'label' => 'Smoke', 'role' => 'editor']],
 ], JSON_THROW_ON_ERROR));
 $manifest = ModuleManifest::fromDirectory($moduleDir);
+check(ModuleManifest::satisfies('>=0.6.0 <1.0.0', '0.6.0') && !ModuleManifest::satisfies('>=0.7.0', '0.6.0')
+    && ModuleManifest::satisfies('0.6.0', '0.6.0') && !ModuleManifest::satisfies('~1', '0.6.0') && ModuleManifest::satisfies('', '0.6.0'),
+    'Modul-Versionsbedingungen werden geprüft');
 check($manifest->paid && $manifest->menu[0]['href'] === '/admin/smoke' && $manifest->migrations !== null, 'Modul-Manifest wird gelesen');
 
 file_put_contents($moduleDir . '/module.json', json_encode(['id' => 'smoke-module', 'name' => 'x', 'version' => '1.0.0', 'entry' => '../../etc/passwd'], JSON_THROW_ON_ERROR));

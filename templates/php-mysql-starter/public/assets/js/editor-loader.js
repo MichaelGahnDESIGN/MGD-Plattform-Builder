@@ -103,15 +103,21 @@
           instance.setStyle(cssField ? cssField.value : '');
         }
       }
+      // Eine bewusst gewählte andere Formatierung (HTML/Markdown) wird respektiert.
+      var formatChosen = false;
+      if (formatField) {
+        formatField.addEventListener('change', function () { formatChosen = true; });
+      }
       form.addEventListener('submit', function () {
         textarea.value = instance.getHtml();
+        var keepGrapes = !formatChosen || (formatField && formatField.value === 'grapesjs');
         if (cssField) {
-          cssField.value = instance.getCss();
+          cssField.value = keepGrapes ? instance.getCss() : cssField.value;
         }
         if (projectField) {
-          projectField.value = JSON.stringify(instance.getProjectData());
+          projectField.value = keepGrapes ? JSON.stringify(instance.getProjectData()) : '';
         }
-        if (formatField) {
+        if (formatField && keepGrapes) {
           formatField.value = 'grapesjs';
         }
       });

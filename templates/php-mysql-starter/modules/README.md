@@ -23,7 +23,7 @@ modules/
   "description": "Kurze Beschreibung",
   "vendor": "Dein Name",
   "license": "free",
-  "requires": { "starter": ">=0.1.0" },
+  "requires": { "starter": ">=0.6.0" },
   "entry": "module.php",
   "migrations": "migrations",
   "menu": [
