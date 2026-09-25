@@ -15,6 +15,7 @@ use MGD\Platform\Core\Jobs\Outbox;
 use MGD\Platform\Core\Permissions\Authorization;
 use MGD\Platform\Core\Permissions\CapabilityRepository;
 use MGD\Platform\Core\Security\SecurityEventLogger;
+use MGD\Platform\Core\Support\Version;
 use MGD\Platform\Modules\Accounts\AccountService;
 
 $container = require dirname(__DIR__) . '/bootstrap.php';
@@ -134,7 +135,7 @@ if ($path === '/login' && $method === 'GET') {
     $token = View::e(Csrf::token());
     $body = '<div class="panel" style="max-width:460px;margin:60px auto">
         <h1>Sign in</h1>
-        <p class="muted">Reference backoffice login</p>
+        <p class="muted">Reference backoffice login · Version ' . View::e(Version::label()) . '</p>
         <form method="post" action="/login">
             <input type="hidden" name="_csrf" value="' . $token . '">
             <label>Email<input type="email" name="email" autocomplete="username" required></label>

@@ -73,7 +73,16 @@ The roadmap is intentionally capability-oriented. Dates are not promises.
 - expanded MariaDB integration smoke tests
 - complete public Wiki documentation for 0.5
 
-## 0.6 Reference Expansion
+
+## 0.5.1 AI-generated CMS — completed
+
+- mandatory features for every project: versioning, release notes, credits, editable legal pages, searchable settings, light/dark, design tokens
+- `version.json` single source of truth and `mgd-platform version`
+- agent briefing (`mgd-platform briefing`) and recommendations incl. MGD-DevOS (`mgd-platform recommend`)
+- `templates/php-mysql-starter` with light and dark variant, FTP deployment and optional private database
+- `mgd-platform template list|check|create`
+
+## 0.6 Reference and CMS Expansion
 
 - Node/PostgreSQL reference
 - stronger reusable backoffice component set
@@ -83,6 +92,11 @@ The roadmap is intentionally capability-oriented. Dates are not promises.
 - domain-level idempotency examples
 - Docker staging example with application container
 - migration rollback examples
+- media library with local image processing
+- navigation/menu editor and multilingual CMS pages
+- visual diff between page revisions
+- starter templates for further stacks (Node/PostgreSQL, static export)
+- automated release-note generation from conventional commits
 
 ## 0.7 Compliance Tooling
 

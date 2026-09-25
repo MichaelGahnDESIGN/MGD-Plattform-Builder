@@ -85,3 +85,21 @@ jobs:
           MGD_TEST_DB_USER: mgd
           MGD_TEST_DB_PASSWORD: mgdpass
         run: php reference/php-mariadb/tests/smoke.php
+
+      - name: Lint PHP/MySQL starter template
+        run: find templates/php-mysql-starter -name "*.php" -print0 | xargs -0 -n1 php -l
+
+      - name: Prepare starter test database
+        run: |
+          php -r '$pdo = new PDO("mysql:host=127.0.0.1;port=3306", "root", "rootpass");
+            $pdo->exec("CREATE DATABASE IF NOT EXISTS mgd_starter_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+            $pdo->exec("GRANT ALL PRIVILEGES ON mgd_starter_test.* TO \"mgd\"@\"%\"");'
+
+      - name: Run PHP/MySQL starter smoke test
+        env:
+          MGD_TEST_DB_HOST: 127.0.0.1
+          MGD_TEST_DB_PORT: 3306
+          MGD_TEST_DB_NAME: mgd_starter_test
+          MGD_TEST_DB_USER: mgd
+          MGD_TEST_DB_PASSWORD: mgdpass
+        run: php templates/php-mysql-starter/tests/smoke.php

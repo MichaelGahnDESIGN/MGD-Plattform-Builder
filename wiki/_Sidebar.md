@@ -6,6 +6,10 @@
 * [[02-Schnellstart]]
 * [[03-Projektprofil-und-Konfiguration]]
 
+**AI-CMS (0.5.1)**
+* [[23-AI-CMS-Pflichtfunktionen]]
+* [[24-Briefing-Templates-und-Empfehlungen]]
+
 **Werkzeuge**
 * [[18-CLI-Validator-und-Automatisierung]]
 * [[19-Referenzimplementierungen-und-Demos]]

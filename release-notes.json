@@ -1,0 +1,35 @@
+{
+  "$schema": "./schema/release-notes.schema.json",
+  "entries": [
+    {
+      "version": "0.5.1",
+      "status": "pre-alpha",
+      "date": "2026-09-25",
+      "audience": ["platform", "backoffice", "editor"],
+      "type": "feature",
+      "title": "Pflichtfunktionen für AI-generierte CMS-Projekte",
+      "items": [
+        "Versionierung mit version.json als Single Source of Truth, Status Pre-Alpha bis Stable und CLI `mgd-platform version`",
+        "Release Notes als Timeline mit Zielgruppen (Frontend sieht nur frontend, Backoffice alles)",
+        "Credits für Personen/Rollen sowie KI-Systeme, Tools, Bibliotheken, Schriften und Icons",
+        "Durchsuchbare und filterbare Einstellungen, Design-Tokens, Light/Dark-Konfiguration, Dateispeicherorte und Code-Editoren",
+        "Editierbare Rechtstexte mit Revisionen, Papierkorb, Export und Import",
+        "Briefing-Interview und Empfehlungen für MGD-DevOS sowie öffentliche MGD Skills und Plugins",
+        "Neuer Ordner templates/php-mysql-starter mit Light- und Dark-Variante"
+      ]
+    },
+    {
+      "version": "0.5.0",
+      "status": "pre-alpha",
+      "date": "2026-09-20",
+      "audience": ["platform", "backoffice"],
+      "type": "feature",
+      "title": "Translation Review, Agenten-Historie und idempotente Jobs",
+      "items": [
+        "Übersetzungen durchlaufen Draft, Review, Published oder Rejected",
+        "Service Principals mit Detailseite und Lebenszyklus-Historie",
+        "Idempotency Keys und Handler Registry für Hintergrundjobs"
+      ]
+    }
+  ]
+}

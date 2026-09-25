@@ -1,0 +1,191 @@
+# Public MGD skills, tools and plugins the briefing agent may recommend.
+# Matching: an entry is recommended when `always` is true or at least one
+# condition matches (project type, enabled feature, experience topic, stack
+# keyword or description keyword). Recommendations are suggestions only;
+# the user decides, and accepted ones are stored in briefing.accepted_recommendations.
+version: 1
+owner: "https://github.com/MichaelGahnDESIGN"
+recommendations:
+  - id: "mgd-devos"
+    name: "MGD-DevOS"
+    kind: "tool"
+    url: "https://github.com/MichaelGahnDESIGN/MGD-DevOS"
+    license: "PolyForm Noncommercial"
+    summary: "Lokale Desktop-Projektzentrale (Flutter) mit Projekt-Dashboards in Tabs, Agentic Control Panel und Projektmanager-Skill (/projektstart, /dashboard)."
+    reason: "Sinnvoll, sobald mehrere Projekte, Agenten oder Dashboards parallel betreut werden oder der Projektstart geführt erfolgen soll."
+    when:
+      features: ["ai_agents"]
+      experience: ["updater"]
+      keywords: ["dashboard", "mehrere projekte", "multi-project", "agent", "projektzentrale", "desktop"]
+  - id: "mgd-dev-skill"
+    name: "MGD DEV Skill"
+    kind: "skill"
+    url: "https://github.com/MichaelGahnDESIGN/MGD_DEV_SKILL"
+    summary: "Release, Sync, Backup, Cleanup, Tests und Wissensdokumentation."
+    reason: "Hält Versionsnummern, Changelog/Release Notes, Staging und Live synchron."
+    when:
+      always: true
+  - id: "mgd-todo-skill"
+    name: "MGD Todo Skill"
+    kind: "skill"
+    url: "https://github.com/MichaelGahnDESIGN/MGD_Todo_SKILL"
+    summary: "Sortierbare, durchsuchbare TODO.html im eigenen Repo."
+    reason: "Offene Briefing-Fragen und Pflichtfunktionen als Aufgaben nachverfolgen."
+    when:
+      always: true
+  - id: "mgd-living-documentation"
+    name: "MGD Living Documentation"
+    kind: "skill"
+    url: "https://github.com/MichaelGahnDESIGN/MGD_Living-Documentation"
+    summary: "Versionierte, belegbare Projektdokumentation (Ist-Zustand, Entscheidungen, Risiken)."
+    reason: "Dokumentiert Entscheidungen aus dem Briefing nachvollziehbar."
+    when:
+      always: true
+  - id: "fragenkatalog-skill"
+    name: "Fragenkatalog Skill"
+    kind: "skill"
+    url: "https://github.com/MichaelGahnDESIGN/Fragenkatalog-Skill"
+    summary: "Erzeugt einen durchsuchbaren Fragenkatalog mit KI-Antworten und Entscheidungsfeld."
+    reason: "Vertieft das Briefing für Konzept- und Designfragen (Spiele, Apps, Websites)."
+    when:
+      project_types: ["game", "creator", "community", "custom"]
+      keywords: ["konzept", "spiel", "game", "design", "idee"]
+  - id: "mgd-ci-designmanual"
+    name: "MGD CI Designmanual / CI BUILDER"
+    kind: "tool"
+    url: "https://github.com/MichaelGahnDESIGN/MGD_CI-Designmanual"
+    summary: "Designmanual für Logo, Fonts, Farben, UI/UX, Do's und Don'ts."
+    reason: "Liefert die Farben und Fonts für die Design-Einstellungen (primary, secondary, ...)."
+    when:
+      features: ["themes"]
+      keywords: ["marke", "brand", "ci", "corporate", "design", "logo"]
+  - id: "mgd-software-updater-skill"
+    name: "MGD Software Updater Skill"
+    kind: "skill"
+    url: "https://github.com/MichaelGahnDESIGN/MGD_Software-Updater_SKILL"
+    summary: "Update-Systeme planen und implementieren, mit Reifegraden und Rollback."
+    reason: "Empfohlen, wenn im Briefing ein Updater gewünscht ist."
+    when:
+      experience: ["updater"]
+      keywords: ["updater", "update", "desktop", "installer", "launcher"]
+  - id: "mgd-ai-project-updater-skill"
+    name: "MGD AI Project Updater Skill"
+    kind: "skill"
+    url: "https://github.com/MichaelGahnDESIGN/MGD_AI-Project-Updater_SKILL"
+    summary: "Sichere lokale Staging-, Docker- und Update-Workflows mit KI-Agenten."
+    reason: "Wenn Staging oder Docker genutzt werden, bevor Live aktualisiert wird."
+    when:
+      staging: ["local", "nas", "cloud", "managed"]
+  - id: "mgd-backup-skill"
+    name: "MGD Backup Skill"
+    kind: "skill"
+    url: "https://github.com/MichaelGahnDESIGN/MGD_Backup_SKILL"
+    summary: "Backups lokal, NAS oder Cloud mit Secrets-Filterung und Verifikation."
+    reason: "Backup vor Migrationen, Deployments und Code-Editor-Änderungen."
+    when:
+      always: true
+  - id: "mgd-autopilot-skill"
+    name: "MGD Autopilot Skill"
+    kind: "skill"
+    url: "https://github.com/MichaelGahnDESIGN/MGD_Autopilot_SKILL"
+    summary: "Projektziele sicher unbeaufsichtigt abarbeiten, mit Vertrag und Validierung."
+    reason: "Wenn Agenten größere Pakete autonom umsetzen sollen."
+    when:
+      features: ["ai_agents"]
+  - id: "mgd-projectclean-skill"
+    name: "MGD ProjectClean Skill"
+    kind: "skill"
+    url: "https://github.com/MichaelGahnDESIGN/MGD_ProjectClean_SKILL"
+    summary: "Abschluss: Version erhöhen, testen, committen, Doku aktualisieren, aufräumen."
+    reason: "Passt zur Versionierungspflicht: jede Auslieferung erhöht Version und Release Notes."
+    when:
+      always: true
+  - id: "mgd-ai-thread"
+    name: "MGD AI Thread"
+    kind: "skill"
+    url: "https://github.com/MichaelGahnDESIGN/MGD_AI-Thread"
+    summary: "Ehrliche Übergabe, bevor das Kontextfenster voll ist."
+    reason: "Für lange Agentensitzungen am CMS."
+    when:
+      features: ["ai_agents"]
+  - id: "mgd-ai-playtest-skill"
+    name: "MGD AI PlayTest Skill"
+    kind: "skill"
+    url: "https://github.com/MichaelGahnDESIGN/MGD_AI-PlayTest_SKILL"
+    summary: "Rollenbasierte Play- und Produkttests der von Agenten gebauten Funktionen."
+    reason: "Testet Login, Einstellungen, Rechtstexte und Rollenansichten wie echte Nutzer."
+    when:
+      project_types: ["game", "community", "creator", "ecommerce", "general"]
+  - id: "mgd-bugreport-skill"
+    name: "MGD Bugreport Skill"
+    kind: "skill"
+    url: "https://github.com/MichaelGahnDESIGN/MGD_BugReport_SKILL"
+    summary: "Feedback- und Bug-Report-Systeme datenschutzorientiert planen."
+    reason: "Wenn Nutzer Feedback oder Fehler melden sollen."
+    when:
+      features: ["support"]
+      keywords: ["feedback", "bug", "beta", "alpha", "tester"]
+  - id: "mgd-prozesse-skill"
+    name: "MGD Prozesse Skill"
+    kind: "skill"
+    url: "https://github.com/MichaelGahnDESIGN/MGD_Prozesse_SKILL"
+    summary: "Hintergrundprozesse von Agenten prüfen, einordnen und beenden."
+    reason: "Bei lokalen Dev-Servern, Workern und Docker-Containern."
+    when:
+      features: ["ai_agents"]
+  - id: "mgd-claude-codex-mcp"
+    name: "MGD Claude-Codex MCP"
+    kind: "tool"
+    url: "https://github.com/MichaelGahnDESIGN/MGD_Claude-Codex_MCP"
+    summary: "Gemeinsames Aufgaben-, Chat- und Übergabeprotokoll für mehrere KI-Agenten."
+    reason: "Wenn Claude Code und ChatGPT Codex gemeinsam am Projekt arbeiten."
+    when:
+      keywords: ["codex", "claude", "mehrere agenten", "multi-agent"]
+  - id: "mgd-ai-basic-projektordner"
+    name: "MGD AI Basic Projektordner"
+    kind: "tool"
+    url: "https://github.com/MichaelGahnDESIGN/MGD_AI-Basic-Projektordner_TOOL"
+    summary: "Neutrale KI-Projektordner-Vorlage mit Startdateien, Regeln und Doku-Bereichen."
+    reason: "Für neue Projekte ohne bestehende Ordnerstruktur."
+    when:
+      keywords: ["neues projekt", "new project", "projektordner"]
+  - id: "mgd-platform-builder"
+    name: "MGD Platform Builder"
+    kind: "tool"
+    url: "https://github.com/MichaelGahnDESIGN/MGD_Platform-Builder_TOOL"
+    summary: "Generator für Docker-Plattformgerüste mit MariaDB/MySQL/PostgreSQL."
+    reason: "Alternative zum PHP/FTP-Starter, wenn Docker-Hosting geplant ist."
+    when:
+      docker: true
+  - id: "mgd-divi5-dev-skill"
+    name: "MGD Divi5 Dev Skill"
+    kind: "skill"
+    url: "https://github.com/MichaelGahnDESIGN/MGD_Divi5-Dev_SKILL"
+    summary: "WordPress- und Divi-5-Entwicklung mit eigenen Plugins und Child-Themes."
+    reason: "Nur wenn die Landingpage auf WordPress/Divi läuft."
+    when:
+      keywords: ["wordpress", "divi"]
+  - id: "mgd-wordpress-mcp"
+    name: "MGD WordPress MCP"
+    kind: "plugin"
+    url: "https://github.com/MichaelGahnDESIGN/MGD_WordPress-MCP"
+    summary: "WordPress-Projekte mit ChatGPT, Claude und Co. verwalten."
+    reason: "Wenn WordPress Teil der Plattform ist."
+    when:
+      keywords: ["wordpress"]
+  - id: "mgd-ai-kennzeichnung"
+    name: "MGD AI-Kennzeichnung (WordPress, Shopware 6, JTL-Shop 5)"
+    kind: "plugin"
+    url: "https://github.com/MichaelGahnDESIGN?tab=repositories&q=AI-Kennzeichnung"
+    summary: "Transparente Kennzeichnung KI-generierter und KI-bearbeiteter Bilder."
+    reason: "Passt zur Pflichtseite AI-Philosophie, wenn KI-Bilder veröffentlicht werden."
+    when:
+      keywords: ["ki-bilder", "ai images", "shopware", "jtl", "wordpress", "ki-generiert"]
+  - id: "mgd-jtl-seo-plugin"
+    name: "MGD JTL SEO Plugin"
+    kind: "plugin"
+    url: "https://github.com/MichaelGahnDESIGN/MGD_JTL-SEO-Plugin"
+    summary: "Pagespeed und SEO für JTL-Shop 5."
+    reason: "Nur bei JTL-Shop-Projekten mit SEO-Fokus."
+    when:
+      keywords: ["jtl"]

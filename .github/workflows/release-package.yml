@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - "VERSION"
+      - "version.json"
+      - "release-notes.json"
       - "package.json"
       - "CHANGELOG.md"
       - ".github/workflows/release-package.yml"

@@ -397,6 +397,437 @@
         }
       },
       "additionalProperties": true
+    },
+    "versioning": {
+      "type": "object",
+      "description": "Mandatory: project version number (MAJOR.MINOR.PATCH + status), its single source file and where it is displayed.",
+      "required": [
+        "current",
+        "status"
+      ],
+      "properties": {
+        "source_file": {
+          "type": "string",
+          "default": "version.json"
+        },
+        "current": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pre-alpha",
+            "alpha",
+            "beta",
+            "pre-release",
+            "release",
+            "stable",
+            "staging",
+            "hotfix",
+            "lts",
+            "deprecated"
+          ]
+        },
+        "display": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "show_status": {
+              "type": "boolean"
+            },
+            "audience": {
+              "type": "string",
+              "enum": [
+                "public",
+                "private",
+                "both"
+              ]
+            },
+            "locations": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "login",
+                  "settings",
+                  "game_settings",
+                  "backoffice_footer",
+                  "public_footer",
+                  "public_header",
+                  "landing_public",
+                  "landing_private",
+                  "about"
+                ]
+              },
+              "uniqueItems": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "release_notes": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "source_file": {
+              "type": "string",
+              "default": "release-notes.json"
+            },
+            "public_audiences": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "frontend",
+                  "backoffice",
+                  "editor",
+                  "platform",
+                  "game",
+                  "api"
+                ]
+              },
+              "uniqueItems": true
+            },
+            "settings_menu_label": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "cms": {
+      "type": "object",
+      "description": "CMS pages including mandatory legal pages, editor choice and delivery.",
+      "properties": {
+        "editor": {
+          "type": "string",
+          "enum": [
+            "tinymce",
+            "grapesjs",
+            "quill",
+            "editorjs",
+            "markdown",
+            "plain",
+            "other"
+          ]
+        },
+        "editor_delivery": {
+          "type": "string",
+          "enum": [
+            "local",
+            "cdn"
+          ],
+          "description": "local = editor files embedded in the app; cdn = loaded from a third-party CDN."
+        },
+        "revisions": {
+          "type": "boolean"
+        },
+        "import_export": {
+          "type": "boolean"
+        },
+        "trash": {
+          "type": "boolean"
+        },
+        "custom_pages": {
+          "type": "boolean"
+        },
+        "legal_pages": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "contact",
+              "imprint",
+              "terms",
+              "privacy",
+              "cookies",
+              "cookie_banner",
+              "payment",
+              "shipping",
+              "withdrawal",
+              "withdrawal_button",
+              "youth_protection",
+              "accessibility",
+              "ai_philosophy",
+              "credits"
+            ]
+          },
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "credits": {
+      "type": "object",
+      "description": "Mandatory credits page: people and roles, then all AI systems, tools, plugins, libraries, fonts and icons.",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "people": {
+          "type": "boolean"
+        },
+        "components": {
+          "type": "boolean"
+        },
+        "editable_in_backoffice": {
+          "type": "boolean"
+        },
+        "local_assets_only": {
+          "type": "boolean",
+          "description": "Fonts, icons, logos and libraries are embedded locally, never hotlinked."
+        }
+      },
+      "additionalProperties": false
+    },
+    "settings": {
+      "type": "object",
+      "description": "Backoffice settings must always be searchable and filterable.",
+      "properties": {
+        "searchable": {
+          "type": "boolean"
+        },
+        "filterable": {
+          "type": "boolean"
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "appearance": {
+      "type": "object",
+      "description": "Light and dark mode plus editable design tokens.",
+      "properties": {
+        "modes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "light",
+              "dark"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "default_mode": {
+          "type": "string",
+          "enum": [
+            "system",
+            "light",
+            "dark"
+          ]
+        },
+        "toggle": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "locations": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "header",
+                  "footer",
+                  "login",
+                  "settings",
+                  "floating"
+                ]
+              },
+              "uniqueItems": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "design_tokens_editable": {
+          "type": "boolean"
+        },
+        "design_tokens": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^#[0-9a-fA-F]{6}$"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "file_locations": {
+      "type": "object",
+      "description": "Where important files live. Paths are relative to the project root and never contain secrets.",
+      "properties": {
+        "documented_in_backoffice": {
+          "type": "boolean"
+        },
+        "paths": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "code_editors": {
+      "type": "object",
+      "description": "Optional backoffice code editors. PHP/server code editing is high risk and needs an extra config flag.",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "languages": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "css",
+              "js",
+              "php",
+              "html",
+              "json"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "php_requires_config_flag": {
+          "type": "boolean"
+        },
+        "backup_before_save": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "experience": {
+      "type": "object",
+      "description": "Product experience topics that the briefing must clarify.",
+      "properties": {
+        "updater": {
+          "type": "boolean"
+        },
+        "loading_screen": {
+          "type": "boolean"
+        },
+        "seo": {
+          "type": "boolean"
+        },
+        "cookie_banner": {
+          "type": "boolean"
+        },
+        "maintenance_mode": {
+          "type": "boolean"
+        },
+        "error_pages": {
+          "type": "boolean"
+        },
+        "offline_mode": {
+          "type": "boolean"
+        },
+        "onboarding": {
+          "type": "boolean"
+        },
+        "newsletter": {
+          "type": "boolean"
+        },
+        "search": {
+          "type": "boolean"
+        },
+        "analytics_consent": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": true
+    },
+    "template": {
+      "type": "object",
+      "description": "Starter template the project was created from.",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "variants": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "light",
+              "dark"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "databases": {
+          "type": "object",
+          "properties": {
+            "core": {
+              "type": "string"
+            },
+            "private": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "additionalProperties": true
+        },
+        "deployment": {
+          "type": "string",
+          "enum": [
+            "ftp",
+            "ftps",
+            "sftp",
+            "git",
+            "docker",
+            "ci",
+            "other"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "briefing": {
+      "type": "object",
+      "description": "State of the agent briefing interview.",
+      "properties": {
+        "completed": {
+          "type": "boolean"
+        },
+        "completed_at": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "accepted_recommendations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "open_questions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": false
     }
   },
   "additionalProperties": true,

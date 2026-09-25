@@ -1,0 +1,64 @@
+{
+  "entries": [
+    {
+      "version": "0.0.1",
+      "status": "pre-alpha",
+      "date": "2026-09-25",
+      "audience": ["frontend", "backoffice"],
+      "type": "feature",
+      "title": "Erste Vorabversion des Starters",
+      "items": [
+        "CMS-Seiten mit Revisionen, Papierkorb sowie Import und Export",
+        "Rechtstexte als Platzhalter (bitte rechtlich prüfen lassen)",
+        "Light- und Dark-Modus mit Umschalter"
+      ]
+    },
+    {
+      "version": "0.0.1",
+      "status": "pre-alpha",
+      "date": "2026-09-25",
+      "audience": ["frontend", "platform"],
+      "type": "feature",
+      "title": "Release Notes und Credits",
+      "items": [
+        "Öffentliche Seiten /release-notes und /credits",
+        "Credits für Personen und verwendete Komponenten mit Lizenzangaben"
+      ]
+    },
+    {
+      "version": "0.0.1",
+      "status": "pre-alpha",
+      "date": "2026-09-25",
+      "audience": ["backoffice", "editor"],
+      "type": "feature",
+      "title": "Durchsuchbare Einstellungen",
+      "items": [
+        "Einstellungen mit Kategorien, Suche und Filter",
+        "Design-Farben für Hell und Dunkel, Ladebildschirm, SEO, Cookie-Box, Wartungsmodus und Updater"
+      ]
+    },
+    {
+      "version": "0.0.1",
+      "status": "pre-alpha",
+      "date": "2026-09-25",
+      "audience": ["backoffice", "platform"],
+      "type": "security",
+      "title": "Sicherheitsgrundlagen",
+      "items": [
+        "CSRF-Schutz, Rollenprüfung pro Route, Login-Drosselung und Audit-Log",
+        "Serverseitige HTML-Bereinigung und Content-Security-Policy mit Nonce"
+      ]
+    },
+    {
+      "version": "0.0.1",
+      "status": "pre-alpha",
+      "date": "2026-09-25",
+      "audience": ["platform"],
+      "type": "deploy",
+      "title": "FTP-Deployment",
+      "items": [
+        "Deployment per FTPS mit Probelauf als Standard"
+      ]
+    }
+  ]
+}

@@ -6,7 +6,7 @@
 
 Privacy, security, compliance, modular backends, administration, moderation, Docker workflows, documentation and AI-agent collaboration in one project-neutral blueprint.
 
-[![Status](https://img.shields.io/badge/status-early%20foundation-orange?style=flat-square)](ROADMAP.md)
+[![Version](https://img.shields.io/badge/version-0.5.1%20Pre--Alpha-orange?style=flat-square)](version.json)
 [![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-compatible-6B5CE7?style=flat-square)](AGENTS.md)
 [![ChatGPT Codex](https://img.shields.io/badge/ChatGPT%20Codex-compatible-10A37F?style=flat-square)](AGENTS.md)
@@ -17,7 +17,32 @@ Privacy, security, compliance, modular backends, administration, moderation, Doc
 
 ---
 
-## New in 0.5: translation review, agent history and idempotent jobs
+## New in 0.5.1 Pre-Alpha: AI-generated CMS with mandatory features
+
+With 0.5.1 the foundation becomes an **AI-agent driven CMS**. Claude Code, ChatGPT Codex and other agents use it to build websites for games, projects and platforms – from a **briefing**, a **starter template** and **mandatory features** that every project always contains.
+
+| Mandatory feature | In short |
+|---|---|
+| **Versioning** | `version.json` as single source, `MAJOR.MINOR.PATCH` + status (Pre-Alpha … Stable). Start: `0.0.1 Pre-Alpha`. Shown below the login and in (game) settings; more locations configurable in the backoffice |
+| **Release notes** | timeline in settings; the frontend sees frontend notes only, editor/admin/mod see everything |
+| **Credits** | people and roles first, then all AI systems, tools, plugins, libraries, fonts and icons with logo, provider, links and license tags – everything embedded locally |
+| **Legal / CMS pages** | contact, imprint, terms, privacy, cookies, cookie box, payment, shipping, withdrawal, withdrawal button, youth protection, accessibility, AI philosophy – edit, delete, add, revisions, export/import |
+| **Settings** | always searchable and filterable; design colors, light/dark toggle, file locations, optional code editors |
+| **Templates** | `templates/php-mysql-starter`: PHP + FTP + one MySQL DB (logins), optional second DB for personal data, always light **and** dark |
+
+```bash
+mgd-platform template create php-mysql-starter --target ./my-project
+mgd-platform init --target ./my-project
+mgd-platform briefing ./my-project --write     # mandatory questions: editor local/CDN, version display, updater, loading screen, SEO, ...
+mgd-platform recommend ./my-project            # matching MGD skills, tools, plugins and MGD-DevOS
+mgd-platform version ./my-project --bump patch --note "First deploy" --audience frontend
+```
+
+More: [Mandatory features](WIKI/18-CMS/MANDATORY-FEATURES.md) · [Versioning](WIKI/18-CMS/VERSIONING-RELEASE-NOTES.md) · [Credits](WIKI/18-CMS/CREDITS.md) · [Legal/CMS pages](WIKI/18-CMS/LEGAL-CMS-PAGES.md) · [Settings/design/themes](WIKI/18-CMS/SETTINGS-DESIGN-THEMES.md) · [Briefing](WIKI/18-CMS/BRIEFING-RECOMMENDATIONS.md) · [Templates](WIKI/18-CMS/TEMPLATES.md)
+
+---
+
+## Since 0.5: translation review, agent history and idempotent jobs
 
 Version 0.5 adds team and operational workflows. Translations now move through draft, review, published or rejected states. JSON exports can be imported again and intentionally return to draft. Service principals have dedicated detail/history views. Background jobs can use idempotency keys and modular handler registration.
 
@@ -99,7 +124,7 @@ Reference implementations: [Reference Implementations and Demos](https://github.
 
 ## What is this project?
 
-The **MGD Project Platform System** is not a finished CMS, SaaS product or rigid application framework.
+The **MGD Project Platform System** is a foundation for **AI-generated CMS projects** – not a SaaS product or rigid application framework.
 
 It is a **reusable platform foundation** for projects that need more than a frontend and a database: user accounts, roles, administration, moderation, privacy, security, compliance, backups, staging, translations, support, documentation, AI agents and a controlled development workflow.
 
@@ -391,6 +416,11 @@ See [Agent Workflow](WIKI/07-AGENTS/AGENT-WORKFLOW.md).
 | [MGD AI Thread](https://github.com/MichaelGahnDESIGN/MGD_AI-Thread) | handoff between context windows |
 | [MGD AI PlayTest Skill](https://github.com/MichaelGahnDESIGN/MGD_AI-PlayTest_SKILL) | role-based play/product testing |
 | [MGD Platform Builder](https://github.com/MichaelGahnDESIGN/MGD_Platform-Builder_TOOL) | generates technical starter skeletons |
+| [MGD-DevOS](https://github.com/MichaelGahnDESIGN/MGD-DevOS) | desktop project hub with dashboards; recommended by the briefing when several projects or agents are managed |
+| [MGD Living Documentation](https://github.com/MichaelGahnDESIGN/MGD_Living-Documentation) | evidence-based, versioned project documentation |
+| [MGD Software Updater Skill](https://github.com/MichaelGahnDESIGN/MGD_Software-Updater_SKILL) | plans and builds updaters when the briefing asks for one |
+
+The complete machine-readable list with matching rules is [`registry/recommendations.yml`](registry/recommendations.yml) (`mgd-platform recommend`).
 
 ---
 
@@ -412,7 +442,7 @@ See [Domain Packs](WIKI/10-DOMAIN-PACKS/README.md).
 
 ## Maturity
 
-Current status: **Early Foundation / 0.5.x**
+Current status: **0.5.1 Pre-Alpha** (see [`version.json`](version.json) and [`release-notes.json`](release-notes.json))
 
 Schemas and recommendations may change before 1.0. Real-world feedback and contributions are welcome.
 

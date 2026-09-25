@@ -6,7 +6,7 @@
 
 Privacy, security, compliance, modular backends, administration, moderation, Docker workflows, documentation and AI-agent collaboration in one project-neutral blueprint.
 
-[![Status](https://img.shields.io/badge/status-early%20foundation-orange?style=flat-square)](ROADMAP.md)
+[![Version](https://img.shields.io/badge/version-0.5.1%20Pre--Alpha-orange?style=flat-square)](version.json)
 [![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-compatible-6B5CE7?style=flat-square)](AGENTS.md)
 [![ChatGPT Codex](https://img.shields.io/badge/ChatGPT%20Codex-compatible-10A37F?style=flat-square)](AGENTS.md)
@@ -18,7 +18,32 @@ Privacy, security, compliance, modular backends, administration, moderation, Doc
 
 ---
 
-## Neu in 0.5: Translation Review, Agenten-Historie und idempotente Jobs
+## Neu in 0.5.1 Pre-Alpha: AI-generiertes CMS mit Pflichtfunktionen
+
+Mit 0.5.1 wird die Foundation zu einem **AI-Agenten-gesteuerten CMS**. Claude Code, ChatGPT Codex und andere Agenten erstellen damit Websites für Spiele, Projekte und Plattformen – aus einem **Briefing**, einem **Starter-Template** und **Pflichtfunktionen**, die in jedem Projekt immer vorhanden sind.
+
+| Pflichtfunktion | Kurz erklärt |
+|---|---|
+| **Versionierung** | `version.json` als einzige Quelle, Schema `MAJOR.MINOR.PATCH` + Status (Pre-Alpha … Stable). Start: `0.0.1 Pre-Alpha`. Anzeige unter Login und in den (Spiel-)Einstellungen, weitere Orte im Backoffice unter „Versionsnummern“ konfigurierbar |
+| **Release Notes** | Timeline unter Einstellungen; Frontend sieht nur Frontend-Notes, Editor/Admin/Mod sehen alles |
+| **Credits** | zuerst Personen und Rollen, dann alle KI-Systeme, Tools, Plugins, Bibliotheken, Schriften und Icons mit Logo, Anbieter, Links und Lizenz-Tags – alles lokal eingebettet |
+| **Rechtstexte / CMS-Seiten** | Kontakt, Impressum, AGB, Datenschutz, Cookies, Cookie-Box, Zahlung, Versand, Widerruf, Widerrufs-Button, Jugendschutz, Barrierefreiheit, AI-Philosophie – bearbeiten, löschen, neu anlegen, Revisionen, Export/Import |
+| **Einstellungen** | immer durchsuchbar und filterbar; Design-Farben, Light/Dark-Umschalter, Dateispeicherorte, optionale Code-Editoren |
+| **Templates** | `templates/php-mysql-starter`: PHP + FTP + 1 MySQL-DB (Logins), optional 2. DB für personenbezogene Daten, immer Light **und** Dark |
+
+```bash
+mgd-platform template create php-mysql-starter --target ./mein-projekt
+mgd-platform init --target ./mein-projekt
+mgd-platform briefing ./mein-projekt --write     # Pflichtfragen: Editor lokal/CDN, Versionsanzeige, Updater, Ladebildschirm, SEO, ...
+mgd-platform recommend ./mein-projekt            # passende MGD Skills, Tools, Plugins und MGD-DevOS
+mgd-platform version ./mein-projekt --bump patch --note "Erster Deploy" --audience frontend
+```
+
+Mehr: [AI-CMS-Pflichtfunktionen](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki/23-AI-CMS-Pflichtfunktionen) · [Briefing, Templates und Empfehlungen](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki/24-Briefing-Templates-und-Empfehlungen) · [Technische Doku](WIKI/18-CMS/MANDATORY-FEATURES.md)
+
+---
+
+## Seit 0.5: Translation Review, Agenten-Historie und idempotente Jobs
 
 Version 0.5 ergänzt echte Team- und Betriebsworkflows. Übersetzungen durchlaufen jetzt Draft, Review, Published beziehungsweise Rejected. JSON Exporte lassen sich wieder importieren, landen dabei absichtlich erneut im Draft. Service Principals besitzen eigene Detailseiten und eine Lebenszyklus-Historie. Hintergrundjobs können mit Idempotency Keys gegen doppelte Ausführung geschützt und über eine Handler Registry modular verarbeitet werden.
 
@@ -101,6 +126,10 @@ Die wichtigsten Funktionen:
 | `release-check` | Release-Gates gegen echte Evidence-Dateien prüfen |
 | `module create` | Modulmanifest und Dokumentationsgerüst erzeugen |
 | `update` | Foundation-Version vergleichen und Migration anstoßen |
+| `version` | Versionsnummer anzeigen, erhöhen, Status setzen, Dateien synchronisieren, Release Note anlegen |
+| `briefing` | offene Pflichtfragen des Agenten-Briefings anzeigen oder als `BRIEFING.md` schreiben |
+| `recommend` | passende MGD Skills, Tools und Plugins (inkl. MGD-DevOS) empfehlen |
+| `template` | Starter-Templates auflisten, prüfen (Light + Dark) und erzeugen |
 
 Zusätzlich enthält das Projekt jetzt eine zentrale **Capability Registry**, maschinenlesbare **Release Evidence**, automatische **GitHub Foundation Checks**, eine **PHP/MariaDB Referenzimplementierung** und ein lokales **Backoffice-Demo**.
 
@@ -112,7 +141,7 @@ Referenzcode und Demos: [Referenzimplementierungen und Demos](https://github.com
 
 ## Was ist dieses Projekt?
 
-Das **MGD Project Platform System** ist kein fertiges CMS, kein SaaS und kein starres Framework.
+Das **MGD Project Platform System** ist eine Foundation für **AI-generierte CMS-Projekte** – kein SaaS und kein starres Framework.
 
 Es ist eine **wiederverwendbare Plattform-Grundlage** für Projekte, die mehr benötigen als nur Frontend und Datenbank: Benutzerkonten, Rollen, Admin- und Moderatorbereiche, Datenschutz, Sicherheit, Compliance, Backups, Staging, Übersetzungen, Support, Dokumentation, AI-Agenten, Module und ein kontrollierter Entwicklungsprozess.
 
@@ -208,11 +237,15 @@ Dieses Projekt dreht die Reihenfolge um:
 | CLI & Validation | Init, Validator, Doctor, Audit, Module Generator, Release Check |
 | Evidence | maschinenlesbare Release-Nachweise mit Ablaufdatum |
 | Referenzen | PHP/MariaDB Architektur und lokales Backoffice-Demo |
+| AI-CMS | Versionierung, Release Notes, Credits, Rechtstexte mit Revisionen, durchsuchbare Einstellungen, Design, Light/Dark |
+| Briefing & Empfehlungen | Pflichtfragen für Agenten, Empfehlungen für MGD-DevOS und MGD Skills |
+| Templates | FTP-fähiger PHP/MySQL-Starter mit Light- und Dark-Variante |
 
 ---
 
 ## Was die Foundation bewusst nicht ist
 
+- kein monolithisches Fertig-CMS von der Stange – der PHP/MySQL-Starter ist ein Ausgangspunkt, den Agenten projektspezifisch ausbauen
 - kein fertiges PHP-, Node-, Java- oder .NET-Framework
 - kein Ersatz für Laravel, Symfony, Django, Spring, Directus oder ähnliche Systeme
 - kein automatisch rechtssicheres Komplettpaket
@@ -257,7 +290,7 @@ Beispiel:
 project:
   name: "Example Platform"
   type: "community"
-  foundation_version: "0.5.0"
+  foundation_version: "0.5.1"
 
 market:
   countries: ["DE"]
@@ -587,6 +620,12 @@ Die Foundation dupliziert vorhandene Skills nicht, sondern kann sie orchestriere
 | [MGD AI Thread](https://github.com/MichaelGahnDESIGN/MGD_AI-Thread) | Übergaben zwischen Kontextfenstern |
 | [MGD AI PlayTest Skill](https://github.com/MichaelGahnDESIGN/MGD_AI-PlayTest_SKILL) | rollenbasierte Play-/Produkttests |
 | [MGD Platform Builder](https://github.com/MichaelGahnDESIGN/MGD_Platform-Builder_TOOL) | erzeugt technische Startgerüste; diese Foundation definiert Architektur, Betrieb und Governance |
+| [MGD-DevOS](https://github.com/MichaelGahnDESIGN/MGD-DevOS) | Desktop-Projektzentrale mit Dashboards; wird im Briefing empfohlen, wenn mehrere Projekte oder Agenten betreut werden |
+| [MGD Living Documentation](https://github.com/MichaelGahnDESIGN/MGD_Living-Documentation) | belegbare, versionierte Projektdokumentation |
+| [MGD Software Updater Skill](https://github.com/MichaelGahnDESIGN/MGD_Software-Updater_SKILL) | Updater planen und umsetzen, wenn im Briefing gewünscht |
+| [Fragenkatalog Skill](https://github.com/MichaelGahnDESIGN/Fragenkatalog-Skill) | vertieft das Briefing für Konzept- und Designfragen |
+
+Die vollständige, maschinenlesbare Liste mit Empfehlungsregeln steht in [`registry/recommendations.yml`](registry/recommendations.yml) (`mgd-platform recommend`).
 
 Weitere öffentliche Projekte:
 [Michael Gahn DESIGN – eigene Projekte](https://michael-gahn.de/eigene-projekte/)
@@ -630,24 +669,35 @@ Projekt-Plattform-System/
 ├── src/
 │   ├── commands/
 │   └── lib/
+├── version.json              # Versionsnummer + Status (Single Source of Truth)
+├── release-notes.json
 ├── registry/
-│   └── capabilities.yml
+│   ├── capabilities.yml
+│   ├── briefing.yml           # Pflichtfragen des Agenten-Briefings
+│   └── recommendations.yml    # MGD Skills, Tools, Plugins, MGD-DevOS
 ├── reference/
 │   ├── php-mariadb/
 │   └── backoffice-demo/
 ├── platform/
-│   └── SKILL.md
+│   ├── SKILL.md
+│   └── BRIEFING.md
 │
 ├── schema/
 │   ├── mgd-platform.schema.json
 │   ├── module-manifest.schema.json
 │   ├── evidence.schema.json
-│   └── capability-registry.schema.json
+│   ├── capability-registry.schema.json
+│   ├── version.schema.json
+│   ├── release-notes.schema.json
+│   └── template-manifest.schema.json
 │
 ├── templates/
 │   ├── MGD_PLATFORM.example.yml
 │   ├── AGENTS.md
-│   └── CLAUDE.md
+│   ├── CLAUDE.md
+│   ├── version.example.json
+│   ├── release-notes.example.json
+│   └── php-mysql-starter/     # FTP-fähiges CMS, Light + Dark
 │
 ├── compliance/
 │   ├── README.md
@@ -662,7 +712,7 @@ Projekt-Plattform-System/
 
 ## Reifegrad
 
-Aktueller Stand: **Early Foundation / 0.5.x**
+Aktueller Stand: **0.5.1 Pre-Alpha** (siehe [`version.json`](version.json) und [`release-notes.json`](release-notes.json))
 
 Vor 1.0 können sich Schemas und Empfehlungen noch ändern. Beiträge aus realen Projekten sind ausdrücklich erwünscht.
 

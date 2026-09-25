@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/schema/template-manifest.schema.json",
+  "title": "MGD Project Template Manifest",
+  "description": "Describes a starter template in templates/<id>/template.json. Every template must ship a light and a dark variant.",
+  "type": "object",
+  "required": ["id", "name", "version", "status", "requirements", "variants", "features", "entry"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{1,63}$" },
+    "name": { "type": "string", "minLength": 1 },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "status": {
+      "type": "string",
+      "enum": ["pre-alpha", "alpha", "beta", "pre-release", "release", "stable", "staging", "hotfix", "lts", "deprecated"]
+    },
+    "requirements": {
+      "type": "object",
+      "required": ["databases", "deployment"],
+      "properties": {
+        "php": { "type": "string" },
+        "extensions": { "type": "array", "items": { "type": "string" } },
+        "databases": {
+          "type": "object",
+          "required": ["core"],
+          "properties": {
+            "core": { "$ref": "#/$defs/database" },
+            "private": { "$ref": "#/$defs/database" }
+          },
+          "additionalProperties": { "$ref": "#/$defs/database" }
+        },
+        "deployment": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "variants": {
+      "type": "object",
+      "required": ["light", "dark"],
+      "properties": {
+        "light": { "type": "string", "minLength": 1 },
+        "dark": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": { "type": "string" }
+    },
+    "features": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "entry": { "type": "string", "minLength": 1 }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "database": {
+      "type": "object",
+      "required": ["engine", "required"],
+      "properties": {
+        "engine": { "type": "string" },
+        "required": { "type": "boolean" },
+        "purpose": { "type": "string" }
+      },
+      "additionalProperties": true
+    }
+  }
+}

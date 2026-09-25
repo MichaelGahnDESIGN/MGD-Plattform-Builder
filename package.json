@@ -1,6 +1,6 @@
 {
   "name": "@michaelgahndesign/mgd-platform",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "CLI and validation tooling for the MGD Project Platform System",
   "type": "module",
   "bin": {
@@ -11,8 +11,10 @@
     "validate:examples": "node ./bin/mgd-platform.js validate ./examples/general-platform.yml && node ./bin/mgd-platform.js validate ./examples/game.yml && node ./bin/mgd-platform.js validate ./examples/community.yml && node ./bin/mgd-platform.js validate ./examples/creator.yml && node ./bin/mgd-platform.js validate ./examples/ecommerce.yml",
     "check:schemas": "node ./scripts/check-schemas.js",
     "check:docs": "node ./scripts/check-doc-links.js",
-    "check": "npm test && npm run check:schemas && npm run validate:examples && npm run check:docs",
-    "doctor": "node ./bin/mgd-platform.js doctor ."
+    "check": "npm test && npm run check:schemas && npm run validate:examples && npm run check:version && npm run check:templates && npm run check:docs",
+    "doctor": "node ./bin/mgd-platform.js doctor .",
+    "check:templates": "node ./bin/mgd-platform.js template check",
+    "check:version": "node ./bin/mgd-platform.js version --check"
   },
   "engines": {
     "node": ">=20"
@@ -24,7 +26,9 @@
     "templates/",
     "examples/",
     "registry/",
-    "VERSION"
+    "VERSION",
+    "version.json",
+    "release-notes.json"
   ],
   "dependencies": {
     "ajv": "^8.17.1",

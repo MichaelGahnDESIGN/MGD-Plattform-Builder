@@ -18,3 +18,9 @@ Never place credentials, production data or private infrastructure details in pu
 
 Foundation:
 https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System
+
+## Mandatory features and briefing
+
+Follow the "Mandatory features" section in `AGENTS.md`. Start new work with the briefing
+(`platform/BRIEFING.md` in the foundation), recommend matching MGD skills/tools via
+`mgd-platform recommend`, and bump `version.json` plus `release-notes.json` with every delivery.

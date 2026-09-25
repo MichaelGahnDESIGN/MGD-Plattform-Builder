@@ -172,6 +172,49 @@ Release readiness: BLOCKED
 
 Das ist ein zentraler Unterschied zwischen einer reinen Checkliste und der MGD Foundation: Ein Release-Gate kann maschinell als erfüllt oder nicht erfüllt bewertet werden.
 
+## Neue Befehle ab 0.5.1
+
+### `mgd-platform version`
+
+Liest `version.json` (einzige Quelle für Versionsnummer und Status) und hält Kopien synchron.
+
+```bash
+mgd-platform version                        # 0.0.1 Pre-Alpha
+mgd-platform version --bump patch           # 0.0.2 (Patches, Updates bestehender Funktionen)
+mgd-platform version --bump minor           # 0.1.0 (neue Funktionen)
+mgd-platform version --bump major           # 1.0.0 (Releaselinie)
+mgd-platform version --status beta          # Status ändern
+mgd-platform version --sync                 # VERSION, package.json, composer.json, template.json angleichen
+mgd-platform version --check                # CI: Fehler bei abweichenden Kopien
+mgd-platform version --bump patch --note "Fix Login" --audience frontend,backoffice --type fix
+```
+
+`--note` legt gleichzeitig einen Eintrag in `release-notes.json` an.
+
+### `mgd-platform briefing`
+
+Zeigt alle Briefing-Fragen aus `registry/briefing.yml` mit Status: ✓ beantwortet, ✗ offene Pflichtfrage, · optional. Mit `--write` entsteht `BRIEFING.md` mit Checkboxen. Exit-Code 1, solange Pflichtfragen offen sind.
+
+### `mgd-platform recommend`
+
+Empfiehlt passende öffentliche MGD Skills, Tools und Plugins aus `registry/recommendations.yml` – inklusive **MGD-DevOS**, wenn es Sinn ergibt – mit Begründung und Trefferliste. Angenommene Empfehlungen stehen in `briefing.accepted_recommendations`.
+
+### `mgd-platform template`
+
+```bash
+mgd-platform template list
+mgd-platform template check                 # jedes Template: template.json, Light + Dark, version.json, release-notes.json
+mgd-platform template create php-mysql-starter --target ./mein-projekt
+```
+
+### Neue Prüfungen in `npm run check`
+
+* `check:version` – Versionskopien stimmen mit `version.json` überein
+* `check:templates` – jedes Starter-Template hat Light- und Dark-Variante
+* `check:schemas` – zusätzlich `version.schema.json`, `release-notes.schema.json`, `template-manifest.schema.json`, Empfehlungs- und Briefing-Registry
+
+Details zu den Pflichtfunktionen: [[23-AI-CMS-Pflichtfunktionen]] · Briefing und Templates: [[24-Briefing-Templates-und-Empfehlungen]]
+
 ## Evidence-Dateien
 
 Nachweise liegen im Projekt unter:
@@ -314,8 +357,11 @@ Dadurch prüft die Foundation sich selbst nach ihren eigenen Qualitätsregeln.
 ## Empfohlener Ablauf für ein neues Projekt
 
 ```bash
-mgd-platform init --preset community
+mgd-platform template create php-mysql-starter --target ./mein-projekt
+mgd-platform init --preset community --target ./mein-projekt
 cd mein-projekt
+mgd-platform briefing --write
+mgd-platform recommend
 mgd-platform doctor
 mgd-platform audit --write
 ```

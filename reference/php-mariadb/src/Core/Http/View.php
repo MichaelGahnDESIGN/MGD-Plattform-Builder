@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace MGD\Platform\Core\Http;
 
+use MGD\Platform\Core\Support\Version;
+
 final class View
 {
     public static function e(string $value): string
@@ -48,6 +50,7 @@ final class View
 <body>
 <header><strong>MGD Platform Reference</strong>' . $nav . '</header>
 <main>' . $body . '</main>
+<footer class="muted">MGD Platform Reference · Version ' . self::e(Version::label()) . '</footer>
 </body>
 </html>';
     }

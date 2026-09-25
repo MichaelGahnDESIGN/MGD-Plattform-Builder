@@ -1,0 +1,71 @@
+/* Backoffice, Login und Installer. Ergänzt site.css. */
+.admin-shell { display: grid; grid-template-columns: 16rem 1fr; min-height: 100vh; }
+.admin-sidebar { background: var(--color-surface); border-right: 1px solid var(--color-border); padding: var(--space-5) var(--space-4); position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+.admin-sidebar .admin-brand { display: flex; flex-direction: column; font-weight: 700; text-decoration: none; color: var(--color-text); margin-bottom: var(--space-5); }
+.admin-brand small { color: var(--color-muted); font-weight: 400; }
+.admin-sidebar ul { list-style: none; margin: 0 0 var(--space-4); padding: 0; }
+.admin-sidebar a { display: block; padding: var(--space-2) var(--space-3); border-radius: var(--radius); color: var(--color-text); text-decoration: none; }
+.admin-sidebar a:hover { background: var(--color-surface-raised); }
+.admin-sidebar a[aria-current="page"] { background: color-mix(in srgb, var(--color-primary) 15%, transparent); color: var(--color-primary); font-weight: 600; }
+.admin-nav__group { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-muted); margin: var(--space-4) 0 var(--space-2); }
+.admin-content { display: flex; flex-direction: column; min-width: 0; }
+.admin-topbar { display: flex; justify-content: space-between; align-items: center; gap: var(--space-3); flex-wrap: wrap; padding: var(--space-3) var(--space-5); border-bottom: 1px solid var(--color-border); background: var(--color-surface); font-size: var(--font-size-small); }
+.admin-topbar__tools { display: flex; gap: var(--space-2); align-items: center; flex-wrap: wrap; }
+.admin-main { padding: var(--space-5); flex: 1; }
+.admin-footer { padding: var(--space-3) var(--space-5); border-top: 1px solid var(--color-border); }
+
+.table-wrap { overflow-x: auto; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); margin-bottom: var(--space-5); }
+.table-wrap table { min-width: 40rem; }
+.filter-bar { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: flex-end; margin-bottom: var(--space-4); }
+.filter-bar .field { min-width: 12rem; }
+.grid-2 { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); }
+.card-grid { list-style: none; padding: 0; display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr)); }
+.section-head { display: flex; justify-content: space-between; align-items: center; gap: var(--space-3); margin-top: var(--space-6); }
+.section-head h2 { margin: 0; }
+.check-list { display: grid; gap: var(--space-2); max-height: 18rem; overflow-y: auto; padding: var(--space-2); border: 1px solid var(--color-border); border-radius: var(--radius); }
+.checkbox-group { border: 0; padding: 0; margin: 0; }
+.code-input, .code-view { font-family: var(--font-mono); font-size: 0.875rem; line-height: 1.5; tab-size: 2; }
+.code-view { max-height: 24rem; white-space: pre-wrap; word-break: break-word; }
+.meta-list { display: grid; grid-template-columns: max-content 1fr; gap: var(--space-2) var(--space-4); }
+.meta-list dt { color: var(--color-muted); }
+.meta-list dd { margin: 0; }
+.stat-grid { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr)); }
+.stat-card { display: grid; padding: var(--space-5); border-radius: var(--radius); border: 1px solid var(--color-border); background: var(--color-surface); text-decoration: none; color: var(--color-text); }
+.stat-card__value { font-size: 2rem; font-weight: 700; color: var(--color-primary); }
+.stat-card__label { color: var(--color-muted); }
+.audit-meta { font-size: 0.75rem; word-break: break-all; }
+.editor-canvas { min-height: 28rem; border: 1px solid var(--color-border); border-radius: var(--radius); background: var(--color-surface); }
+
+/* Einstellungen */
+.settings-layout { display: grid; grid-template-columns: 16rem 1fr; gap: var(--space-5); align-items: start; }
+.settings-sidebar { position: sticky; top: var(--space-4); display: grid; gap: var(--space-4); }
+.settings-categories { list-style: none; padding: 0; margin: 0; }
+.settings-categories a { display: flex; justify-content: space-between; padding: var(--space-2) var(--space-3); border-radius: var(--radius); text-decoration: none; color: var(--color-text); }
+.settings-categories a[aria-current="page"] { background: color-mix(in srgb, var(--color-primary) 15%, transparent); color: var(--color-primary); font-weight: 600; }
+.settings-categories .count { color: var(--color-muted); font-size: var(--font-size-small); }
+.settings-group { border: 1px solid var(--color-border); border-radius: var(--radius); background: var(--color-surface); padding: var(--space-4) var(--space-5); margin: 0 0 var(--space-5); }
+.settings-group legend { font-weight: 700; font-size: var(--font-size-h3); padding: 0 var(--space-2); }
+.setting-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-4); padding: var(--space-4) 0; border-bottom: 1px solid var(--color-border); }
+.setting-row:last-of-type { border-bottom: 0; }
+.setting-row__meta label { font-weight: 600; }
+.setting-row__meta p { margin: var(--space-1) 0; font-size: var(--font-size-small); }
+.setting-key { font-size: 0.75rem; color: var(--color-muted); }
+.switch { display: inline-flex; gap: var(--space-2); align-items: center; }
+.color-field { display: inline-flex; align-items: center; gap: var(--space-3); }
+.sticky-actions { position: sticky; bottom: 0; padding: var(--space-3) 0; background: linear-gradient(transparent, var(--color-background) 40%); }
+.design-preview { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); margin-top: var(--space-4); }
+.design-preview__mode h3 { font-size: var(--font-size-base); }
+.swatches { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.swatch { width: 2rem; height: 2rem; border-radius: var(--radius-small); border: 1px solid var(--color-border); }
+
+/* Login / Installer */
+.auth-main { min-height: 100vh; display: grid; place-items: center; padding: var(--space-4); }
+.auth-card { width: min(100%, 28rem); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-6); box-shadow: var(--shadow); }
+.auth-card__footer { display: flex; justify-content: space-between; align-items: center; gap: var(--space-3); margin-top: var(--space-5); flex-wrap: wrap; }
+.install-log { font-size: var(--font-size-small); }
+
+@media (max-width: 900px) {
+  .admin-shell, .settings-layout { grid-template-columns: 1fr; }
+  .admin-sidebar, .settings-sidebar { position: static; height: auto; }
+  .setting-row { grid-template-columns: 1fr; }
+}

@@ -156,6 +156,25 @@ Die englischsprachige Tiefendokumentation unter `WIKI/` enthält unter anderem:
 
 ## Versionierung
 
+Aktuelle Version: **0.5.1 Pre-Alpha**. Die Nummer steht zentral in `version.json` und wird mit `mgd-platform version --sync` nach `VERSION` und `package.json` übertragen. Release Notes stehen in `release-notes.json`, Details unter [[23-AI-CMS-Pflichtfunktionen]].
+
+Neue Dateien und Ordner ab 0.5.1:
+
+```text
+version.json                     Versionsnummer + Status
+release-notes.json               Release Notes der Foundation
+platform/BRIEFING.md             Ablauf des Agenten-Briefings
+registry/briefing.yml            Briefing-Fragen (maschinenlesbar)
+registry/recommendations.yml     MGD Skills, Tools, Plugins, MGD-DevOS
+schema/version.schema.json
+schema/release-notes.schema.json
+schema/template-manifest.schema.json
+src/lib/mandatory-rules.js       Pflichtfunktionen im Validator
+src/lib/versioning.js, release-notes.js, briefing.js, recommendations.js, templates.js
+templates/php-mysql-starter/     FTP-fähiges CMS mit Light- und Dark-Variante
+WIKI/18-CMS/                     technische Doku der Pflichtfunktionen
+```
+
 Die Foundation befindet sich im frühen Entwicklungsstadium. Vor 1.0 können sich Schemas und Empfehlungen ändern. Adoptierende Projekte sollen die verwendete Foundation-Version im Projektprofil dokumentieren und Updates bewusst übernehmen.
 
 Weiter: [[14-Governance-Dokumentation-und-Releases]]

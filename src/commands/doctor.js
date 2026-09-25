@@ -8,7 +8,9 @@ const checks = [
   ["AGENTS.md", true, "agent rules"],
   ["CLAUDE.md", false, "Claude-specific rules"],
   ["SECURITY.md", false, "security policy"],
-  ["FEATURE-GOVERNANCE.md", false, "feature governance"]
+  ["FEATURE-GOVERNANCE.md", false, "feature governance"],
+  ["version.json", false, "version number source (mandatory feature)"],
+  ["release-notes.json", false, "release notes source (mandatory feature)"]
 ];
 
 export async function doctorCommand(target = ".") {

@@ -1,0 +1,16 @@
+{
+  "entries": [
+    {
+      "version": "0.0.1",
+      "status": "pre-alpha",
+      "date": "2026-01-01",
+      "audience": ["frontend", "backoffice"],
+      "type": "feature",
+      "title": "Projektstart",
+      "items": [
+        "Projekt aus dem MGD Project Platform System erstellt",
+        "Versionierung, Release Notes, Credits und Rechtstexte vorbereitet"
+      ]
+    }
+  ]
+}
