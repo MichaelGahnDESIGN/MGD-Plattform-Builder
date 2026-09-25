@@ -1,6 +1,6 @@
 # Project Wiki
 
-This wiki is the detailed knowledge base for the **MGD Project Platform System**.
+This wiki is the detailed knowledge base for the **MGD-Plattform-Builder**.
 
 It is organized so humans and coding agents can enter at different depths without reading the entire repository.
 
@@ -24,6 +24,17 @@ It is organized so humans and coding agents can enter at different depths withou
 - [Billing and Entitlements](02-ARCHITECTURE/BILLING-ENTITLEMENTS.md)
 - [API and Agent Access](02-ARCHITECTURE/API-AGENT-ACCESS.md)
 - [Database Migrations](02-ARCHITECTURE/DATABASE-MIGRATIONS.md)
+
+## AI-generated CMS (mandatory features, since 0.5.1)
+
+- [Mandatory Features Overview](18-CMS/MANDATORY-FEATURES.md)
+- [Versioning and Release Notes](18-CMS/VERSIONING-RELEASE-NOTES.md)
+- [Credits](18-CMS/CREDITS.md)
+- [Legal and CMS Pages](18-CMS/LEGAL-CMS-PAGES.md)
+- [Settings, Design, Light/Dark, File Locations, Code Editors](18-CMS/SETTINGS-DESIGN-THEMES.md)
+- [Briefing and Recommendations](18-CMS/BRIEFING-RECOMMENDATIONS.md)
+- [Templates](18-CMS/TEMPLATES.md)
+- [Licensing, label, white-label and modules](18-CMS/LICENSING.md)
 
 ## Security
 

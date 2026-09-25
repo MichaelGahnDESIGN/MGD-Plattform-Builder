@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/schema/evidence.schema.json",
+  "$id": "https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/schema/evidence.schema.json",
   "title": "MGD Release Evidence Record",
   "type": "object",
   "required": ["gate", "status", "checked_at"],

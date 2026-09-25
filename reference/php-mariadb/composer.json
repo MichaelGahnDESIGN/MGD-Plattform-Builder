@@ -1,6 +1,6 @@
 {
   "name": "michaelgahndesign/mgd-platform-reference-php",
-  "description": "Framework-neutral PHP/MariaDB reference for the MGD Project Platform System",
+  "description": "Framework-neutral PHP/MariaDB reference for the MGD-Plattform-Builder",
   "type": "project",
   "require": {
     "php": ">=8.3"
@@ -10,5 +10,5 @@
       "MGD\\Platform\\": "src/"
     }
   },
-  "license": "MIT"
+  "license": "LicenseRef-MGD"
 }

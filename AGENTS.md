@@ -13,6 +13,7 @@ Keep the foundation project-neutral, privacy-aware, secure and understandable.
 3. `WIKI/README.md`
 4. `WIKI/09-GOVERNANCE/FEATURE-GOVERNANCE.md`
 5. relevant domain/architecture document
+6. `WIKI/18-CMS/MANDATORY-FEATURES.md` for features every project must provide
 
 ## Source of truth
 
@@ -34,6 +35,19 @@ Keep the foundation project-neutral, privacy-aware, secure and understandable.
 - treat role-specific backoffice views as presentation only; authorization remains server-side
 - minimize returned fields per role/capability instead of fetching sensitive fields and hiding them in the UI
 - distinguish examples from normative requirements
+
+## Versioning of this repository
+
+- `version.json` is the single source of truth (currently `0.5.1 Pre-Alpha`)
+- change it only with `node bin/mgd-platform.js version --bump ... --note ...`; never edit `VERSION` or `package.json` by hand
+- every release adds an entry to `release-notes.json` and `CHANGELOG.md`
+- starter templates in `templates/<id>/` must keep their light and dark variants (`npm run check:templates`)
+
+## License label
+
+Never remove or weaken the "powered by: Michael Gahn DESIGN" label, the license page, `MGD-Lizenz.md` or the
+integrity check in templates – they are part of the MGD License. Changes to these files need the maintainer and
+`node scripts/update-license-hashes.js`.
 
 ## Agent workflow
 

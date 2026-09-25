@@ -1,0 +1,59 @@
+{
+  "id": "php-mysql-starter",
+  "name": "MGD PHP/MySQL Starter",
+  "version": "0.6.0",
+  "status": "pre-alpha",
+  "requirements": {
+    "php": ">=8.2",
+    "extensions": [
+      "pdo_mysql",
+      "mbstring",
+      "dom",
+      "sodium",
+      "fileinfo"
+    ],
+    "databases": {
+      "core": {
+        "engine": "mysql",
+        "required": true,
+        "purpose": "logins, settings, CMS"
+      },
+      "private": {
+        "engine": "mysql",
+        "required": false,
+        "purpose": "personal and sensitive data"
+      }
+    },
+    "deployment": [
+      "ftp",
+      "ftps"
+    ],
+    "optional_extensions": [
+      "gd"
+    ]
+  },
+  "variants": {
+    "light": "public/assets/css/theme-light.css",
+    "dark": "public/assets/css/theme-dark.css"
+  },
+  "features": [
+    "versioning",
+    "release-notes",
+    "credits",
+    "legal-pages",
+    "cms-revisions",
+    "cms-import-export",
+    "settings-search",
+    "design-tokens",
+    "theme-modes",
+    "file-locations",
+    "code-editors",
+    "seo",
+    "loading-screen",
+    "updater",
+    "cookie-box",
+    "maintenance-mode"
+  ],
+  "entry": "public/index.php",
+  "license": "LicenseRef-MGD"
+}

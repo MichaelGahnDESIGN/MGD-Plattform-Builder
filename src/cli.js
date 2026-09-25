@@ -5,6 +5,10 @@ import { auditCommand } from "./commands/audit.js";
 import { releaseCheckCommand } from "./commands/release-check.js";
 import { moduleCommand } from "./commands/module.js";
 import { updateCommand } from "./commands/update.js";
+import { versionCommand } from "./commands/version.js";
+import { briefingCommand } from "./commands/briefing.js";
+import { recommendCommand } from "./commands/recommend.js";
+import { templateCommand } from "./commands/template.js";
 
 function help() {
   console.log([
@@ -19,9 +23,16 @@ function help() {
     "  mgd-platform release-check [PATH]",
     "  mgd-platform module create <name> [--target DIR]",
     "  mgd-platform update [PATH]",
+    "  mgd-platform version [PATH] [--bump major|minor|patch] [--status STATUS] [--sync] [--check]",
+    "                       [--note TEXT --audience frontend,backoffice --type feature|patch|fix|security]",
+    "  mgd-platform briefing [PATH] [--write]",
+    "  mgd-platform recommend [PATH]",
+    "  mgd-platform template list | check | create <id> [--target DIR]",
     "",
     "Recommended first run:",
-    "  mgd-platform init --preset general",
+    "  mgd-platform template create php-mysql-starter --target ./mein-projekt",
+    "  mgd-platform init --preset general --target ./mein-projekt",
+    "  mgd-platform briefing ./mein-projekt --write",
     "  mgd-platform doctor",
     "  mgd-platform audit --write",
     ""
@@ -44,6 +55,10 @@ export async function runCli(args) {
   if (command === "release-check") return releaseCheckCommand(rest[0] || ".");
   if (command === "module") return moduleCommand(rest);
   if (command === "update") return updateCommand(rest[0] || ".");
+  if (command === "version") return versionCommand(rest);
+  if (command === "briefing") return briefingCommand(rest);
+  if (command === "recommend") return recommendCommand(rest[0] || ".");
+  if (command === "template") return templateCommand(rest);
 
   console.error("Unknown command: " + command);
   help();

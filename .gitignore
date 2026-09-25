@@ -8,6 +8,11 @@ Thumbs.db
 *.p12
 *.pfx
 *.sql
+# Versionierte Schema-Migrationen sind Code, keine Backups:
+!templates/*/database/core/*.sql
+!templates/*/database/private/*.sql
+!reference/*/database/*.sql
+!reference/*/database/migrations/*.sql
 *.sql.gz
 *.dump
 backups/
@@ -20,3 +25,6 @@ vendor/
 .idea/
 .vscode/settings.json
 MGD_PLATFORM.local.yml
+# Leere Sicherungsordner der Starter-Templates (Inhalt bleibt über die Template-.gitignore ausgeschlossen):
+!templates/*/storage/backups/
+!templates/*/public/assets/vendor/

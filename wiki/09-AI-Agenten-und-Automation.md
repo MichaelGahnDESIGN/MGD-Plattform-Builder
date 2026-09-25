@@ -1,6 +1,6 @@
 # AI-Agenten und Automation
 
-Das MGD Project Platform System ist ausdrücklich für die Zusammenarbeit mit Coding-Agenten ausgelegt.
+Das MGD-Plattform-Builder ist ausdrücklich für die Zusammenarbeit mit Coding-Agenten ausgelegt.
 
 ## Grundprinzip
 
@@ -78,3 +78,6 @@ Agenten-Aktionen sollten Principal, Scope, Aktion, Ergebnis und Zeitpunkt nachvo
 Das Repository ist so aufgebaut, dass spezialisierte MGD Skills für Development, Backups, Todos, Autopilot, Project Cleanup, Thread-Handover und Playtests ergänzt werden können.
 
 Weiter: [[14-Governance-Dokumentation-und-Releases]]
+## Briefing vor dem Bauen (ab 0.5.1)
+
+Bevor ein Agent ein Projekt baut, führt er das Briefing aus `platform/BRIEFING.md` durch: Editor und Auslieferung (lokal/CDN), Versionsanzeige, Release Notes, Rechtsseiten, Credits, Datenbanken, Code-Editoren, Dateispeicherorte, Light/Dark, Updater, Ladeüberbrückung, SEO und mehr. Danach empfiehlt er mit `mgd-platform recommend` passende MGD Skills, Tools und Plugins – inklusive MGD-DevOS, wenn es sinnvoll ist. Details: [[24-Briefing-Templates-und-Empfehlungen]].

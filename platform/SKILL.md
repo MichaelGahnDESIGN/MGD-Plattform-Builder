@@ -1,16 +1,42 @@
 ---
 name: platform
 description: >-
-  Audits, plans and bootstraps projects against the MGD Project Platform System.
+  Audits, plans and bootstraps projects against the MGD-Plattform-Builder.
   Covers architecture, data, admin/mod backoffice, privacy, security, compliance,
   operations, Docker, backups, i18n, documentation and agent governance.
 ---
 
 # /platform
 
-Use the MGD Project Platform System as a project-neutral foundation.
+Use the MGD-Plattform-Builder as a project-neutral foundation.
+
+## Mandatory features (every project)
+
+Versioning (`version.json`, MAJOR.MINOR.PATCH + status, default `0.0.1 Pre-Alpha`), release-notes
+timeline, credits (people + components), editable legal/CMS pages with revisions, trash,
+export/import, searchable and filterable settings, light **and** dark variants, editable design
+tokens. Never ask whether to build them – only how to configure them.
 
 ## Modes
+
+### /platform briefing
+
+Run the interview from `platform/BRIEFING.md` and `registry/briefing.yml` before building.
+Ask mandatory questions in small groups, write answers into `MGD_PLATFORM.yml`, then run
+`mgd-platform recommend` and suggest matching public MGD skills, tools and plugins – including
+**MGD-DevOS** when several projects, dashboards or agents are managed. Close with
+`briefing.completed: true`.
+
+### /platform template
+
+Create a project from `templates/<id>/` (`mgd-platform template create php-mysql-starter`).
+Every template must ship a light and a dark variant.
+
+### /platform release
+
+Bump the version (`mgd-platform version --bump patch|minor|major [--status beta]`), add a release
+note with audience (`--note "..." --audience frontend,backoffice`) and sync targets
+(`mgd-platform version --check`).
 
 ### /platform audit
 
@@ -18,6 +44,7 @@ Read-only first.
 
 Inspect the project and report:
 
+- mandatory features (versioning, release notes, credits, legal pages, settings search, light/dark, design)
 - current architecture
 - role-specific backoffice views and capability boundaries
 - project profile

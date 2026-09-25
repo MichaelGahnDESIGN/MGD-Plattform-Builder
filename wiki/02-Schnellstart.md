@@ -9,8 +9,8 @@ Für neue Projekte ist die CLI der einfachste Einstieg.
 Repository klonen und Abhängigkeiten installieren:
 
 ```bash
-git clone https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System.git
-cd Projekt-Plattform-System
+git clone https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder.git
+cd MGD-Plattform-Builder
 npm install
 npm link
 ```

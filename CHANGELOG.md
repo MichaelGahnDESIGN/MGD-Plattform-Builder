@@ -6,21 +6,78 @@ The format follows the spirit of Keep a Changelog and semantic versioning.
 
 ## [Unreleased]
 
-### Added
-
-- role-based backoffice view model for admin, moderation, support, privacy/compliance, translation/editorial, operations/security and AI supervision
-- machine-readable `backoffice.role_views` project profile schema
-- agent guidance for server-side role/capability enforcement and field-level data minimization
-- `/platform backoffice` audit/design mode
-
 ### Planned
 
 - Node/PostgreSQL reference implementation
 - stronger reusable backoffice components
 - translation CSV workflows and review queues
-- domain-level job idempotency examples
 - compliance automation
 - richer agent integration
+
+## [0.6.0 Pre-Alpha] - 2026-09-25
+
+### Changed
+
+- repository renamed from `Projekt-Plattform-System` to **MGD-Plattform-Builder**; the former `MGD_Platform-Builder_TOOL` is now `MGD_Docker_Projektbuilder`
+- **dual licensing** (`LICENSING.md`): CLI, validator, schemas, registries, scripts and docs stay MIT; starter templates, the reference platform, the "powered by" label and logos are under the new **MGD-Lizenz** (`MGD-Lizenz.md`, `LicenseRef-MGD`). Versions up to 0.5.1 remain MIT
+
+### Added
+
+- mandatory label "powered by: Michael Gahn DESIGN" (local logo light/dark, link to michael-gahn.de in a new tab) in public footer, public and private landing pages, login, backoffice footer and settings; only alignment is configurable
+- starter page **Settings › License** with label, full license text, domain, white-label and integrity status
+- `LicenseIntegrity` (SHA-256 of license text, label code, label CSS, logos) with backoffice warning; `mgd-platform template check` fails on modified license files; `scripts/update-license-hashes.js` for maintainers
+- Ed25519-signed license keys (`MGD1.<payload>.<signature>`) for white-label (EUR 500 one-time per project/domain) and paid modules, bound to domains
+- generic starter module interface (`modules/<id>/module.json`, entry, migrations, menu, free/paid), **Settings › Modules**, `schema/module-package.schema.json`
+- starter user management (`/admin/users`), **My account**, forced password change, optional e-mail password reset (`mail()` or SMTP, hashed single-use tokens, rate limited)
+- starter media library (`/admin/media`) with extension+MIME allowlist, random file names, GD re-encoding without metadata, usage check and picker for logos/OG image
+- GrapesJS saves HTML, scoped and sanitized CSS (`CssSanitizer`) and project data incl. revisions and export/import (migration 004)
+- updater sends the release channel and supports manifests with `channels`
+- reference platform shows the label on login and in the footer
+- private repository `MGD-Plattform-Builder-Marketplace` for paid modules/templates and the license signing tool
+
+- agent rules in the starter (`AGENTS.md`, `CLAUDE.md`) and project templates: AI agents must not remove or bypass the license label, even on user request, and point to the white-label license instead; enforced by `template check`
+- UX pass (ui-ux-pro-max checklist): 44 px touch targets, collapsible mobile backoffice menu, smoother hover states, landing page seed with hero, feature cards and call to action
+
+### Fixed
+
+- review fixes: license host check uses `app.url`; `sodium` and `fileinfo` are required extensions (GD optional); images are rejected instead of silently keeping EXIF data when GD is missing; module `requires.starter` is enforced against `template.json`; GrapesJS respects an explicitly chosen content format; release notes extraction matches versioned headings
+- starter database migrations, the code-editor backup folder and the editor vendor README were excluded by the root `.gitignore` (`*.sql`, `backups/`, `vendor/`) and never reached the repository; targeted exceptions added
+- CI and wiki/release workflows run on GitHub-hosted runners (`ubuntu-latest`); no self-hosted runner was registered, so required checks never ran
+- local PHP dev server (`php -S … public/index.php`) now serves CSS, JS and images of the starter
+- starter smoke test: reset throttling expectation (max. 3 requests per e-mail and hour)
+
+## [0.5.1 Pre-Alpha] - 2026-09-25
+
+The foundation becomes an **AI-agent driven CMS**: mandatory features every project must provide,
+an agent briefing, recommendations and a first starter template.
+
+### Added
+
+- `version.json` as single source of truth for version number and status (`pre-alpha` … `deprecated`), `schema/version.schema.json`
+- `mgd-platform version` (show, `--bump major|minor|patch`, `--status`, `--sync`, `--check`, `--note` with audience and type)
+- `release-notes.json` + `schema/release-notes.schema.json`; frontend shows only `frontend` entries, backoffice shows all
+- profile sections `versioning`, `cms`, `credits`, `settings`, `appearance`, `file_locations`, `code_editors`, `experience`, `template`, `briefing`
+- mandatory-feature rules in the validator (`src/lib/mandatory-rules.js`): versioning, release notes, credits, legal pages with revisions and export/import, searchable/filterable settings, light **and** dark mode, PHP editor safeguard
+- agent briefing: `platform/BRIEFING.md`, `registry/briefing.yml`, `mgd-platform briefing [--write]` (editor + local/CDN, version display, updater, loading screen, SEO, code editors, file locations, databases, ...)
+- recommendations: `registry/recommendations.yml`, `mgd-platform recommend` incl. MGD-DevOS and public MGD skills/plugins
+- starter templates: `templates/php-mysql-starter` (PHP, FTP, one MySQL DB, optional private DB, light and dark variant), `schema/template-manifest.schema.json`, `mgd-platform template list|check|create`
+- `templates/version.example.json` and `templates/release-notes.example.json` copied by `mgd-platform init`
+- CMS capabilities in `registry/capabilities.yml` (`cms.pages.*`, `release-notes.manage`, `credits.manage`, `settings.*`, `design.manage`, `code-editor.*`)
+- PHP/MariaDB reference shows the version on the login page and in the footer (`Core/Support/Version`)
+- role-based backoffice view model for admin, moderation, support, privacy/compliance, translation/editorial, operations/security and AI supervision
+- machine-readable `backoffice.role_views` project profile schema
+- agent guidance for server-side role/capability enforcement and field-level data minimization
+- `/platform backoffice` audit/design mode
+- documentation: `WIKI/18-CMS/*`, GitHub wiki pages 23 and 24, `/platform briefing|template|release` skill modes
+
+### Fixed
+
+- capability registry schema now accepts hyphenated domains such as `service-principals.read` (`npm run check:schemas` failed before)
+
+### Changed
+
+- `npm run check` additionally runs `check:version` and `check:templates`
+- `doctor` recommends `version.json` and `release-notes.json`
 
 ## [0.5.0] - 2026-09-20
 

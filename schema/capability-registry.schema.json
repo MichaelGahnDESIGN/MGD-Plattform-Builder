@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/schema/capability-registry.schema.json",
+  "$id": "https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/schema/capability-registry.schema.json",
   "title": "MGD Capability Registry",
   "type": "object",
   "required": ["version", "capabilities"],
@@ -16,7 +16,7 @@
     "capabilities": {
       "type": "object",
       "propertyNames": {
-        "pattern": "^[a-z0-9]+(?:\\.[a-z0-9-]+){1,4}$"
+        "pattern": "^[a-z0-9][a-z0-9-]*(?:\\.[a-z0-9-]+){1,4}$"
       },
       "additionalProperties": {
         "type": "object",

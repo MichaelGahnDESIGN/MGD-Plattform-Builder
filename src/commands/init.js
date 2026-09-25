@@ -37,7 +37,9 @@ export async function initCommand(args = []) {
     await copyUnlessExists(sourceProfile, path.join(target, "MGD_PLATFORM.yml"), force),
     await copyUnlessExists(path.join(foundationRoot, "templates", "AGENTS.md"), path.join(target, "AGENTS.md"), force),
     await copyUnlessExists(path.join(foundationRoot, "templates", "CLAUDE.md"), path.join(target, "CLAUDE.md"), force),
-    await copyUnlessExists(path.join(foundationRoot, "templates", "FEATURE-GOVERNANCE.md"), path.join(target, "FEATURE-GOVERNANCE.md"), force)
+    await copyUnlessExists(path.join(foundationRoot, "templates", "FEATURE-GOVERNANCE.md"), path.join(target, "FEATURE-GOVERNANCE.md"), force),
+    await copyUnlessExists(path.join(foundationRoot, "templates", "version.example.json"), path.join(target, "version.json"), false),
+    await copyUnlessExists(path.join(foundationRoot, "templates", "release-notes.example.json"), path.join(target, "release-notes.json"), false)
   ];
 
   await fs.mkdir(path.join(target, ".mgd", "evidence"), { recursive: true });
@@ -47,6 +49,7 @@ export async function initCommand(args = []) {
     console.log("  " + operation.status.padEnd(8) + " " + path.relative(target, operation.path));
   }
   console.log("  created  .mgd/evidence/");
-  console.log("\nNext: edit MGD_PLATFORM.yml, then run mgd-platform doctor.");
+  console.log("\nNext: run mgd-platform briefing --write, answer the questions in MGD_PLATFORM.yml,");
+  console.log("then run mgd-platform recommend and mgd-platform doctor.");
   return 0;
 }

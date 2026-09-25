@@ -1,24 +1,68 @@
 <div align="center">
 
-# MGD Project Platform System
+# MGD-Plattform-Builder
 
 **A reusable, agent-friendly foundation for building and operating modern digital platforms.**
 
 Privacy, security, compliance, modular backends, administration, moderation, Docker workflows, documentation and AI-agent collaboration in one project-neutral blueprint.
 
-[![Status](https://img.shields.io/badge/status-early%20foundation-orange?style=flat-square)](ROADMAP.md)
-[![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
+[![Version](https://img.shields.io/badge/version-0.6.0%20Pre--Alpha-orange?style=flat-square)](version.json)
+[![License](https://img.shields.io/badge/license-MIT%20%2B%20MGD-blue?style=flat-square)](LICENSING.md)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-compatible-6B5CE7?style=flat-square)](AGENTS.md)
 [![ChatGPT Codex](https://img.shields.io/badge/ChatGPT%20Codex-compatible-10A37F?style=flat-square)](AGENTS.md)
 [![Docker](https://img.shields.io/badge/Docker-ready-2496ED?style=flat-square)](WIKI/06-OPERATIONS/DOCKER-STAGING.md)
 
-**Deutsch** · [English](README.en.md) · [Installation](INSTALL.md) · [GitHub Wiki](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki) · [CLI-Dokumentation](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki/18-CLI-Validator-und-Automatisierung) · [Roadmap](ROADMAP.md) · [Mitmachen](CONTRIBUTING.md)
+**Deutsch** · [English](README.en.md) · [Installation](INSTALL.md) · [GitHub Wiki](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/wiki) · [CLI-Dokumentation](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/wiki/18-CLI-Validator-und-Automatisierung) · [Roadmap](ROADMAP.md) · [Mitmachen](CONTRIBUTING.md)
 
 </div>
 
 ---
 
-## Neu in 0.5: Translation Review, Agenten-Historie und idempotente Jobs
+## Neu in 0.6.0 Pre-Alpha: MGD-Plattform-Builder, Lizenz-Label, Benutzer, Medien und Module
+
+Das Projekt heißt jetzt **MGD-Plattform-Builder**. Neu:
+
+| Bereich | Was ist neu |
+|---|---|
+| **Lizenz** | Dual-Lizenz: CLI, Schemas und Doku bleiben MIT; Starter-Templates, Referenzplattform und Label stehen unter der [MGD-Lizenz](MGD-Lizenz.md). Details: [LICENSING.md](LICENSING.md) |
+| **„powered by“-Label** | Pflicht-Label „powered by: Michael Gahn DESIGN“ mit Logo und Link (neuer Tab) im Footer, auf Landingpages, beim Login, im Backoffice und in den Einstellungen, dazu die Seite **Einstellungen › Lizenz** |
+| **Whitelabel** | Label entfällt nur mit Whitelabel-Lizenz (500 €, einmalig pro Projekt/Domain), nachgewiesen durch einen signierten Schlüssel |
+| **Benutzerverwaltung** | Benutzer anlegen, Rollen, sperren, löschen, Mein Konto, optionaler Passwort-Reset per E-Mail |
+| **Medienbibliothek** | sichere Uploads (Bilder, PDF) mit MIME-Prüfung und Neukodierung ohne Metadaten |
+| **GrapesJS** | speichert HTML, CSS und Projektdaten, inkl. Revisionen und Export/Import |
+| **Updater** | Release-Kanäle (stable, beta, alpha, lts) im Manifest |
+| **Module** | eigene und kostenpflichtige Module unter `modules/<id>/`, aktivierbar im Backoffice |
+
+Mehr: [Lizenz, Label, Whitelabel und Module](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/wiki/25-Lizenz-Label-Whitelabel-und-Module)
+
+---
+
+## Seit 0.5.1: AI-generiertes CMS mit Pflichtfunktionen
+
+Mit 0.5.1 wird die Foundation zu einem **AI-Agenten-gesteuerten CMS**. Claude Code, ChatGPT Codex und andere Agenten erstellen damit Websites für Spiele, Projekte und Plattformen – aus einem **Briefing**, einem **Starter-Template** und **Pflichtfunktionen**, die in jedem Projekt immer vorhanden sind.
+
+| Pflichtfunktion | Kurz erklärt |
+|---|---|
+| **Versionierung** | `version.json` als einzige Quelle, Schema `MAJOR.MINOR.PATCH` + Status (Pre-Alpha … Stable). Start: `0.0.1 Pre-Alpha`. Anzeige unter Login und in den (Spiel-)Einstellungen, weitere Orte im Backoffice unter „Versionsnummern“ konfigurierbar |
+| **Release Notes** | Timeline unter Einstellungen; Frontend sieht nur Frontend-Notes, Editor/Admin/Mod sehen alles |
+| **Credits** | zuerst Personen und Rollen, dann alle KI-Systeme, Tools, Plugins, Bibliotheken, Schriften und Icons mit Logo, Anbieter, Links und Lizenz-Tags – alles lokal eingebettet |
+| **Rechtstexte / CMS-Seiten** | Kontakt, Impressum, AGB, Datenschutz, Cookies, Cookie-Box, Zahlung, Versand, Widerruf, Widerrufs-Button, Jugendschutz, Barrierefreiheit, AI-Philosophie – bearbeiten, löschen, neu anlegen, Revisionen, Export/Import |
+| **Einstellungen** | immer durchsuchbar und filterbar; Design-Farben, Light/Dark-Umschalter, Dateispeicherorte, optionale Code-Editoren |
+| **Templates** | `templates/php-mysql-starter`: PHP + FTP + 1 MySQL-DB (Logins), optional 2. DB für personenbezogene Daten, immer Light **und** Dark |
+
+```bash
+mgd-platform template create php-mysql-starter --target ./mein-projekt
+mgd-platform init --target ./mein-projekt
+mgd-platform briefing ./mein-projekt --write     # Pflichtfragen: Editor lokal/CDN, Versionsanzeige, Updater, Ladebildschirm, SEO, ...
+mgd-platform recommend ./mein-projekt            # passende MGD Skills, Tools, Plugins und MGD-DevOS
+mgd-platform version ./mein-projekt --bump patch --note "Erster Deploy" --audience frontend
+```
+
+Mehr: [AI-CMS-Pflichtfunktionen](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/wiki/23-AI-CMS-Pflichtfunktionen) · [Briefing, Templates und Empfehlungen](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/wiki/24-Briefing-Templates-und-Empfehlungen) · [Technische Doku](WIKI/18-CMS/MANDATORY-FEATURES.md)
+
+---
+
+## Seit 0.5: Translation Review, Agenten-Historie und idempotente Jobs
 
 Version 0.5 ergänzt echte Team- und Betriebsworkflows. Übersetzungen durchlaufen jetzt Draft, Review, Published beziehungsweise Rejected. JSON Exporte lassen sich wieder importieren, landen dabei absichtlich erneut im Draft. Service Principals besitzen eigene Detailseiten und eine Lebenszyklus-Historie. Hintergrundjobs können mit Idempotency Keys gegen doppelte Ausführung geschützt und über eine Handler Registry modular verarbeitet werden.
 
@@ -37,7 +81,7 @@ request + idempotency key
 → done / retry / dead
 ```
 
-Mehr: [0.5 Translation Review, Agenten-Historie und idempotente Jobs](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki/22-Translation-Review-Agenten-Historie-und-Idempotente-Jobs)
+Mehr: [0.5 Translation Review, Agenten-Historie und idempotente Jobs](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/wiki/22-Translation-Review-Agenten-Historie-und-Idempotente-Jobs)
 
 ---
 
@@ -54,7 +98,7 @@ php scripts/migrate.php
 php -S 127.0.0.1:8080 -t public
 ```
 
-Mehr: [0.4 Migrationen, I18n, Agenten und Jobs](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki/21-Migrationen-I18n-Agenten-und-Jobs)
+Mehr: [0.4 Migrationen, I18n, Agenten und Jobs](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/wiki/21-Migrationen-I18n-Agenten-und-Jobs)
 
 ---
 
@@ -72,7 +116,7 @@ php -S 127.0.0.1:8080 -t public
 
 Die Referenz wird in GitHub Actions gegen eine echte MariaDB getestet.
 
-[PHP/MariaDB Referenz im Wiki](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki/20-PHP-MariaDB-Referenzplattform)
+[PHP/MariaDB Referenz im Wiki](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/wiki/20-PHP-MariaDB-Referenzplattform)
 
 ---
 
@@ -101,18 +145,22 @@ Die wichtigsten Funktionen:
 | `release-check` | Release-Gates gegen echte Evidence-Dateien prüfen |
 | `module create` | Modulmanifest und Dokumentationsgerüst erzeugen |
 | `update` | Foundation-Version vergleichen und Migration anstoßen |
+| `version` | Versionsnummer anzeigen, erhöhen, Status setzen, Dateien synchronisieren, Release Note anlegen |
+| `briefing` | offene Pflichtfragen des Agenten-Briefings anzeigen oder als `BRIEFING.md` schreiben |
+| `recommend` | passende MGD Skills, Tools und Plugins (inkl. MGD-DevOS) empfehlen |
+| `template` | Starter-Templates auflisten, prüfen (Light + Dark) und erzeugen |
 
 Zusätzlich enthält das Projekt jetzt eine zentrale **Capability Registry**, maschinenlesbare **Release Evidence**, automatische **GitHub Foundation Checks**, eine **PHP/MariaDB Referenzimplementierung** und ein lokales **Backoffice-Demo**.
 
-Ausführliche Erklärung: [CLI, Validator und Automatisierung](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki/18-CLI-Validator-und-Automatisierung)
+Ausführliche Erklärung: [CLI, Validator und Automatisierung](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/wiki/18-CLI-Validator-und-Automatisierung)
 
-Referenzcode und Demos: [Referenzimplementierungen und Demos](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki/19-Referenzimplementierungen-und-Demos)
+Referenzcode und Demos: [Referenzimplementierungen und Demos](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/wiki/19-Referenzimplementierungen-und-Demos)
 
 ---
 
 ## Was ist dieses Projekt?
 
-Das **MGD Project Platform System** ist kein fertiges CMS, kein SaaS und kein starres Framework.
+Das **MGD-Plattform-Builder** ist eine Foundation für **AI-generierte CMS-Projekte** – kein SaaS und kein starres Framework.
 
 Es ist eine **wiederverwendbare Plattform-Grundlage** für Projekte, die mehr benötigen als nur Frontend und Datenbank: Benutzerkonten, Rollen, Admin- und Moderatorbereiche, Datenschutz, Sicherheit, Compliance, Backups, Staging, Übersetzungen, Support, Dokumentation, AI-Agenten, Module und ein kontrollierter Entwicklungsprozess.
 
@@ -208,11 +256,15 @@ Dieses Projekt dreht die Reihenfolge um:
 | CLI & Validation | Init, Validator, Doctor, Audit, Module Generator, Release Check |
 | Evidence | maschinenlesbare Release-Nachweise mit Ablaufdatum |
 | Referenzen | PHP/MariaDB Architektur und lokales Backoffice-Demo |
+| AI-CMS | Versionierung, Release Notes, Credits, Rechtstexte mit Revisionen, durchsuchbare Einstellungen, Design, Light/Dark |
+| Briefing & Empfehlungen | Pflichtfragen für Agenten, Empfehlungen für MGD-DevOS und MGD Skills |
+| Templates | FTP-fähiger PHP/MySQL-Starter mit Light- und Dark-Variante |
 
 ---
 
 ## Was die Foundation bewusst nicht ist
 
+- kein monolithisches Fertig-CMS von der Stange – der PHP/MySQL-Starter ist ein Ausgangspunkt, den Agenten projektspezifisch ausbauen
 - kein fertiges PHP-, Node-, Java- oder .NET-Framework
 - kein Ersatz für Laravel, Symfony, Django, Spring, Directus oder ähnliche Systeme
 - kein automatisch rechtssicheres Komplettpaket
@@ -230,8 +282,8 @@ Die Foundation beschreibt **Schnittstellen, Prinzipien, Prüfpunkte und Template
 ### 1. Repository klonen und CLI vorbereiten
 
 ```bash
-git clone https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System.git
-cd Projekt-Plattform-System
+git clone https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder.git
+cd MGD-Plattform-Builder
 npm install
 npm link
 ```
@@ -257,7 +309,7 @@ Beispiel:
 project:
   name: "Example Platform"
   type: "community"
-  foundation_version: "0.5.0"
+  foundation_version: "0.6.0"
 
 market:
   countries: ["DE"]
@@ -586,7 +638,13 @@ Die Foundation dupliziert vorhandene Skills nicht, sondern kann sie orchestriere
 | [MGD ProjectClean Skill](https://github.com/MichaelGahnDESIGN/MGD_ProjectClean_SKILL) | Abschluss und Cleanup |
 | [MGD AI Thread](https://github.com/MichaelGahnDESIGN/MGD_AI-Thread) | Übergaben zwischen Kontextfenstern |
 | [MGD AI PlayTest Skill](https://github.com/MichaelGahnDESIGN/MGD_AI-PlayTest_SKILL) | rollenbasierte Play-/Produkttests |
-| [MGD Platform Builder](https://github.com/MichaelGahnDESIGN/MGD_Platform-Builder_TOOL) | erzeugt technische Startgerüste; diese Foundation definiert Architektur, Betrieb und Governance |
+| [MGD Docker Projektbuilder](https://github.com/MichaelGahnDESIGN/MGD_Docker_Projektbuilder) | erzeugt technische Startgerüste; diese Foundation definiert Architektur, Betrieb und Governance |
+| [MGD-DevOS](https://github.com/MichaelGahnDESIGN/MGD-DevOS) | Desktop-Projektzentrale mit Dashboards; wird im Briefing empfohlen, wenn mehrere Projekte oder Agenten betreut werden |
+| [MGD Living Documentation](https://github.com/MichaelGahnDESIGN/MGD_Living-Documentation) | belegbare, versionierte Projektdokumentation |
+| [MGD Software Updater Skill](https://github.com/MichaelGahnDESIGN/MGD_Software-Updater_SKILL) | Updater planen und umsetzen, wenn im Briefing gewünscht |
+| [Fragenkatalog Skill](https://github.com/MichaelGahnDESIGN/Fragenkatalog-Skill) | vertieft das Briefing für Konzept- und Designfragen |
+
+Die vollständige, maschinenlesbare Liste mit Empfehlungsregeln steht in [`registry/recommendations.yml`](registry/recommendations.yml) (`mgd-platform recommend`).
 
 Weitere öffentliche Projekte:
 [Michael Gahn DESIGN – eigene Projekte](https://michael-gahn.de/eigene-projekte/)
@@ -612,7 +670,7 @@ Siehe [Domain Packs](WIKI/10-DOMAIN-PACKS/README.md).
 ## Repository-Struktur
 
 ```text
-Projekt-Plattform-System/
+MGD-Plattform-Builder/
 ├── README.md
 ├── README.en.md
 ├── LICENSE
@@ -630,24 +688,35 @@ Projekt-Plattform-System/
 ├── src/
 │   ├── commands/
 │   └── lib/
+├── version.json              # Versionsnummer + Status (Single Source of Truth)
+├── release-notes.json
 ├── registry/
-│   └── capabilities.yml
+│   ├── capabilities.yml
+│   ├── briefing.yml           # Pflichtfragen des Agenten-Briefings
+│   └── recommendations.yml    # MGD Skills, Tools, Plugins, MGD-DevOS
 ├── reference/
 │   ├── php-mariadb/
 │   └── backoffice-demo/
 ├── platform/
-│   └── SKILL.md
+│   ├── SKILL.md
+│   └── BRIEFING.md
 │
 ├── schema/
 │   ├── mgd-platform.schema.json
 │   ├── module-manifest.schema.json
 │   ├── evidence.schema.json
-│   └── capability-registry.schema.json
+│   ├── capability-registry.schema.json
+│   ├── version.schema.json
+│   ├── release-notes.schema.json
+│   └── template-manifest.schema.json
 │
 ├── templates/
 │   ├── MGD_PLATFORM.example.yml
 │   ├── AGENTS.md
-│   └── CLAUDE.md
+│   ├── CLAUDE.md
+│   ├── version.example.json
+│   ├── release-notes.example.json
+│   └── php-mysql-starter/     # FTP-fähiges CMS, Light + Dark
 │
 ├── compliance/
 │   ├── README.md
@@ -662,7 +731,7 @@ Projekt-Plattform-System/
 
 ## Reifegrad
 
-Aktueller Stand: **Early Foundation / 0.5.x**
+Aktueller Stand: **0.6.0 Pre-Alpha** (siehe [`version.json`](version.json) und [`release-notes.json`](release-notes.json))
 
 Vor 1.0 können sich Schemas und Empfehlungen noch ändern. Beiträge aus realen Projekten sind ausdrücklich erwünscht.
 
@@ -699,7 +768,12 @@ Siehe [SECURITY.md](SECURITY.md).
 
 ## Lizenz
 
-MIT License. Siehe [LICENSE](LICENSE).
+Dual lizenziert, siehe [LICENSING.md](LICENSING.md):
+
+- **MIT** ([LICENSE](LICENSE)): CLI, Validator, Schemas, Registries, Skripte, Dokumentation
+- **MGD-Lizenz** ([MGD-Lizenz.md](MGD-Lizenz.md)): Starter-Templates, Referenzplattform, „powered by“-Label und daraus erstellte Projekte. Pflicht-Label „powered by: Michael Gahn DESIGN“; Entfernen nur mit Whitelabel-Lizenz (500 €, einmalig pro Projekt/Domain)
+
+Versionen bis 0.5.1 bleiben MIT.
 
 ---
 
@@ -717,7 +791,7 @@ Dieses Repository enthält keine privaten Zugangsdaten, Serverpfade oder kundens
 - [MGD Todo Skill](https://github.com/MichaelGahnDESIGN/MGD_Todo_SKILL)
 - [MGD Backup Skill](https://github.com/MichaelGahnDESIGN/MGD_Backup_SKILL)
 - [MGD Autopilot Skill](https://github.com/MichaelGahnDESIGN/MGD_Autopilot_SKILL)
-- [MGD Platform Builder](https://github.com/MichaelGahnDESIGN/MGD_Platform-Builder_TOOL)
+- [MGD Docker Projektbuilder](https://github.com/MichaelGahnDESIGN/MGD_Docker_Projektbuilder)
 - [Alle öffentlichen Repositories](https://github.com/MichaelGahnDESIGN)
 
 ---

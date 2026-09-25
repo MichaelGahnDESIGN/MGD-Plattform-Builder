@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Project: MGD Project Platform System
+Project: MGD-Plattform-Builder
 
 This repository is a reusable public foundation, not a project-specific application.
 

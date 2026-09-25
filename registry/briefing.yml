@@ -1,0 +1,170 @@
+# Briefing interview for coding agents (Claude Code, ChatGPT Codex, ...).
+# Every question maps to a path in MGD_PLATFORM.yml. `mgd-platform briefing`
+# lists which questions are still open. `mandatory: true` questions must be
+# answered before implementation starts.
+version: 1
+sections:
+  - id: "project"
+    title: "Projekt"
+    questions:
+      - id: "project.description"
+        path: "project.description"
+        mandatory: true
+        question: "Was wird gebaut (Spiel, Plattform, Website, Shop, Community, ...) und für wen?"
+      - id: "project.type"
+        path: "project.type"
+        mandatory: true
+        question: "Welcher Projekttyp passt am besten (general, game, community, creator, ecommerce, internal, custom)?"
+      - id: "market.countries"
+        path: "market.countries"
+        mandatory: true
+        question: "In welchen Ländern wird das Projekt angeboten?"
+      - id: "languages.enabled"
+        path: "languages.enabled"
+        mandatory: true
+        question: "Welche Sprachen sind aktiv, welche vorbereitet?"
+  - id: "template"
+    title: "Template, Hosting und Datenbanken"
+    questions:
+      - id: "template.id"
+        path: "template.id"
+        mandatory: true
+        question: "Welches Template soll genutzt werden (z. B. php-mysql-starter)? Mindestanforderung: PHP, FTP, eine MySQL-Datenbank für Logins."
+      - id: "template.databases.private"
+        path: "template.databases.private"
+        mandatory: true
+        question: "Soll eine zweite MySQL-Datenbank personenbezogene und sensible Daten sauber von Logins und Inhalten trennen?"
+      - id: "template.deployment"
+        path: "template.deployment"
+        mandatory: true
+        question: "Wie wird ausgeliefert (FTP, FTPS, SFTP, Git, Docker, CI)?"
+      - id: "infrastructure.staging"
+        path: "infrastructure.staging"
+        mandatory: true
+        question: "Gibt es eine Staging-Umgebung (lokal, NAS, Cloud)?"
+      - id: "infrastructure.backup"
+        path: "infrastructure.backup"
+        mandatory: true
+        question: "Wo und wie werden Backups gespeichert?"
+  - id: "versioning"
+    title: "Versionsnummern und Release Notes"
+    questions:
+      - id: "versioning.status"
+        path: "versioning.status"
+        mandatory: true
+        question: "Mit welchem Status startet das Projekt? Standard: 0.0.1 Pre-Alpha."
+      - id: "versioning.display.locations"
+        path: "versioning.display.locations"
+        mandatory: true
+        question: "Wo soll die Versionsnummer angezeigt werden (Login, Einstellungen/Spieleinstellungen, Backoffice-Footer, öffentlicher Footer/Header, öffentliche oder private Landingpage)?"
+      - id: "versioning.display.audience"
+        path: "versioning.display.audience"
+        mandatory: true
+        question: "Soll die Version öffentlich, nur privat (eingeloggt) oder beides sichtbar sein?"
+      - id: "versioning.release_notes.public_audiences"
+        path: "versioning.release_notes.public_audiences"
+        mandatory: true
+        question: "Welche Release Notes sieht das Frontend? Standard: nur Einträge mit Zielgruppe frontend; das Backoffice sieht alle."
+  - id: "cms"
+    title: "CMS, Rechtstexte und Credits"
+    questions:
+      - id: "cms.editor"
+        path: "cms.editor"
+        mandatory: true
+        question: "Mit welchem Editor werden CMS-Seiten bearbeitet (TinyMCE, GrapesJS, Quill, Editor.js, Markdown, reines Textfeld, anderes)?"
+      - id: "cms.editor_delivery"
+        path: "cms.editor_delivery"
+        mandatory: true
+        question: "Soll der Editor lokal in der App eingebettet werden oder von einem CDN geladen werden? (Empfehlung: lokal)"
+      - id: "cms.legal_pages"
+        path: "cms.legal_pages"
+        mandatory: true
+        question: "Welche Rechts- und Pflichtseiten werden gebraucht (Kontakt, Impressum, AGB, Datenschutz, Cookies, Cookie-Box-Texte, Zahlung, Versand, Widerrufsbelehrung, Widerrufs-Button-Text, Jugendschutz, Barrierefreiheit, AI-Philosophie, Credits)?"
+      - id: "credits.people"
+        path: "credits.people"
+        mandatory: true
+        question: "Wer ist beteiligt und mit welcher Rolle (für die Credits)?"
+      - id: "credits.local_assets_only"
+        path: "credits.local_assets_only"
+        mandatory: true
+        question: "Bestätigung: Schriften, Icons, Logos und Bibliotheken werden lokal eingebettet und in den Credits mit Lizenz aufgeführt?"
+  - id: "backoffice"
+    title: "Backoffice und Einstellungen"
+    questions:
+      - id: "settings.searchable"
+        path: "settings.searchable"
+        mandatory: true
+        question: "Bestätigung: Einstellungen sind durchsuchbar und filterbar (Pflicht)."
+      - id: "file_locations.documented_in_backoffice"
+        path: "file_locations.documented_in_backoffice"
+        mandatory: true
+        question: "Soll das Backoffice eine Übersicht der Dateispeicherorte zeigen (Uploads, Backups, Logs, Konfiguration, Versionsdatei)?"
+      - id: "code_editors.enabled"
+        path: "code_editors.enabled"
+        mandatory: true
+        question: "Soll es im Admin-Backoffice Code-Editoren geben? Für welche Sprachen (CSS, JS, PHP, HTML, JSON)? PHP nur mit zusätzlichem Konfigurationsschalter."
+      - id: "backoffice.role_views"
+        path: "backoffice.role_views"
+        mandatory: false
+        question: "Welche Rollenansichten braucht das Backoffice (Admin, Redaktion, Moderation, Support, ...)?"
+  - id: "appearance"
+    title: "Design, Light- und Dark-Mode"
+    questions:
+      - id: "appearance.default_mode"
+        path: "appearance.default_mode"
+        mandatory: true
+        question: "Welcher Modus ist Standard (System, Light, Dark)? Light und Dark sind immer beide vorhanden."
+      - id: "appearance.toggle.locations"
+        path: "appearance.toggle.locations"
+        mandatory: true
+        question: "Soll der Light/Dark-Umschalter angezeigt werden und wo (Header, Footer, Login, Einstellungen, schwebend)?"
+      - id: "appearance.design_tokens"
+        path: "appearance.design_tokens"
+        mandatory: false
+        question: "Gibt es Markenfarben (primary, secondary, accent, ...)? Sonst werden Standardfarben gesetzt, die im Backoffice unter Design änderbar sind."
+  - id: "experience"
+    title: "Produkt-Erlebnis"
+    questions:
+      - id: "experience.updater"
+        path: "experience.updater"
+        mandatory: true
+        question: "Braucht das Projekt einen Updater (Update-Prüfung, Kanäle, Hinweise)?"
+      - id: "experience.loading_screen"
+        path: "experience.loading_screen"
+        mandatory: true
+        question: "Soll es eine Ladeüberbrückung geben (Ladebildschirm, Spinner, Fortschrittsbalken, Tipps)?"
+      - id: "experience.seo"
+        path: "experience.seo"
+        mandatory: true
+        question: "Welche SEO-Anforderungen gibt es (Titel, Beschreibungen, Sitemap, robots.txt, Open Graph, noindex für Staging)?"
+      - id: "experience.cookie_banner"
+        path: "experience.cookie_banner"
+        mandatory: true
+        question: "Wird eine Cookie-Box benötigt (nur wenn nicht-essenzielle Cookies/Tracking eingesetzt werden)?"
+      - id: "experience.maintenance_mode"
+        path: "experience.maintenance_mode"
+        mandatory: true
+        question: "Soll es einen Wartungsmodus geben?"
+      - id: "experience.error_pages"
+        path: "experience.error_pages"
+        mandatory: false
+        question: "Sollen eigene Fehlerseiten (404, 500, Wartung) gestaltet werden?"
+      - id: "experience.onboarding"
+        path: "experience.onboarding"
+        mandatory: false
+        question: "Braucht es ein Onboarding oder Tutorial für neue Nutzer?"
+      - id: "experience.search"
+        path: "experience.search"
+        mandatory: false
+        question: "Braucht das Frontend eine Suche?"
+  - id: "agents"
+    title: "KI-Agenten und Empfehlungen"
+    questions:
+      - id: "agents.enabled"
+        path: "agents.enabled"
+        mandatory: true
+        question: "Welche KI-Agenten arbeiten am Projekt (Claude Code, ChatGPT Codex, ...) und brauchen Produktionsänderungen eine Freigabe?"
+      - id: "briefing.accepted_recommendations"
+        path: "briefing.accepted_recommendations"
+        mandatory: false
+        question: "Welche empfohlenen MGD Skills, Tools und Plugins (inkl. MGD-DevOS) sollen genutzt werden? Siehe `mgd-platform recommend`."

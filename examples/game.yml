@@ -1,7 +1,8 @@
 project:
   name: "Example Game"
   type: "game"
-  foundation_version: "0.2.0"
+  foundation_version: "0.6.0"
+  description: "Beispiel-Browserspiel mit Spielerkonten, Shop, Moderation und Editor für Spielinhalte"
 market:
   countries: ["DE"]
 languages:
@@ -47,3 +48,115 @@ release_gates:
   - "security-reviewed"
   - "payment-flow-tested"
   - "restore-tested"
+
+versioning:
+  source_file: "version.json"
+  current: "0.0.1"
+  status: "pre-alpha"
+  display:
+    enabled: true
+    show_status: true
+    audience: "both"
+    locations:
+      - "login"
+      - "game_settings"
+      - "settings"
+      - "backoffice_footer"
+  release_notes:
+    enabled: true
+    source_file: "release-notes.json"
+    public_audiences:
+      - "frontend"
+    settings_menu_label: "Release Notes"
+
+cms:
+  editor: "grapesjs"
+  editor_delivery: "local"
+  revisions: true
+  import_export: true
+  trash: true
+  custom_pages: true
+  legal_pages:
+    - "contact"
+    - "imprint"
+    - "privacy"
+    - "cookies"
+    - "cookie_banner"
+    - "accessibility"
+    - "ai_philosophy"
+    - "credits"
+    - "terms"
+    - "payment"
+    - "shipping"
+    - "withdrawal"
+    - "withdrawal_button"
+    - "youth_protection"
+
+credits:
+  enabled: true
+  people: true
+  components: true
+  editable_in_backoffice: true
+  local_assets_only: true
+
+settings:
+  searchable: true
+  filterable: true
+
+appearance:
+  modes:
+    - "light"
+    - "dark"
+  default_mode: "dark"
+  toggle:
+    enabled: true
+    locations:
+      - "header"
+      - "settings"
+  design_tokens_editable: true
+  design_tokens:
+    primary: "#4f46e5"
+    secondary: "#0ea5e9"
+    accent: "#f59e0b"
+
+file_locations:
+  documented_in_backoffice: true
+  paths:
+    version: "version.json"
+    release_notes: "release-notes.json"
+    uploads: "public/uploads"
+    backups: "storage/backups"
+    logs: "storage/logs"
+
+code_editors:
+  enabled: true
+  languages:
+    - "css"
+    - "js"
+  php_requires_config_flag: true
+  backup_before_save: true
+
+experience:
+  updater: true
+  loading_screen: true
+  seo: true
+  cookie_banner: true
+  maintenance_mode: true
+  error_pages: true
+
+template:
+  id: "php-mysql-starter"
+  variants:
+    - "light"
+    - "dark"
+  databases:
+    core: "mysql"
+    private: "mysql"
+  deployment: "ftps"
+
+briefing:
+  completed: true
+  completed_at: "2026-09-25"
+  accepted_recommendations:
+    - "mgd-dev-skill"
+    - "mgd-todo-skill"
