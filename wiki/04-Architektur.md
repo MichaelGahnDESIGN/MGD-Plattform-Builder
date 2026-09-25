@@ -69,6 +69,6 @@ Identitäten, Besitzverhältnisse, Status, Berechtigungen, Billing und Moderatio
 
 Interne numerische IDs dürfen effizient bleiben. Öffentliche URLs und APIs sollten bei Enumerationsrisiken nicht vorhersagbare IDs verwenden.
 
-Technische Tiefenreferenz: [WIKI/02-ARCHITECTURE](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/tree/main/WIKI/02-ARCHITECTURE)
+Technische Tiefenreferenz: [WIKI/02-ARCHITECTURE](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/tree/main/WIKI/02-ARCHITECTURE)
 
 Weiter: [[05-Rollen-Berechtigungen-und-Backoffice]] · [[06-Daten-Dateien-und-Speicherung]]

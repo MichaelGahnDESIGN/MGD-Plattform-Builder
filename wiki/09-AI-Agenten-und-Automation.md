@@ -1,6 +1,6 @@
 # AI-Agenten und Automation
 
-Das MGD Project Platform System ist ausdrücklich für die Zusammenarbeit mit Coding-Agenten ausgelegt.
+Das MGD-Plattform-Builder ist ausdrücklich für die Zusammenarbeit mit Coding-Agenten ausgelegt.
 
 ## Grundprinzip
 

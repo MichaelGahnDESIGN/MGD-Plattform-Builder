@@ -1,6 +1,6 @@
 # 0.5.1: AI-CMS-Pflichtfunktionen
 
-Mit Version **0.5.1 Pre-Alpha** wird das MGD Project Platform System zu einem **AI-Agenten-gesteuerten CMS**: Claude Code, ChatGPT Codex und andere Coding-Agenten erstellen damit Websites für Spiele, Projekte und Plattformen – aus einem Briefing, einem Starter-Template und festen Pflichtfunktionen.
+Mit Version **0.5.1 Pre-Alpha** wird das MGD-Plattform-Builder zu einem **AI-Agenten-gesteuerten CMS**: Claude Code, ChatGPT Codex und andere Coding-Agenten erstellen damit Websites für Spiele, Projekte und Plattformen – aus einem Briefing, einem Starter-Template und festen Pflichtfunktionen.
 
 Pflichtfunktionen sind Funktionen, die **jedes** Projekt immer hat. Der Agent fragt nie *ob*, sondern nur *wie* sie eingerichtet werden.
 
@@ -227,4 +227,4 @@ design.manage           code-editor.assets.manage
 code-editor.server.manage
 ```
 
-Technische Tiefendokumentation (Englisch): [WIKI/18-CMS](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/tree/main/WIKI/18-CMS)
+Technische Tiefendokumentation (Englisch): [WIKI/18-CMS](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/tree/main/WIKI/18-CMS)

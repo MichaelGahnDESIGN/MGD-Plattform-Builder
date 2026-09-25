@@ -1,6 +1,6 @@
 # CLI, Validator und Automatisierung
 
-Mit Version 0.2 erhält das MGD Project Platform System eine eigene Kommandozeilenoberfläche. Damit wird die Foundation nicht mehr nur gelesen, sondern kann Projekte aktiv initialisieren, prüfen und auf Release-Bereitschaft kontrollieren.
+Mit Version 0.2 erhält das MGD-Plattform-Builder eine eigene Kommandozeilenoberfläche. Damit wird die Foundation nicht mehr nur gelesen, sondern kann Projekte aktiv initialisieren, prüfen und auf Release-Bereitschaft kontrollieren.
 
 Die CLI heißt:
 
@@ -15,8 +15,8 @@ Sie läuft lokal mit Node.js und benötigt keinen Webserver.
 Repository klonen und Abhängigkeiten installieren:
 
 ```bash
-git clone https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System.git
-cd Projekt-Plattform-System
+git clone https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder.git
+cd MGD-Plattform-Builder
 npm install
 ```
 

@@ -1,4 +1,4 @@
-# MGD Project Platform System
+# MGD-Plattform-Builder
 
 **Start**
 * [[Home]]
@@ -41,4 +41,4 @@
 
 ---
 
-[Repository](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System) · [Issues](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/issues)
+[Repository](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder) · [Issues](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/issues)

@@ -60,7 +60,7 @@ jobs:
           mv "dist/${CLI_PACKAGE}" "dist/MGD-Platform-CLI-${VERSION}.tgz"
 
           awk -v version="$VERSION" '
-            $0 == "## [" version "] - 2026-09-20" { found=1; print "# MGD Project Platform System v" version; print ""; next }
+            $0 == "## [" version "] - 2026-09-20" { found=1; print "# MGD-Plattform-Builder v" version; print ""; next }
             found && /^## \[/ { exit }
             found { print }
           ' CHANGELOG.md > dist/RELEASE_NOTES.md

@@ -1,6 +1,6 @@
 # PHP / MariaDB Reference Platform
 
-This directory contains a small but runnable reference platform for the **MGD Project Platform System**.
+This directory contains a small but runnable reference platform for the **MGD-Plattform-Builder**.
 
 It demonstrates how the Foundation concepts can map to PHP 8.3+ and MariaDB without forcing Symfony, Laravel or another application framework.
 
@@ -426,4 +426,4 @@ The purpose of this reference is to make the Foundation architecture concrete wi
 
 See the GitHub Wiki page:
 
-https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki/20-PHP-MariaDB-Referenzplattform
+https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/wiki/20-PHP-MariaDB-Referenzplattform

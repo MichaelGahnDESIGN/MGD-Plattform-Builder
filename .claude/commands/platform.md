@@ -1,6 +1,6 @@
 # /platform
 
-Use the MGD Project Platform System rules from this repository.
+Use the MGD-Plattform-Builder rules from this repository.
 
 Arguments: `$ARGUMENTS`
 

@@ -1,12 +1,12 @@
-# MGD Project Platform System
+# MGD-Plattform-Builder
 
-Willkommen im öffentlichen Wiki des **MGD Project Platform Systems**.
+Willkommen im öffentlichen Wiki des **MGD-Plattform-Builders**.
 
 Diese Dokumentation erklärt die Foundation so, dass Entwickler, Projektverantwortliche, Agenten und externe Dritte verstehen können, **was das System ist, wie es eingesetzt wird, welche Sicherheits- und Datenschutzprinzipien gelten und wie ein Projekt damit betrieben und weiterentwickelt wird**.
 
 > **Neu in 0.5.1 Pre-Alpha:** Die Foundation wird zum **AI-Agenten-gesteuerten CMS** – mit Pflichtfunktionen (Versionierung, Release Notes, Credits, editierbare Rechtstexte, durchsuchbare Einstellungen, Design, Light/Dark), Agenten-Briefing, Empfehlungen für MGD-DevOS und MGD Skills sowie einem FTP-fähigen PHP/MySQL-Starter. → [[23-AI-CMS-Pflichtfunktionen]] · [[24-Briefing-Templates-und-Empfehlungen]]
 
-> **Kurz gesagt:** Das MGD Project Platform System ist eine projektneutrale Grundlage für moderne digitale Plattformen mit Accounts, Rollen, Admin- und Moderatorbereichen, Datenschutz, Sicherheit, Compliance, Backups, Staging, Support, Dokumentation und AI-Agenten.
+> **Kurz gesagt:** Das MGD-Plattform-Builder ist eine projektneutrale Grundlage für moderne digitale Plattformen mit Accounts, Rollen, Admin- und Moderatorbereichen, Datenschutz, Sicherheit, Compliance, Backups, Staging, Support, Dokumentation und AI-Agenten.
 
 ## Wo sollte ich anfangen?
 
@@ -122,6 +122,6 @@ Sie ist eine technische und organisatorische Grundlage, die hilft, relevante The
 
 ---
 
-Repository: [MichaelGahnDESIGN/Projekt-Plattform-System](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System)
+Repository: [MichaelGahnDESIGN/MGD-Plattform-Builder](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder)
 
-Technische Tiefendokumentation: [WIKI im Hauptrepository](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/tree/main/WIKI)
+Technische Tiefendokumentation: [WIKI im Hauptrepository](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/tree/main/WIKI)

@@ -1,6 +1,6 @@
 # Project Wiki
 
-This wiki is the detailed knowledge base for the **MGD Project Platform System**.
+This wiki is the detailed knowledge base for the **MGD-Plattform-Builder**.
 
 It is organized so humans and coding agents can enter at different depths without reading the entire repository.
 

@@ -1,6 +1,6 @@
 <div align="center">
 
-# MGD Project Platform System
+# MGD-Plattform-Builder
 
 **A reusable, agent-friendly foundation for building and operating modern digital platforms.**
 
@@ -11,7 +11,7 @@ Privacy, security, compliance, modular backends, administration, moderation, Doc
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-compatible-6B5CE7?style=flat-square)](AGENTS.md)
 [![ChatGPT Codex](https://img.shields.io/badge/ChatGPT%20Codex-compatible-10A37F?style=flat-square)](AGENTS.md)
 
-[Deutsch](README.md) · **English** · [Installation](INSTALL.md) · [GitHub Wiki](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki) · [CLI documentation](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki/18-CLI-Validator-und-Automatisierung) · [Roadmap](ROADMAP.md) · [Contributing](CONTRIBUTING.md)
+[Deutsch](README.md) · **English** · [Installation](INSTALL.md) · [GitHub Wiki](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/wiki) · [CLI documentation](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/wiki/18-CLI-Validator-und-Automatisierung) · [Roadmap](ROADMAP.md) · [Contributing](CONTRIBUTING.md)
 
 </div>
 
@@ -61,7 +61,7 @@ request + idempotency key
 → done / retry / dead
 ```
 
-More: [0.5 translation review, agent history and idempotent jobs](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki/22-Translation-Review-Agenten-Historie-und-Idempotente-Jobs)
+More: [0.5 translation review, agent history and idempotent jobs](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/wiki/22-Translation-Review-Agenten-Historie-und-Idempotente-Jobs)
 
 ---
 
@@ -78,7 +78,7 @@ php scripts/migrate.php
 php -S 127.0.0.1:8080 -t public
 ```
 
-More: [0.4 migrations, i18n, agents and jobs](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki/21-Migrationen-I18n-Agenten-und-Jobs)
+More: [0.4 migrations, i18n, agents and jobs](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/wiki/21-Migrationen-I18n-Agenten-und-Jobs)
 
 ---
 
@@ -96,7 +96,7 @@ php -S 127.0.0.1:8080 -t public
 
 The reference is integration-tested against a real MariaDB instance in GitHub Actions.
 
-[PHP/MariaDB reference Wiki guide](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki/20-PHP-MariaDB-Referenzplattform)
+[PHP/MariaDB reference Wiki guide](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/wiki/20-PHP-MariaDB-Referenzplattform)
 
 ---
 
@@ -116,15 +116,15 @@ mgd-platform update ./my-project
 
 Version 0.2 also adds a central capability registry, machine-readable release evidence, automated GitHub Foundation Checks, a PHP/MariaDB reference implementation and a local backoffice demo.
 
-Full CLI documentation: [CLI, Validator and Automation](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki/18-CLI-Validator-und-Automatisierung)
+Full CLI documentation: [CLI, Validator and Automation](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/wiki/18-CLI-Validator-und-Automatisierung)
 
-Reference implementations: [Reference Implementations and Demos](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki/19-Referenzimplementierungen-und-Demos)
+Reference implementations: [Reference Implementations and Demos](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/wiki/19-Referenzimplementierungen-und-Demos)
 
 ---
 
 ## What is this project?
 
-The **MGD Project Platform System** is a foundation for **AI-generated CMS projects** – not a SaaS product or rigid application framework.
+The **MGD-Plattform-Builder** is a foundation for **AI-generated CMS projects** – not a SaaS product or rigid application framework.
 
 It is a **reusable platform foundation** for projects that need more than a frontend and a database: user accounts, roles, administration, moderation, privacy, security, compliance, backups, staging, translations, support, documentation, AI agents and a controlled development workflow.
 
@@ -218,8 +218,8 @@ The foundation moves these concerns to the beginning of the project instead of t
 ## Quick start
 
 ```bash
-git clone https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System.git
-cd Projekt-Plattform-System
+git clone https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder.git
+cd MGD-Plattform-Builder
 npm install
 npm link
 mgd-platform init --preset general --target ../my-project
@@ -415,7 +415,7 @@ See [Agent Workflow](WIKI/07-AGENTS/AGENT-WORKFLOW.md).
 | [MGD ProjectClean Skill](https://github.com/MichaelGahnDESIGN/MGD_ProjectClean_SKILL) | project completion and cleanup |
 | [MGD AI Thread](https://github.com/MichaelGahnDESIGN/MGD_AI-Thread) | handoff between context windows |
 | [MGD AI PlayTest Skill](https://github.com/MichaelGahnDESIGN/MGD_AI-PlayTest_SKILL) | role-based play/product testing |
-| [MGD Platform Builder](https://github.com/MichaelGahnDESIGN/MGD_Platform-Builder_TOOL) | generates technical starter skeletons |
+| [MGD Docker Projektbuilder](https://github.com/MichaelGahnDESIGN/MGD_Docker_Projektbuilder) | generates technical starter skeletons |
 | [MGD-DevOS](https://github.com/MichaelGahnDESIGN/MGD-DevOS) | desktop project hub with dashboards; recommended by the briefing when several projects or agents are managed |
 | [MGD Living Documentation](https://github.com/MichaelGahnDESIGN/MGD_Living-Documentation) | evidence-based, versioned project documentation |
 | [MGD Software Updater Skill](https://github.com/MichaelGahnDESIGN/MGD_Software-Updater_SKILL) | plans and builds updaters when the briefing asks for one |

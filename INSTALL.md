@@ -1,6 +1,6 @@
 # Installation and Usage
 
-The MGD Project Platform System can be used as documentation, as project rules, through its CLI and through optional AI-agent skills.
+The MGD-Plattform-Builder can be used as documentation, as project rules, through its CLI and through optional AI-agent skills.
 
 ## Recommended: CLI
 
@@ -12,8 +12,8 @@ Requirements:
 Clone the repository:
 
 ```bash
-git clone https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System.git
-cd Projekt-Plattform-System
+git clone https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder.git
+cd MGD-Plattform-Builder
 npm install
 ```
 
@@ -77,7 +77,7 @@ mgd-platform update
 ```
 
 Full documentation:
-https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki/18-CLI-Validator-und-Automatisierung
+https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/wiki/18-CLI-Validator-und-Automatisierung
 
 ## Manual Level 1: Documentation only
 
@@ -106,21 +106,21 @@ cp templates/FEATURE-GOVERNANCE.md /path/to/project/FEATURE-GOVERNANCE.md
 Clone the repository and copy `platform/` into the local skills directory used by your Codex setup.
 
 ```bash
-git clone https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System.git
+git clone https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder.git
 mkdir -p ~/.codex/skills
-cp -R Projekt-Plattform-System/platform ~/.codex/skills/platform
+cp -R MGD-Plattform-Builder/platform ~/.codex/skills/platform
 mkdir -p ~/.codex/commands
-cp Projekt-Plattform-System/.codex/commands/platform.md ~/.codex/commands/
+cp MGD-Plattform-Builder/.codex/commands/platform.md ~/.codex/commands/
 ```
 
 ### Claude Code
 
 ```bash
-git clone https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System.git
+git clone https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder.git
 mkdir -p ~/.claude/skills
-cp -R Projekt-Plattform-System/platform ~/.claude/skills/platform
+cp -R MGD-Plattform-Builder/platform ~/.claude/skills/platform
 mkdir -p ~/.claude/commands
-cp Projekt-Plattform-System/.claude/commands/platform.md ~/.claude/commands/
+cp MGD-Plattform-Builder/.claude/commands/platform.md ~/.claude/commands/
 ```
 
 ## Release evidence
@@ -217,4 +217,4 @@ The 0.5 reference supports atomic job claiming, retries, dead letters, stale-wor
 
 Full reference documentation:
 
-https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki/22-Translation-Review-Agenten-Historie-und-Idempotente-Jobs
+https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/wiki/22-Translation-Review-Agenten-Historie-und-Idempotente-Jobs

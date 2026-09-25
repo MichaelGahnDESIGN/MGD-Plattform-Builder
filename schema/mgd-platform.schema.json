@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/schema/mgd-platform.schema.json",
+  "$id": "https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/schema/mgd-platform.schema.json",
   "title": "MGD Project Platform Profile",
   "description": "Project-neutral profile consumed by humans and coding agents.",
   "type": "object",

@@ -1,6 +1,6 @@
 # AGENTS.md
 
-This project follows the MGD Project Platform System.
+This project follows the MGD-Plattform-Builder.
 
 ## Read first
 
@@ -45,4 +45,4 @@ mgd-platform version --bump patch --note "Kurzbeschreibung" --audience frontend,
 ## Foundation
 
 Reference:
-https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System
+https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder

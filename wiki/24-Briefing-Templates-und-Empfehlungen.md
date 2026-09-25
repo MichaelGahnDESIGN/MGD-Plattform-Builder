@@ -1,6 +1,6 @@
 # 0.5.1: Briefing, Templates und Empfehlungen
 
-Diese Seite erklärt, wie ein KI-Agent ein neues Projekt mit dem MGD Project Platform System aufsetzt: **Briefing → Template → Empfehlungen → Bauen → Version und Release Notes**. Die Pflichtfunktionen selbst stehen auf [[23-AI-CMS-Pflichtfunktionen]].
+Diese Seite erklärt, wie ein KI-Agent ein neues Projekt mit dem MGD-Plattform-Builder aufsetzt: **Briefing → Template → Empfehlungen → Bauen → Version und Release Notes**. Die Pflichtfunktionen selbst stehen auf [[23-AI-CMS-Pflichtfunktionen]].
 
 ```bash
 mgd-platform template create php-mysql-starter --target ./mein-projekt
@@ -126,4 +126,4 @@ mgd-platform version --check
 
 Danach im Backoffice „Aus release-notes.json synchronisieren“ oder `php scripts/sync-release-notes.php`.
 
-Technische Doku (Englisch): [WIKI/18-CMS](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/tree/main/WIKI/18-CMS)
+Technische Doku (Englisch): [WIKI/18-CMS](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/tree/main/WIKI/18-CMS)

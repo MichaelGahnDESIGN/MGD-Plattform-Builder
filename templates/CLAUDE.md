@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-This project follows the MGD Project Platform System.
+This project follows the MGD-Plattform-Builder.
 
 Before a substantial change:
 
@@ -17,7 +17,7 @@ Before a substantial change:
 Never place credentials, production data or private infrastructure details in public repository content.
 
 Foundation:
-https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System
+https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder
 
 ## Mandatory features and briefing
 

@@ -1,14 +1,14 @@
 ---
 name: platform
 description: >-
-  Audits, plans and bootstraps projects against the MGD Project Platform System.
+  Audits, plans and bootstraps projects against the MGD-Plattform-Builder.
   Covers architecture, data, admin/mod backoffice, privacy, security, compliance,
   operations, Docker, backups, i18n, documentation and agent governance.
 ---
 
 # /platform
 
-Use the MGD Project Platform System as a project-neutral foundation.
+Use the MGD-Plattform-Builder as a project-neutral foundation.
 
 ## Mandatory features (every project)
 

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/schema/template-manifest.schema.json",
+  "$id": "https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/schema/template-manifest.schema.json",
   "title": "MGD Project Template Manifest",
   "description": "Describes a starter template in templates/<id>/template.json. Every template must ship a light and a dark variant.",
   "type": "object",

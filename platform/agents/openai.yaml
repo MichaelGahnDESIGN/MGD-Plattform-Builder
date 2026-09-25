@@ -1,3 +1,3 @@
-name: MGD Project Platform System
+name: MGD-Plattform-Builder
 description: Project-neutral platform architecture, privacy, security, compliance and operations foundation.
-default_prompt: Run the MGD briefing (platform/BRIEFING.md) for new projects, otherwise audit the current project against the MGD Project Platform System and its mandatory features before making changes.
+default_prompt: Run the MGD briefing (platform/BRIEFING.md) for new projects, otherwise audit the current project against the MGD-Plattform-Builder and its mandatory features before making changes.

@@ -1,7 +1,7 @@
-# Agent Briefing · MGD Project Platform System
+# Agent Briefing · MGD-Plattform-Builder
 
 This is the interview a coding agent (Claude Code, ChatGPT Codex, ...) runs **before** it builds a
-project on the MGD Project Platform System. The questions live in
+project on the MGD-Plattform-Builder. The questions live in
 [`registry/briefing.yml`](../registry/briefing.yml); answers are written into `MGD_PLATFORM.yml`.
 
 ```bash

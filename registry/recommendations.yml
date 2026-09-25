@@ -149,10 +149,10 @@ recommendations:
     reason: "Für neue Projekte ohne bestehende Ordnerstruktur."
     when:
       keywords: ["neues projekt", "new project", "projektordner"]
-  - id: "mgd-platform-builder"
-    name: "MGD Platform Builder"
+  - id: "mgd-docker-projektbuilder"
+    name: "MGD Docker Projektbuilder"
     kind: "tool"
-    url: "https://github.com/MichaelGahnDESIGN/MGD_Platform-Builder_TOOL"
+    url: "https://github.com/MichaelGahnDESIGN/MGD_Docker_Projektbuilder"
     summary: "Generator für Docker-Plattformgerüste mit MariaDB/MySQL/PostgreSQL."
     reason: "Alternative zum PHP/FTP-Starter, wenn Docker-Hosting geplant ist."
     when:

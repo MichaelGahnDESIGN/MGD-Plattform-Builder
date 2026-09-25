@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/schema/version.schema.json",
+  "$id": "https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/schema/version.schema.json",
   "title": "MGD Version File",
   "description": "Single source of truth for a project's version number and release status. Other files are synchronized from it.",
   "type": "object",

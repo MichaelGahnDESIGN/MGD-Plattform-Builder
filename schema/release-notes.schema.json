@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/schema/release-notes.schema.json",
+  "$id": "https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/schema/release-notes.schema.json",
   "title": "MGD Release Notes",
   "description": "File-based release notes. Frontends show only entries for the frontend audience; backoffices show all.",
   "type": "object",

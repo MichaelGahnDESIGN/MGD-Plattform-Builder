@@ -5,7 +5,7 @@ Diese Seite hilft Dritten dabei, sich schnell im Repository zu orientieren.
 ## Hauptstruktur
 
 ```text
-Projekt-Plattform-System/
+MGD-Plattform-Builder/
 ├── README.md
 ├── README.en.md
 ├── INSTALL.md

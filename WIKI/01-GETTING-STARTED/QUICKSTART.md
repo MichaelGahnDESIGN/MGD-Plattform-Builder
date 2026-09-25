@@ -31,7 +31,7 @@ Then use [Migration](../11-ADOPTION/MIGRATION-EXISTING-PROJECT.md).
 ## Suggested first agent prompt
 
 ```text
-Read MGD_PLATFORM.yml, AGENTS.md and the MGD Project Platform System.
+Read MGD_PLATFORM.yml, AGENTS.md and the MGD-Plattform-Builder.
 Do not change code yet.
 Create a gap report grouped by:
 architecture, data, permissions, privacy, security,
