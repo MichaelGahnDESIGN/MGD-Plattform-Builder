@@ -52,7 +52,8 @@ final class SettingFieldRenderer
             'url' => '<input type="url"' . $idAttr . ' name="' . View::e($name) . '" value="' . View::e($scalar) . '"'
                 . (!empty($constraints['https_only']) ? ' pattern="https://.*" placeholder="https://…"' : '') . '>',
             default => '<input type="text"' . $idAttr . ' name="' . View::e($name) . '" value="' . View::e($scalar) . '"'
-                . (isset($constraints['max_length']) ? ' maxlength="' . (int) $constraints['max_length'] . '"' : '') . '>',
+                . (isset($constraints['max_length']) ? ' maxlength="' . (int) $constraints['max_length'] . '"' : '')
+                . (!empty($constraints['media_picker']) ? MediaPicker::attribute() : '') . '>',
         };
     }
 

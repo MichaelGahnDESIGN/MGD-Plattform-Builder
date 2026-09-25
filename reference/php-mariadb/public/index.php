@@ -142,6 +142,7 @@ if ($path === '/login' && $method === 'GET') {
             <label>Password<input type="password" name="password" autocomplete="current-password" required></label>
             <button type="submit">Sign in</button>
         </form>
+        ' . View::poweredBy() . '
     </div>';
 
     echo View::page('Sign in', $body);

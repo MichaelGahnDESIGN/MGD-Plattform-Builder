@@ -1,7 +1,7 @@
 project:
   name: "Example Store"
   type: "ecommerce"
-  foundation_version: "0.5.1"
+  foundation_version: "0.6.0"
   description: "Beispiel-Shop für digitale und physische Produkte mit Kundenkonto"
 market:
   countries: ["DE"]

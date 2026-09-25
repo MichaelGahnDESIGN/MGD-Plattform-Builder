@@ -13,7 +13,8 @@ const schemaFiles = [
   "schema/capability-registry.schema.json",
   "schema/version.schema.json",
   "schema/release-notes.schema.json",
-  "schema/template-manifest.schema.json"
+  "schema/template-manifest.schema.json",
+  "schema/module-package.schema.json"
 ];
 
 const compiled = new Map();

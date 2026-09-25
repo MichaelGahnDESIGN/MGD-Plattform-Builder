@@ -135,14 +135,18 @@ final class PagesController extends AdminController
 
     private function submitted(Request $request): array
     {
+        $format = $request->input('content_format', 'html');
+
         return [
             'title' => $request->input('title'),
             'slug' => $request->input('slug'),
             'page_type' => $request->input('page_type'),
             'status' => $request->input('status'),
-            'content_format' => $request->input('content_format', 'html'),
+            'content_format' => $format,
             'content_html' => $request->input('content'),
-            'content_source' => $request->input('content'),
+            // Markdown: Quelltext im Inhaltsfeld. GrapesJS: Projektdaten im versteckten Feld content_source.
+            'content_source' => $format === 'grapesjs' ? $request->input('content_source') : $request->input('content'),
+            'content_css' => $request->input('content_css'),
             'meta_description' => $request->input('meta_description'),
         ];
     }

@@ -11,6 +11,7 @@ use MGD\Starter\Core\Auth\User;
 /**
  * Export/Import von CMS-Seiten als JSON.
  * Format: {"format":"mgd-cms-pages","format_version":1,"exported_at":"…","pages":[…]}
+ * Seiten im Format "grapesjs" enthalten zusätzlich content_css und die Editor-Projektdaten (content_source).
  * Beim Import werden Seiten neu angelegt oder – falls der Slug existiert – als neue Revision gespeichert.
  * Inhalte werden dabei immer erneut bereinigt.
  */
@@ -113,7 +114,7 @@ final class PageTransfer
     private function importPage(array $raw, ?User $actor): string
     {
         $data = $this->input->normalize(array_intersect_key($raw, array_flip([
-            'slug', 'title', 'page_type', 'status', 'content_format', 'content_source', 'content_html', 'meta_description',
+            'slug', 'title', 'page_type', 'status', 'content_format', 'content_source', 'content_html', 'content_css', 'meta_description',
         ])));
         $existing = $this->pages->findBySlug($data['slug'], false, true);
 
@@ -138,6 +139,7 @@ final class PageTransfer
             'content_format' => $page['content_format'],
             'content_source' => $page['content_source'],
             'content_html' => $page['content_html'],
+            'content_css' => $page['content_css'] ?? null,
             'meta_description' => $page['meta_description'],
             'current_revision' => (int) $page['current_revision'],
             'updated_at' => $page['updated_at'],
@@ -162,6 +164,7 @@ final class PageTransfer
                 'content_format' => $revision['content_format'],
                 'content_source' => $revision['content_source'],
                 'content_html' => $revision['content_html'],
+                'content_css' => $revision['content_css'] ?? null,
                 'meta_description' => $revision['meta_description'],
                 'author_label' => $revision['author_label'],
                 'note' => $revision['note'],

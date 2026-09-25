@@ -16,6 +16,16 @@ use MGD\Starter\Site\MaintenanceGate;
  * Front-Controller. Alle Anfragen laufen über diese Datei (siehe .htaccess).
  */
 
+// Lokaler PHP-Testserver (php -S … public/index.php): vorhandene statische Dateien direkt ausliefern.
+if (PHP_SAPI === 'cli-server') {
+    $staticFile = realpath(__DIR__ . (string) parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH));
+
+    if ($staticFile !== false && is_file($staticFile) && str_starts_with($staticFile, __DIR__ . DIRECTORY_SEPARATOR)
+        && pathinfo($staticFile, PATHINFO_EXTENSION) !== 'php') {
+        return false;
+    }
+}
+
 $root = dirname(__DIR__);
 
 try {
@@ -46,6 +56,7 @@ $app->startSession();
 $request = Request::fromGlobals($app->config->string('app.base_path'));
 $router = new Router();
 (require $root . '/src/routes.php')($router, $app);
+$app->modules()->boot($router);
 
 try {
     $response = (new MaintenanceGate($app))->check($request)

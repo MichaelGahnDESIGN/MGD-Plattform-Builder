@@ -16,7 +16,7 @@ use MGD\Starter\Core\View\View;
  */
 final class MaintenanceGate
 {
-    private const ALWAYS_ALLOWED = ['/login', '/logout', '/install', '/robots.txt'];
+    private const ALWAYS_ALLOWED = ['/login', '/logout', '/install', '/robots.txt', '/passwort-vergessen', '/passwort-zuruecksetzen'];
 
     public function __construct(private readonly App $app)
     {

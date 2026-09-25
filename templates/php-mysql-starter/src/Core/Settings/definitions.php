@@ -37,9 +37,12 @@ $categories = [
     'files' => 'Dateispeicherorte',
     'code_editor' => 'Code-Editoren',
     'maintenance' => 'Wartungsmodus',
+    'mail' => 'E-Mail',
+    'license' => 'Lizenz',
 ];
 
 $localPath = ['local_path' => true, 'max_length' => 300];
+$mediaPath = [...$localPath, 'media_picker' => true];
 $legalSlugs = [
     'kontakt' => 'Kontakt', 'impressum' => 'Impressum', 'agb' => 'AGB', 'datenschutz' => 'Datenschutz',
     'cookies' => 'Cookies', 'zahlung' => 'Zahlung', 'versand' => 'Versand', 'widerruf' => 'Widerruf',
@@ -86,7 +89,7 @@ $settings = [
     $setting('seo.site_title', 'seo', 'text', 'Seitentitel', 'Standardtitel für Suchmaschinen.', 'Mein Projekt', [], ['title', 'titel'], 'public', ['max_length' => 120]),
     $setting('seo.title_pattern', 'seo', 'text', 'Titelmuster', 'Platzhalter: {page} und {site}.', '{page} · {site}', [], ['title', 'muster'], 'public', ['max_length' => 120]),
     $setting('seo.meta_description', 'seo', 'textarea', 'Meta-Beschreibung', 'Standardbeschreibung (max. 300 Zeichen).', '', [], ['description', 'beschreibung'], 'public', ['max_length' => 300]),
-    $setting('seo.og_image', 'seo', 'text', 'Standard-OG-Bild', 'Lokaler Pfad unter /assets/ oder /uploads/.', '', [], ['open graph', 'social', 'bild'], 'public', $localPath),
+    $setting('seo.og_image', 'seo', 'text', 'Standard-OG-Bild', 'Lokaler Pfad unter /assets/ oder /uploads/.', '', [], ['open graph', 'social', 'bild'], 'public', $mediaPath),
     $setting('seo.robots', 'seo', 'select', 'Indexierung', 'Suchmaschinen erlauben oder verbieten.', 'index', ['index' => 'index, follow', 'noindex' => 'noindex, nofollow'], ['robots', 'noindex', 'google'], 'public'),
     $setting('seo.canonical_base', 'seo', 'url', 'Kanonische Basis-URL', 'z. B. https://example.org – für Canonical-Links und sitemap.xml.', '', [], ['canonical', 'sitemap', 'domain'], 'public', ['max_length' => 300]),
 
@@ -94,11 +97,11 @@ $settings = [
     $setting('loader.text', 'loader', 'text', 'Ladetext', 'Text unter der Animation.', 'Wird geladen …', [], ['text'], 'public', ['max_length' => 120]),
     $setting('loader.min_duration_ms', 'loader', 'number', 'Mindestdauer (ms)', 'Mindestanzeigedauer in Millisekunden.', 300, [], ['dauer', 'zeit'], 'public', ['min' => 0, 'max' => 5000]),
     $setting('loader.style', 'loader', 'select', 'Stil', 'Darstellung des Ladebildschirms.', 'spinner', ['spinner' => 'Spinner', 'bar' => 'Balken', 'logo' => 'Logo'], ['animation'], 'public'),
-    $setting('loader.logo_path', 'loader', 'text', 'Logo-Pfad', 'Lokaler Pfad für Stil "Logo".', '', [], ['logo'], 'public', $localPath),
+    $setting('loader.logo_path', 'loader', 'text', 'Logo-Pfad', 'Lokaler Pfad für Stil "Logo".', '', [], ['logo'], 'public', $mediaPath),
 
     $setting('updater.enabled', 'updater', 'bool', 'Update-Prüfung aktiv', 'Erlaubt Admins, nach neuen Versionen zu suchen. Es wird nie automatisch installiert.', false, [], ['update', 'aktualisierung']),
     $setting('updater.channel', 'updater', 'select', 'Kanal', 'Release-Kanal für die Prüfung.', 'stable', ['stable' => 'Stabil', 'beta' => 'Beta', 'alpha' => 'Alpha', 'lts' => 'LTS'], ['kanal', 'channel']),
-    $setting('updater.manifest_url', 'updater', 'url', 'Manifest-URL', 'HTTPS-URL zu JSON {version, status, notes_url}.', '', [], ['manifest', 'json'], 'private', ['https_only' => true, 'max_length' => 500]),
+    $setting('updater.manifest_url', 'updater', 'url', 'Manifest-URL', 'HTTPS-URL zu JSON {version, status, notes_url} oder {channels: {stable: {…}, beta: {…}}}. Es wird ?channel=<Kanal> angehängt.', '', [], ['manifest', 'json'], 'private', ['https_only' => true, 'max_length' => 500]),
 
     $setting('cookie_box.enabled', 'cookie_box', 'bool', 'Cookie-Box aktiv', 'Hinweis zu Cookies/lokalem Speicher anzeigen.', true, [], ['cookie', 'consent', 'dsgvo'], 'public'),
     $setting('cookie_box.essential_only', 'cookie_box', 'bool', 'Nur essenzielle Cookies', 'Es gibt nur technisch notwendige Speicherungen – nur Button "Verstanden".', true, [], ['tracking', 'essenziell'], 'public'),
@@ -113,7 +116,12 @@ $settings = [
 
     $setting('maintenance.enabled', 'maintenance', 'bool', 'Wartungsmodus aktiv', 'Öffentliche Seiten zeigen eine Wartungsmeldung (HTTP 503).', false, [], ['wartung', 'offline', 'maintenance']),
     $setting('maintenance.message', 'maintenance', 'textarea', 'Wartungsmeldung', 'Text für Besucher während der Wartung.', 'Wir führen gerade Wartungsarbeiten durch. Bitte versuche es später erneut.', [], ['meldung', 'text'], 'public', ['max_length' => 1000]),
+    $setting('license.powered_by_align', 'license', 'select', 'Ausrichtung des Labels „powered by“', 'Einzige erlaubte Gestaltung des Pflicht-Labels (MGD-Lizenz). Das Label selbst entfällt nur mit gültiger Whitelabel-Lizenz, siehe Einstellungen › Lizenz.', 'center', MGD\Starter\Core\License\PoweredBy::ALIGNMENTS, ['lizenz', 'label', 'powered by', 'whitelabel', 'michael gahn design']),
     $setting('maintenance.admin_bypass', 'maintenance', 'bool', 'Admins umgehen Wartung', 'Angemeldete Admins sehen die Seite normal.', true, [], ['admin', 'bypass']),
+
+    $setting('mail.password_reset', 'mail', 'bool', 'Passwort-Reset per E-Mail', 'Zeigt "Passwort vergessen?" beim Login. Benötigt mail.transport in config.php, eine Absenderadresse und app.url (oder SEO → Kanonische Basis-URL).', false, [], ['passwort', 'reset', 'vergessen', 'mail']),
+    $setting('mail.from_address', 'mail', 'text', 'Absenderadresse', 'Absender für System-E-Mails, z. B. no-reply@example.org.', '', [], ['absender', 'from', 'e-mail'], 'private', ['max_length' => 254, 'pattern' => '/^[^@\s<>"\',;]+@[^@\s<>"\',;]+\.[^@\s<>"\',;]+$/']),
+    $setting('mail.from_name', 'mail', 'text', 'Absendername', 'Anzeigename des Absenders. Leer = Name der Website.', '', [], ['absender', 'name'], 'private', ['max_length' => 120]),
 ];
 
 $palette = [

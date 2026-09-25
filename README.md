@@ -6,8 +6,8 @@
 
 Privacy, security, compliance, modular backends, administration, moderation, Docker workflows, documentation and AI-agent collaboration in one project-neutral blueprint.
 
-[![Version](https://img.shields.io/badge/version-0.5.1%20Pre--Alpha-orange?style=flat-square)](version.json)
-[![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
+[![Version](https://img.shields.io/badge/version-0.6.0%20Pre--Alpha-orange?style=flat-square)](version.json)
+[![License](https://img.shields.io/badge/license-MIT%20%2B%20MGD-blue?style=flat-square)](LICENSING.md)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-compatible-6B5CE7?style=flat-square)](AGENTS.md)
 [![ChatGPT Codex](https://img.shields.io/badge/ChatGPT%20Codex-compatible-10A37F?style=flat-square)](AGENTS.md)
 [![Docker](https://img.shields.io/badge/Docker-ready-2496ED?style=flat-square)](WIKI/06-OPERATIONS/DOCKER-STAGING.md)
@@ -18,7 +18,26 @@ Privacy, security, compliance, modular backends, administration, moderation, Doc
 
 ---
 
-## Neu in 0.5.1 Pre-Alpha: AI-generiertes CMS mit Pflichtfunktionen
+## Neu in 0.6.0 Pre-Alpha: MGD-Plattform-Builder, Lizenz-Label, Benutzer, Medien und Module
+
+Das Projekt heißt jetzt **MGD-Plattform-Builder**. Neu:
+
+| Bereich | Was ist neu |
+|---|---|
+| **Lizenz** | Dual-Lizenz: CLI, Schemas und Doku bleiben MIT; Starter-Templates, Referenzplattform und Label stehen unter der [MGD-Lizenz](MGD-Lizenz.md). Details: [LICENSING.md](LICENSING.md) |
+| **„powered by“-Label** | Pflicht-Label „powered by: Michael Gahn DESIGN“ mit Logo und Link (neuer Tab) im Footer, auf Landingpages, beim Login, im Backoffice und in den Einstellungen, dazu die Seite **Einstellungen › Lizenz** |
+| **Whitelabel** | Label entfällt nur mit Whitelabel-Lizenz (500 €, einmalig pro Projekt/Domain), nachgewiesen durch einen signierten Schlüssel |
+| **Benutzerverwaltung** | Benutzer anlegen, Rollen, sperren, löschen, Mein Konto, optionaler Passwort-Reset per E-Mail |
+| **Medienbibliothek** | sichere Uploads (Bilder, PDF) mit MIME-Prüfung und Neukodierung ohne Metadaten |
+| **GrapesJS** | speichert HTML, CSS und Projektdaten, inkl. Revisionen und Export/Import |
+| **Updater** | Release-Kanäle (stable, beta, alpha, lts) im Manifest |
+| **Module** | eigene und kostenpflichtige Module unter `modules/<id>/`, aktivierbar im Backoffice |
+
+Mehr: [Lizenz, Label, Whitelabel und Module](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/wiki/25-Lizenz-Label-Whitelabel-und-Module)
+
+---
+
+## Seit 0.5.1: AI-generiertes CMS mit Pflichtfunktionen
 
 Mit 0.5.1 wird die Foundation zu einem **AI-Agenten-gesteuerten CMS**. Claude Code, ChatGPT Codex und andere Agenten erstellen damit Websites für Spiele, Projekte und Plattformen – aus einem **Briefing**, einem **Starter-Template** und **Pflichtfunktionen**, die in jedem Projekt immer vorhanden sind.
 
@@ -290,7 +309,7 @@ Beispiel:
 project:
   name: "Example Platform"
   type: "community"
-  foundation_version: "0.5.1"
+  foundation_version: "0.6.0"
 
 market:
   countries: ["DE"]
@@ -712,7 +731,7 @@ MGD-Plattform-Builder/
 
 ## Reifegrad
 
-Aktueller Stand: **0.5.1 Pre-Alpha** (siehe [`version.json`](version.json) und [`release-notes.json`](release-notes.json))
+Aktueller Stand: **0.6.0 Pre-Alpha** (siehe [`version.json`](version.json) und [`release-notes.json`](release-notes.json))
 
 Vor 1.0 können sich Schemas und Empfehlungen noch ändern. Beiträge aus realen Projekten sind ausdrücklich erwünscht.
 
@@ -749,7 +768,12 @@ Siehe [SECURITY.md](SECURITY.md).
 
 ## Lizenz
 
-MIT License. Siehe [LICENSE](LICENSE).
+Dual lizenziert, siehe [LICENSING.md](LICENSING.md):
+
+- **MIT** ([LICENSE](LICENSE)): CLI, Validator, Schemas, Registries, Skripte, Dokumentation
+- **MGD-Lizenz** ([MGD-Lizenz.md](MGD-Lizenz.md)): Starter-Templates, Referenzplattform, „powered by“-Label und daraus erstellte Projekte. Pflicht-Label „powered by: Michael Gahn DESIGN“; Entfernen nur mit Whitelabel-Lizenz (500 €, einmalig pro Projekt/Domain)
+
+Versionen bis 0.5.1 bleiben MIT.
 
 ---
 

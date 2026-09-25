@@ -43,6 +43,7 @@ final class DashboardController extends AdminController
             'Dashboard',
             Ui::pageHeader('Willkommen, ' . $user->displayName, '', 'Rolle: ' . $user->role->label())
                 . $this->app->versionDisplay()->render('landing_private')
+                . $this->app->poweredBy()->render('landing_private')
                 . $warnings . '<div class="stat-grid">' . $html . '</div>',
             $user,
             '/admin'

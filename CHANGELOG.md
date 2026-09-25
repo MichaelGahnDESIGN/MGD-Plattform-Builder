@@ -14,6 +14,32 @@ The format follows the spirit of Keep a Changelog and semantic versioning.
 - compliance automation
 - richer agent integration
 
+## [0.6.0 Pre-Alpha] - 2026-09-25
+
+### Changed
+
+- repository renamed from `Projekt-Plattform-System` to **MGD-Plattform-Builder**; the former `MGD_Platform-Builder_TOOL` is now `MGD_Docker_Projektbuilder`
+- **dual licensing** (`LICENSING.md`): CLI, validator, schemas, registries, scripts and docs stay MIT; starter templates, the reference platform, the "powered by" label and logos are under the new **MGD-Lizenz** (`MGD-Lizenz.md`, `LicenseRef-MGD`). Versions up to 0.5.1 remain MIT
+
+### Added
+
+- mandatory label "powered by: Michael Gahn DESIGN" (local logo light/dark, link to michael-gahn.de in a new tab) in public footer, public and private landing pages, login, backoffice footer and settings; only alignment is configurable
+- starter page **Settings › License** with label, full license text, domain, white-label and integrity status
+- `LicenseIntegrity` (SHA-256 of license text, label code, label CSS, logos) with backoffice warning; `mgd-platform template check` fails on modified license files; `scripts/update-license-hashes.js` for maintainers
+- Ed25519-signed license keys (`MGD1.<payload>.<signature>`) for white-label (EUR 500 one-time per project/domain) and paid modules, bound to domains
+- generic starter module interface (`modules/<id>/module.json`, entry, migrations, menu, free/paid), **Settings › Modules**, `schema/module-package.schema.json`
+- starter user management (`/admin/users`), **My account**, forced password change, optional e-mail password reset (`mail()` or SMTP, hashed single-use tokens, rate limited)
+- starter media library (`/admin/media`) with extension+MIME allowlist, random file names, GD re-encoding without metadata, usage check and picker for logos/OG image
+- GrapesJS saves HTML, scoped and sanitized CSS (`CssSanitizer`) and project data incl. revisions and export/import (migration 004)
+- updater sends the release channel and supports manifests with `channels`
+- reference platform shows the label on login and in the footer
+- private repository `MGD-Plattform-Builder-Marketplace` for paid modules/templates and the license signing tool
+
+### Fixed
+
+- local PHP dev server (`php -S … public/index.php`) now serves CSS, JS and images of the starter
+- starter smoke test: reset throttling expectation (max. 3 requests per e-mail and hour)
+
 ## [0.5.1 Pre-Alpha] - 2026-09-25
 
 The foundation becomes an **AI-agent driven CMS**: mandatory features every project must provide,

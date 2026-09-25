@@ -7,6 +7,7 @@ namespace MGD\Starter\Admin;
 use MGD\Starter\Core\App;
 use MGD\Starter\Core\Auth\Role;
 use MGD\Starter\Core\Auth\User;
+use MGD\Starter\Core\Http\RedirectException;
 use MGD\Starter\Core\Http\Request;
 use MGD\Starter\Core\Http\Response;
 use MGD\Starter\Core\View\AdminLayout;
@@ -19,17 +20,30 @@ abstract class AdminController
     }
 
     /**
-     * Prüft Rolle (immer) und CSRF (bei POST).
+     * Prüft Rolle (immer) und CSRF (bei POST). Konten mit Einmal-Passwort werden
+     * zur Passwortänderung umgeleitet, bis sie ein eigenes Passwort gesetzt haben.
      */
     protected function guard(Request $request, Role $minimum): User
     {
         $user = $this->app->requireRole($minimum);
+
+        if ($user->mustChangePassword && !$this->allowsPendingPasswordChange()) {
+            throw new RedirectException(AccountController::PASSWORD_PATH);
+        }
 
         if ($request->isPost()) {
             $this->app->requireCsrf($request);
         }
 
         return $user;
+    }
+
+    /**
+     * Nur der Konto-Controller ist trotz ausstehender Passwortänderung erreichbar.
+     */
+    protected function allowsPendingPasswordChange(): bool
+    {
+        return false;
     }
 
     /**

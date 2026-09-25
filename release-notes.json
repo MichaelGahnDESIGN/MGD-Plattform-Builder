@@ -2,10 +2,37 @@
   "$schema": "./schema/release-notes.schema.json",
   "entries": [
     {
+      "version": "0.6.0",
+      "status": "pre-alpha",
+      "date": "2026-09-25",
+      "audience": [
+        "platform",
+        "backoffice",
+        "editor",
+        "frontend"
+      ],
+      "type": "feature",
+      "title": "MGD-Plattform-Builder: Lizenz, Label, Benutzer, Medien, GrapesJS, Module",
+      "items": [
+        "Repository umbenannt in MGD-Plattform-Builder, Dual-Lizenz (MIT für CLI/Doku, MGD-Lizenz für Templates und Referenz)",
+        "Pflicht-Label „powered by: Michael Gahn DESIGN“ an allen Pflichtorten, Seite Einstellungen › Lizenz, Integritätsprüfung",
+        "Whitelabel- und Modul-Lizenzschlüssel (Ed25519-signiert, domaingebunden)",
+        "Starter: Benutzerverwaltung, Mein Konto, optionaler Passwort-Reset per E-Mail",
+        "Starter: Medienbibliothek mit sicherer Upload-Prüfung",
+        "Starter: GrapesJS speichert HTML, CSS und Projektdaten",
+        "Starter: Updater übergibt den Kanal und versteht Kanal-Manifeste",
+        "Starter: generische Modul-Schnittstelle (modules/<id>/, free/paid)"
+      ]
+    },
+    {
       "version": "0.5.1",
       "status": "pre-alpha",
       "date": "2026-09-25",
-      "audience": ["platform", "backoffice", "editor"],
+      "audience": [
+        "platform",
+        "backoffice",
+        "editor"
+      ],
       "type": "feature",
       "title": "Pflichtfunktionen für AI-generierte CMS-Projekte",
       "items": [
@@ -22,7 +49,10 @@
       "version": "0.5.0",
       "status": "pre-alpha",
       "date": "2026-09-20",
-      "audience": ["platform", "backoffice"],
+      "audience": [
+        "platform",
+        "backoffice"
+      ],
       "type": "feature",
       "title": "Translation Review, Agenten-Historie und idempotente Jobs",
       "items": [

@@ -69,3 +69,12 @@
   .admin-sidebar, .settings-sidebar { position: static; height: auto; }
   .setting-row { grid-template-columns: 1fr; }
 }
+
+/* Medienbibliothek */
+.media-grid { list-style: none; padding: 0; margin: var(--space-4) 0; display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr)); }
+.media-card { display: grid; grid-template-rows: 10rem auto; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); overflow: hidden; }
+.media-card > img, .media-card__file { width: 100%; height: 10rem; object-fit: contain; background: var(--color-background); display: grid; place-items: center; font-weight: 700; color: var(--color-muted); }
+.media-card__body { display: grid; gap: var(--space-2); padding: var(--space-3); min-width: 0; }
+.media-card__body strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.media-picker-hint { font-size: var(--font-size-small); }
+.one-time-password { font-size: 1.25rem; letter-spacing: 0.05em; user-select: all; }

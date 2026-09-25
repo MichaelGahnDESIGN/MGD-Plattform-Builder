@@ -13,6 +13,16 @@ final class View
         return htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     }
 
+    /**
+     * Pflicht-Label nach MGD-Lizenz (siehe MGD-Lizenz.md). Nicht entfernen oder verändern.
+     */
+    public static function poweredBy(): string
+    {
+        return '<p class="mgd-powered-by"><a href="https://michael-gahn.de" target="_blank" rel="noopener">'
+            . '<span>powered by:</span>'
+            . '<img src="/brand/mgd-logo-light.svg" alt="Michael Gahn DESIGN" width="152" height="20"></a></p>';
+    }
+
     public static function page(string $title, string $body, array $capabilities = []): string
     {
         $links = [
@@ -50,7 +60,7 @@ final class View
 <body>
 <header><strong>MGD Platform Reference</strong>' . $nav . '</header>
 <main>' . $body . '</main>
-<footer class="muted">MGD Platform Reference · Version ' . self::e(Version::label()) . '</footer>
+<footer class="muted">MGD Platform Reference · Version ' . self::e(Version::label()) . self::poweredBy() . '</footer>
 </body>
 </html>';
     }

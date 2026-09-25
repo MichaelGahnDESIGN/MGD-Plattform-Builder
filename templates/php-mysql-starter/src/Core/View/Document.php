@@ -84,7 +84,7 @@ final class Document
      */
     private function styles(string $area, array $extra): string
     {
-        $files = ['css/tokens.css', 'css/theme-light.css', 'css/theme-dark.css', 'css/site.css'];
+        $files = ['css/tokens.css', 'css/theme-light.css', 'css/theme-dark.css', 'css/site.css', 'css/powered-by.css'];
 
         if ($area !== 'site') {
             $files[] = 'css/admin.css';

@@ -11,35 +11,74 @@ use MGD\Starter\Core\Version\VersionStatus;
 use RuntimeException;
 
 /**
- * Prüft ein Update-Manifest (HTTPS, JSON {version, status, notes_url}).
- * Installiert niemals automatisch.
+ * Prüft ein Update-Manifest per HTTPS. Installiert niemals automatisch.
+ * Die Anfrage trägt ?channel=<kanal>. Akzeptiert werden zwei Formate:
+ *   flach:   {"version": "1.2.0", "status": "stable", "notes_url": "https://…"}
+ *   Kanäle:  {"channels": {"stable": {…}, "beta": {…}}}  (fehlt der Kanal, gilt "stable")
  */
 final class UpdateChecker
 {
+    public const DEFAULT_CHANNELS = ['stable', 'beta', 'alpha', 'lts'];
+    public const FALLBACK_CHANNEL = 'stable';
     private const TIMEOUT_SECONDS = 5;
     private const MAX_BYTES = 65536;
 
     /**
-     * @return array{newer: bool, version: string, status: string, notes_url: string}
+     * @param list<string> $channels erlaubte Kanäle (aus der Einstellungsdefinition updater.channel)
      */
-    public function check(string $manifestUrl, Version $current): array
+    public function __construct(private readonly array $channels = self::DEFAULT_CHANNELS)
+    {
+    }
+
+    /**
+     * @return array{newer: bool, version: string, status: string, notes_url: string, channel: string}
+     */
+    public function check(string $manifestUrl, Version $current, string $channel = self::FALLBACK_CHANNEL): array
+    {
+        if (!in_array($channel, $this->channels, true)) {
+            throw new InvalidArgumentException('Unbekannter Update-Kanal: ' . $channel);
+        }
+
+        $url = self::buildUrl($manifestUrl, $channel);
+
+        return self::parseManifest($this->decode($this->fetch($url)), $channel, $current);
+    }
+
+    /**
+     * Hängt channel=<kanal> an und behält vorhandene Query-Parameter bei (Fragment wird entfernt).
+     */
+    public static function buildUrl(string $manifestUrl, string $channel): string
     {
         $parts = parse_url($manifestUrl);
 
-        if (!is_array($parts) || ($parts['scheme'] ?? '') !== 'https' || empty($parts['host'])) {
+        if (!is_array($parts) || ($parts['scheme'] ?? '') !== 'https' || empty($parts['host']) || isset($parts['user']) || isset($parts['pass'])) {
             throw new InvalidArgumentException('Manifest-URL muss eine HTTPS-URL sein.');
         }
 
-        $data = $this->decode($this->fetch($manifestUrl));
-        $version = (string) ($data['version'] ?? '');
-        $status = VersionStatus::tryFrom((string) ($data['status'] ?? ''));
-        $notesUrl = (string) ($data['notes_url'] ?? '');
+        parse_str($parts['query'] ?? '', $query);
+        $query['channel'] = $channel;
+        $port = isset($parts['port']) ? ':' . (int) $parts['port'] : '';
+
+        return 'https://' . $parts['host'] . $port . ($parts['path'] ?? '/') . '?' . http_build_query($query, '', '&', PHP_QUERY_RFC3986);
+    }
+
+    /**
+     * Reine Funktion (ohne Netzwerk): wählt den Kanal-Eintrag und validiert ihn.
+     *
+     * @return array{newer: bool, version: string, status: string, notes_url: string, channel: string}
+     */
+    public static function parseManifest(array $data, string $channel, Version $current): array
+    {
+        [$entry, $resolvedChannel] = self::selectEntry($data, $channel);
+        $version = (string) ($entry['version'] ?? '');
+        $status = VersionStatus::tryFrom((string) ($entry['status'] ?? ''));
+        $notesUrl = (string) ($entry['notes_url'] ?? '');
 
         if (preg_match(Version::PATTERN, $version) !== 1 || $status === null) {
             throw new RuntimeException('Manifest enthält keine gültige Version oder keinen gültigen Status.');
         }
 
-        if ($notesUrl !== '' && !str_starts_with($notesUrl, 'https://')) {
+        if ($notesUrl !== '' && (!str_starts_with($notesUrl, 'https://') || filter_var($notesUrl, FILTER_VALIDATE_URL) === false)) {
             $notesUrl = '';
         }
 
@@ -48,7 +87,32 @@ final class UpdateChecker
             'version' => $version,
             'status' => $status->value,
             'notes_url' => $notesUrl,
+            'channel' => $resolvedChannel,
         ];
+    }
+
+    /**
+     * @return array{0: array, 1: string}
+     */
+    private static function selectEntry(array $data, string $channel): array
+    {
+        if (!array_key_exists('channels', $data)) {
+            return [$data, $channel];
+        }
+
+        $channels = $data['channels'];
+
+        if (!is_array($channels)) {
+            throw new RuntimeException('Manifest: "channels" muss ein Objekt sein.');
+        }
+
+        foreach ([$channel, self::FALLBACK_CHANNEL] as $candidate) {
+            if (isset($channels[$candidate]) && is_array($channels[$candidate])) {
+                return [$channels[$candidate], $candidate];
+            }
+        }
+
+        throw new RuntimeException('Manifest enthält weder den Kanal "' . $channel . '" noch "' . self::FALLBACK_CHANNEL . '".');
     }
 
     private function fetch(string $url): string

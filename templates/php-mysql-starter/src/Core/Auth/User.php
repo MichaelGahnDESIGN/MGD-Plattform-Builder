@@ -11,6 +11,7 @@ final class User
         public readonly string $email,
         public readonly string $displayName,
         public readonly Role $role,
+        public readonly bool $mustChangePassword = false,
     ) {
     }
 

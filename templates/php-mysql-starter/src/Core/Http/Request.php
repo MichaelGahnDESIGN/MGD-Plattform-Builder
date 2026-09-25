@@ -99,6 +99,37 @@ final class Request
         return $file['error'] === UPLOAD_ERR_OK ? $file : null;
     }
 
+    /**
+     * Mehrfach-Upload (name="key[]") als Liste einzelner Dateien.
+     *
+     * @return list<array{name: string, tmp_name: string, error: int, size: int}>
+     */
+    public function fileList(string $key): array
+    {
+        $files = $this->files[$key] ?? null;
+
+        if (!is_array($files) || !isset($files['name'], $files['tmp_name'], $files['error']) || !is_array($files['name'])) {
+            return [];
+        }
+
+        $result = [];
+
+        foreach (array_keys($files['name']) as $index) {
+            if (!is_string($files['name'][$index] ?? null) || !is_string($files['tmp_name'][$index] ?? null)) {
+                continue;
+            }
+
+            $result[] = [
+                'name' => $files['name'][$index],
+                'tmp_name' => $files['tmp_name'][$index],
+                'error' => (int) ($files['error'][$index] ?? UPLOAD_ERR_NO_FILE),
+                'size' => (int) ($files['size'][$index] ?? 0),
+            ];
+        }
+
+        return $result;
+    }
+
     public function ip(): string
     {
         return (string) ($this->server['REMOTE_ADDR'] ?? '0.0.0.0');

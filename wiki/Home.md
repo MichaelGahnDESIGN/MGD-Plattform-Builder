@@ -108,6 +108,9 @@ Sie ist eine technische und organisatorische Grundlage, die hilft, relevante The
 **Du willst ein AI-generiertes CMS mit allen Pflichtfunktionen aufsetzen?**  
 → [[23-AI-CMS-Pflichtfunktionen]] und [[24-Briefing-Templates-und-Empfehlungen]]
 
+**Du willst wissen, wie Lizenz, „powered by“-Label, Whitelabel und Module funktionieren?**  
+→ [[25-Lizenz-Label-Whitelabel-und-Module]]
+
 **Du willst ein bestehendes Projekt migrieren?**  
 → [[13-Migration-bestehender-Projekte]]
 

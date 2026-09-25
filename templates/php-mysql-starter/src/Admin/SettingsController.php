@@ -42,7 +42,8 @@ final class SettingsController extends AdminController
             ? Ui::emptyState('Keine Einstellungen gefunden.')
             : Form::open('/admin/settings' . $this->filterQuery($query, $category), ' class="settings-form"') . $body
                 . '<p class="settings-empty" data-settings-empty hidden>Keine Einstellungen passen zur Suche.</p>'
-                . '<div class="sticky-actions">' . Form::submit('Einstellungen speichern') . '</div></form>';
+                . '<div class="sticky-actions">' . Form::submit('Einstellungen speichern') . '</div></form>'
+                . MediaPicker::datalist($this->app);
         $reset = isset($groups['design'])
             ? '<section class="card">' . '<h2>Design zurücksetzen</h2><p class="muted">Setzt alle Farben, Radius und Schrift auf die Standardwerte.</p>'
                 . Form::action('/admin/settings/design-reset', 'Auf Standard zurücksetzen', 'Alle Design-Einstellungen zurücksetzen?') . '</section>'
@@ -50,7 +51,9 @@ final class SettingsController extends AdminController
 
         return $this->page(
             'Einstellungen',
-            Ui::pageHeader('Einstellungen', $this->app->versionDisplay()->render('settings'))
+            Ui::pageHeader('Einstellungen', $this->app->versionDisplay()->render('settings')
+                . Ui::link('/admin/license', 'Lizenz', 'button button-ghost'))
+                . $this->app->poweredBy()->render('settings')
                 . '<div class="settings-layout">' . $this->sidebar($query, $category) . '<div class="settings-main">' . $form . $reset . '</div></div>',
             $user,
             '/admin/settings',

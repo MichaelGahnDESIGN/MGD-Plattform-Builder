@@ -82,7 +82,7 @@ final class CreditComponentsController extends AdminController
             . Form::open($action, ' class="stack"') . '<div class="grid-2">'
             . Form::text('name', 'Name', (string) ($component['name'] ?? ''), ' required maxlength="150"')
             . Form::select('category', 'Kategorie', CreditInput::CATEGORIES, (string) ($component['category'] ?? 'other'))
-            . Form::text('logo_path', 'Logo/Icon (lokaler Pfad)', (string) ($component['logo_path'] ?? ''), ' placeholder="/assets/… oder /uploads/…" maxlength="300"')
+            . Form::text('logo_path', 'Logo/Icon (lokaler Pfad)', (string) ($component['logo_path'] ?? ''), ' placeholder="/assets/… oder /uploads/…" maxlength="300"' . MediaPicker::attribute())
             . Form::text('version', 'Version', (string) ($component['version'] ?? ''), ' maxlength="50"')
             . Form::text('provider_name', 'Anbieter', (string) ($component['provider_name'] ?? ''), ' maxlength="150"')
             . Form::text('license', 'Lizenz (SPDX, z. B. MIT)', (string) ($component['license'] ?? ''), ' maxlength="100"')
@@ -96,7 +96,7 @@ final class CreditComponentsController extends AdminController
             . Form::checkbox('attribution_required', 'Namensnennung erforderlich', (bool) ($component['attribution_required'] ?? false))
             . Form::checkbox('locally_embedded', 'Lokal eingebettet', (bool) ($component['locally_embedded'] ?? false))
             . Form::textarea('notes', 'Interne Notizen', (string) ($component['notes'] ?? ''), ' rows="3"')
-            . Form::submit('Speichern') . '</form>';
+            . Form::submit('Speichern') . '</form>' . MediaPicker::datalist($this->app);
 
         return $this->page('Credits', $body, $user, '/admin/credits');
     }

@@ -11,6 +11,8 @@ use MGD\Starter\Core\Http\Response;
 use MGD\Starter\Core\View\AdminLayout;
 use MGD\Starter\Core\View\Form;
 use MGD\Starter\Core\View\Ui;
+use MGD\Starter\Core\View\View;
+use Throwable;
 
 final class AuthController extends AdminController
 {
@@ -41,6 +43,10 @@ final class AuthController extends AdminController
 
         $this->app->audit()->record($result->user, 'auth.login', 'session');
 
+        if ($result->user->mustChangePassword && $result->user->can(Role::Moderator)) {
+            return Response::redirect(AccountController::PASSWORD_PATH);
+        }
+
         return Response::redirect($result->user->can(Role::Moderator) ? '/admin' : '/');
     }
 
@@ -65,8 +71,22 @@ final class AuthController extends AdminController
             . Form::open('/login', ' class="stack"')
             . Form::text('email', 'E-Mail', $email, ' autocomplete="username" required maxlength="254"', 'email')
             . Form::text('password', 'Passwort', '', ' autocomplete="current-password" required', 'password')
-            . Form::submit('Anmelden') . '</form>';
+            . Form::submit('Anmelden') . '</form>'
+            . ($this->passwordResetAvailable()
+                ? '<p><a href="' . View::e(View::url(PasswordResetController::REQUEST_PATH)) . '">Passwort vergessen?</a></p>'
+                : '');
 
         return (new AdminLayout($this->app))->bare('Anmelden', $body);
+    }
+
+    private function passwordResetAvailable(): bool
+    {
+        try {
+            return PasswordResetController::isAvailable($this->app);
+        } catch (Throwable $exception) {
+            error_log('[mgd-starter] password reset availability: ' . $exception->getMessage());
+
+            return false;
+        }
     }
 }

@@ -67,6 +67,9 @@ $darkResults = $registry->search('dark');
 check(isset($darkResults['theme']) && isset($darkResults['design']), 'Einstellungssuche "dark" findet Darstellung und Design');
 check(array_keys($registry->search('', 'seo')) === ['seo'], 'Kategoriefilter liefert nur SEO');
 check(count($registry->categories()) >= 15, 'Mindestens 15 Einstellungskategorien');
+require __DIR__ . '/smoke/gaps-no-db.php';
+
+require __DIR__ . '/license-smoke.php';
 
 // --- Mit Datenbank --------------------------------------------------------
 $dbConfig = [
@@ -195,6 +198,8 @@ $app->privateData()->saveProfile($userId, ['display_name' => 'Smoke', 'real_name
 $profile = $app->privateData()->findProfile($userId);
 check($profile !== null && $profile['real_name'] === 'Erika Muster' && $profile['address']['city'] === 'Musterstadt', 'Private Profildaten über eigene Verbindung');
 $app->privateData()->deleteProfile($userId);
+
+require __DIR__ . '/smoke/gaps-db.php';
 
 $app->audit()->record($editor, 'smoke.test', 'smoke', $suffix);
 check($app->audit()->recent(5, 'smoke')[0]['resource_id'] === $suffix, 'Audit-Log schreibt Einträge');

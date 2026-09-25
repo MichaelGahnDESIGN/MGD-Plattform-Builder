@@ -34,6 +34,7 @@ It is organized so humans and coding agents can enter at different depths withou
 - [Settings, Design, Light/Dark, File Locations, Code Editors](18-CMS/SETTINGS-DESIGN-THEMES.md)
 - [Briefing and Recommendations](18-CMS/BRIEFING-RECOMMENDATIONS.md)
 - [Templates](18-CMS/TEMPLATES.md)
+- [Licensing, label, white-label and modules](18-CMS/LICENSING.md)
 
 ## Security
 

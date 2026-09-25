@@ -33,15 +33,34 @@ final class UpdaterController extends AdminController
             return $this->redirectWith('/admin/updater', 'warning', 'Updater ist deaktiviert oder keine Manifest-URL gesetzt.');
         }
 
+        $channel = $settings->string('updater.channel');
+
         try {
-            $result = (new UpdateChecker())->check($settings->string('updater.manifest_url'), $this->app->version());
+            $result = (new UpdateChecker($this->channels()))->check($settings->string('updater.manifest_url'), $this->app->version(), $channel);
         } catch (InvalidArgumentException | RuntimeException $exception) {
+            $this->audit($user, 'updater.check.failed', 'updater', null, ['channel' => $channel]);
+
             return $this->redirectWith('/admin/updater', 'danger', 'Prüfung fehlgeschlagen: ' . $exception->getMessage());
         }
 
-        $this->audit($user, 'updater.check', 'updater', null, ['remote_version' => $result['version'], 'newer' => $result['newer']]);
+        $this->audit($user, 'updater.check', 'updater', null, [
+            'channel' => $channel,
+            'resolved_channel' => $result['channel'],
+            'remote_version' => $result['version'],
+            'newer' => $result['newer'],
+        ]);
 
         return $this->page('Updater', $this->body($result), $user, '/admin/updater');
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function channels(): array
+    {
+        $options = $this->app->registry()->definition('updater.channel')['options'] ?? [];
+
+        return $options === [] ? UpdateChecker::DEFAULT_CHANNELS : array_map('strval', array_keys($options));
     }
 
     private function body(?array $result = null): string
@@ -55,10 +74,14 @@ final class UpdaterController extends AdminController
 
         if ($result !== null) {
             $status = VersionStatus::tryFrom($result['status']);
-            $label = $result['version'] . ' ' . ($status?->label($this->app->locale()) ?? '');
+            $label = $result['version'] . ' ' . ($status?->label($this->app->locale()) ?? '') . ' · Kanal ' . $result['channel'];
             $resultHtml = $result['newer']
                 ? Ui::notice('Neue Version verfügbar: ' . $label . '. Bitte manuell per FTP aktualisieren (Backup vorher!).', 'success')
                 : Ui::notice('Kein Update verfügbar (Server meldet ' . $label . ').', 'info');
+
+            if ($result['channel'] !== $settings->string('updater.channel')) {
+                $resultHtml .= Ui::notice('Das Manifest bietet den Kanal "' . $settings->string('updater.channel') . '" nicht an – es wurde "' . $result['channel'] . '" verwendet.', 'warning');
+            }
 
             if ($result['notes_url'] !== '') {
                 $resultHtml .= '<p><a href="' . View::e($result['notes_url']) . '" rel="noopener noreferrer" target="_blank">Release Notes ansehen</a></p>';

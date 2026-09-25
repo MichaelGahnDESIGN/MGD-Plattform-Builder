@@ -115,7 +115,16 @@ php scripts/ftp-deploy.php --execute  # hochladen (FTPS)
 Tests: `php tests/smoke.php` gegen eine **Testdatenbank** (Umgebungsvariablen `MGD_TEST_DB_*`). In GitHub Actions laufen Lint und Smoke-Test gegen MariaDB.
 
 > [!NOTE]
-> Pre-Alpha-Grenzen: noch keine Benutzerverwaltung und kein Medien-Upload im Backoffice, GrapesJS speichert nur HTML, der Updater sendet den Kanal noch nicht mit. Siehe `templates/php-mysql-starter/README.md`.
+Seit 0.6.0 außerdem enthalten:
+
+* **Benutzerverwaltung** (anlegen, Rollen, sperren, löschen, Einmal-Passwort mit Pflichtwechsel; letzter Admin ist geschützt), **Mein Konto** und optionaler **Passwort-Reset per E-Mail** (`mail()` oder SMTP, Token nur gehasht, gedrosselt)
+* **Medienbibliothek** (JPG, PNG, WebP, GIF, PDF; MIME-Prüfung, zufällige Dateinamen, Bilder ohne Metadaten neu gespeichert, Auswahl für Logos und OG-Bild)
+* **GrapesJS vollständig**: HTML, CSS (bereinigt und auf den Seiteninhalt begrenzt) und Projektdaten werden gespeichert, inkl. Revisionen und Export/Import
+* **Updater-Kanäle**: Kanal wird an das Manifest übergeben, Manifest mit `channels` (stable, beta, alpha, lts) wird unterstützt
+* **„powered by“-Label, Lizenzseite und Module** – siehe [[25-Lizenz-Label-Whitelabel-und-Module]]
+
+> [!NOTE]
+> Pre-Alpha: Andere Sitzungen eines Kontos werden bei Passwortänderung nicht zentral beendet; die Medien-Verwendungsprüfung berücksichtigt keine alten Revisionen. Siehe `templates/php-mysql-starter/README.md`.
 
 ## 4. Nach jeder Auslieferung
 

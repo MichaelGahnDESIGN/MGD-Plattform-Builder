@@ -15,20 +15,24 @@ use MGD\Starter\Core\Auth\User;
 final class AdminLayout
 {
     private const NAVIGATION = [
-        ['Übersicht', [['/admin', 'Dashboard', Role::Moderator]]],
+        ['Übersicht', [['/admin', 'Dashboard', Role::Moderator], ['/admin/account', 'Mein Konto', Role::Moderator]]],
         ['Inhalte', [
             ['/admin/pages', 'CMS-Seiten', Role::Moderator],
             ['/admin/pages/trash', 'Papierkorb', Role::Editor],
             ['/admin/pages/transfer', 'Import / Export', Role::Editor],
+            ['/admin/media', 'Medien', Role::Editor],
         ]],
         ['Einstellungen', [
             ['/admin/settings', 'Einstellungen', Role::Admin],
+            ['/admin/users', 'Benutzer', Role::Admin],
             ['/admin/release-notes', 'Release Notes', Role::Editor],
             ['/admin/credits', 'Credits', Role::Editor],
             ['/admin/files', 'Dateispeicherorte', Role::Admin],
             ['/admin/code', 'Code-Editoren', Role::Admin],
             ['/admin/updater', 'Updater', Role::Admin],
             ['/admin/audit', 'Audit-Log', Role::Admin],
+            ['/admin/modules', 'Module', Role::Admin],
+            ['/admin/license', 'Lizenz', Role::Moderator],
         ]],
     ];
 
@@ -60,10 +64,30 @@ final class AdminLayout
                 . $toggle->render('settings')
                 . Form::open('/logout', ' class="inline-form"') . Form::submit('Abmelden', 'button button-secondary') . '</form>'
                 . '</div></header>'
-                . '<main id="main" class="admin-main">' . Flash::render() . $body . '</main>'
-                . '<footer class="admin-footer">' . $this->app->versionDisplay()->render('backoffice_footer') . '</footer>'
+                . '<main id="main" class="admin-main">' . Flash::render() . $this->licenseNotice($user) . $body . '</main>'
+                . '<footer class="admin-footer">' . $this->app->versionDisplay()->render('backoffice_footer')
+                . $this->app->poweredBy()->render('backoffice_footer') . '</footer>'
                 . '</div></div>',
         ]);
+    }
+
+    /**
+     * Warnt Admins, wenn Lizenztext, Label oder Logos verändert wurden (ohne Whitelabel-Lizenz).
+     */
+    private function licenseNotice(User $user): string
+    {
+        if (!$user->can(Role::Admin) || $this->app->licenses()->isWhitelabel()) {
+            return '';
+        }
+
+        $violations = $this->app->licenseIntegrity()->violations();
+
+        if ($violations === []) {
+            return '';
+        }
+
+        return Ui::notice('Lizenzverstoß: Folgende Dateien des Pflicht-Labels bzw. der MGD-Lizenz wurden verändert oder fehlen: '
+            . implode(', ', $violations) . '. Bitte wiederherstellen oder eine Whitelabel-Lizenz hinterlegen.', 'danger');
     }
 
     private function navigation(User $user, string $active): string
@@ -87,6 +111,19 @@ final class AdminLayout
             }
         }
 
+        $moduleLinks = '';
+
+        foreach ($this->app->modules()->menu() as $item) {
+            if ($user->can($item['role'])) {
+                $current = $item['href'] === $active ? ' aria-current="page"' : '';
+                $moduleLinks .= '<li><a href="' . View::e(View::url($item['href'])) . '"' . $current . '>' . View::e($item['label']) . '</a></li>';
+            }
+        }
+
+        if ($moduleLinks !== '') {
+            $html .= '<p class="admin-nav__group">Module</p><ul>' . $moduleLinks . '</ul>';
+        }
+
         return $html . '</nav>';
     }
 
@@ -102,7 +139,8 @@ final class AdminLayout
             'area' => 'login',
             'body' => '<main id="main" class="auth-main"><div class="auth-card">' . Flash::render() . $body
                 . '<div class="auth-card__footer">' . $this->app->versionDisplay()->render('login')
-                . (new ThemeToggle($this->app->settings()))->render($toggleLocation) . '</div></div></main>',
+                . (new ThemeToggle($this->app->settings()))->render($toggleLocation) . '</div>'
+                . $this->app->poweredBy()->render('login') . '</div></main>',
         ]);
     }
 }

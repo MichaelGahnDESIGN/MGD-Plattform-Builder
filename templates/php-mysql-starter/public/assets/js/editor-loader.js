@@ -1,5 +1,6 @@
 /*
  * Lädt den gewählten CMS-Editor (TinyMCE, GrapesJS oder Quill) lokal oder per CDN.
+ * GrapesJS speichert HTML (content), CSS (content_css) und Projektdaten (content_source, JSON).
  * Fehlen die Dateien oder schlägt die Initialisierung fehl, bleibt das einfache Textfeld aktiv.
  * Der Server bereinigt das HTML in jedem Fall.
  */
@@ -27,6 +28,18 @@
   function fallback() {
     textarea.hidden = false;
     setStatus('Der Editor konnte nicht geladen werden – das einfache Textfeld ist aktiv.');
+  }
+
+  function parseProject(value) {
+    if (!value) {
+      return null;
+    }
+    try {
+      var data = JSON.parse(value);
+      return data && typeof data === 'object' && !Array.isArray(data) ? data : null;
+    } catch (error) {
+      return null;
+    }
   }
 
   function canvasAfterTextarea() {
@@ -61,16 +74,46 @@
       });
     },
     grapesjs: function () {
+      var cssField = form.querySelector('[data-editor-css]');
+      var projectField = form.querySelector('[data-editor-project]');
+      var formatField = form.querySelector('[name="content_format"]');
+      var project = parseProject(projectField ? projectField.value : '');
       var canvas = canvasAfterTextarea();
-      var instance = window.grapesjs.init({
+      var options = {
         container: canvas,
         fromElement: false,
-        components: textarea.value,
         storageManager: false,
-        height: '32rem'
-      });
+        height: '32rem',
+        // Stile als Klassen-/ID-Regeln statt Inline-Styles: der Server entfernt style-Attribute.
+        avoidInlineStyle: true,
+        forceClass: true,
+        selectorManager: { componentFirst: true },
+        allowScripts: 0
+      };
+      if (!project) {
+        options.components = textarea.value;
+        options.style = cssField ? cssField.value : '';
+      }
+      var instance = window.grapesjs.init(options);
+      if (project) {
+        try {
+          instance.loadProjectData(project);
+        } catch (error) {
+          instance.setComponents(textarea.value);
+          instance.setStyle(cssField ? cssField.value : '');
+        }
+      }
       form.addEventListener('submit', function () {
         textarea.value = instance.getHtml();
+        if (cssField) {
+          cssField.value = instance.getCss();
+        }
+        if (projectField) {
+          projectField.value = JSON.stringify(instance.getProjectData());
+        }
+        if (formatField) {
+          formatField.value = 'grapesjs';
+        }
       });
     }
   };

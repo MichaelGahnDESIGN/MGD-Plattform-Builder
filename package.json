@@ -1,6 +1,6 @@
 {
   "name": "@michaelgahndesign/mgd-platform",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "CLI and validation tooling for the MGD-Plattform-Builder",
   "type": "module",
   "bin": {
@@ -28,11 +28,13 @@
     "registry/",
     "VERSION",
     "version.json",
-    "release-notes.json"
+    "release-notes.json",
+    "MGD-Lizenz.md",
+    "LICENSING.md"
   ],
   "dependencies": {
     "ajv": "^8.17.1",
     "yaml": "^2.8.1"
   },
-  "license": "MIT"
+  "license": "(MIT AND LicenseRef-MGD)"
 }

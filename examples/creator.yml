@@ -1,7 +1,7 @@
 project:
   name: "Example Creator Platform"
   type: "creator"
-  foundation_version: "0.5.1"
+  foundation_version: "0.6.0"
   description: "Beispiel-Creator-Plattform für Veröffentlichungen, Abos und Community"
 market:
   countries: ["DE"]

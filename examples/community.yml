@@ -1,7 +1,7 @@
 project:
   name: "Example Community"
   type: "community"
-  foundation_version: "0.5.1"
+  foundation_version: "0.6.0"
   description: "Beispiel-Community mit Profilen, Moderation und Support für Nutzer ab 16 Jahren"
 market:
   countries: ["DE"]

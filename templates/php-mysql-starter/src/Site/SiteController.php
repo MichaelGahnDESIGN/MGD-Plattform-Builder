@@ -107,6 +107,21 @@ final class SiteController
         return $html;
     }
 
+    /**
+     * GrapesJS-CSS ist beim Speichern bereinigt und auf .page-content begrenzt (CssSanitizer).
+     * Ausgabe nur mit CSP-Nonce; "<" kann im bereinigten CSS nicht vorkommen.
+     */
+    private function pageStyle(array $page): string
+    {
+        $css = (string) ($page['content_css'] ?? '');
+
+        if ($page['content_format'] !== 'grapesjs' || $css === '' || str_contains($css, '<')) {
+            return '';
+        }
+
+        return '<style nonce="' . View::e($this->app->headers->nonce()) . '">' . $css . '</style>';
+    }
+
     private function renderPage(string $slug, string $path, bool $landing = false): Response
     {
         $page = $this->app->pages()->findBySlug($slug);
@@ -117,7 +132,8 @@ final class SiteController
 
         $body = '<div class="container"><article class="page page--' . View::e($page['page_type']) . '">'
             . '<h1>' . View::e($page['title']) . '</h1>'
-            . '<div class="prose">' . $page['content_html'] . '</div>'
+            . $this->pageStyle($page)
+            . '<div class="prose page-content">' . $page['content_html'] . '</div>'
             . ($page['page_type'] === 'legal' ? '<p class="muted page-updated">Stand: ' . View::e(View::date($page['updated_at'])) . '</p>' : '')
             . '</article></div>';
 

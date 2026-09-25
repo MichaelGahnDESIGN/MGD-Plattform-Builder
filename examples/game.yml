@@ -1,7 +1,7 @@
 project:
   name: "Example Game"
   type: "game"
-  foundation_version: "0.5.1"
+  foundation_version: "0.6.0"
   description: "Beispiel-Browserspiel mit Spielerkonten, Shop, Moderation und Editor für Spielinhalte"
 market:
   countries: ["DE"]

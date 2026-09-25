@@ -49,9 +49,12 @@ final class PageRevisionsController extends AdminController
     {
         $user = $this->guard($request, Role::Editor);
         $revision = $this->app->pages()->revision((int) $params['id']) ?? throw new HttpException(404, 'Revision nicht gefunden.');
-        $source = $revision['content_format'] === 'markdown'
-            ? '<h2>Markdown-Quelle</h2><pre class="code-view">' . View::e((string) $revision['content_source']) . '</pre>'
-            : '';
+        $source = match ($revision['content_format']) {
+            'markdown' => '<h2>Markdown-Quelle</h2><pre class="code-view">' . View::e((string) $revision['content_source']) . '</pre>',
+            'grapesjs' => '<h2>CSS (GrapesJS)</h2><pre class="code-view">' . View::e((string) ($revision['content_css'] ?? '')) . '</pre>'
+                . '<p class="muted">Editor-Projektdaten: ' . View::e((string) strlen((string) $revision['content_source'])) . ' Bytes</p>',
+            default => '',
+        };
 
         return $this->page(
             'Revision ' . $revision['revision_no'],

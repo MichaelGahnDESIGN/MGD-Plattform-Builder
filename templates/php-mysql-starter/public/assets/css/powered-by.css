@@ -1,0 +1,43 @@
+/* Pflicht-Label nach MGD-Lizenz, Abschnitt 3. Nicht verändern oder ausblenden. */
+.mgd-powered-by {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  margin: 0.75rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.mgd-powered-by--left { justify-content: flex-start; }
+.mgd-powered-by--center { justify-content: center; }
+.mgd-powered-by--right { justify-content: flex-end; }
+
+.mgd-powered-by__link {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 0.5rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.mgd-powered-by__link:hover .mgd-powered-by__text,
+.mgd-powered-by__link:focus-visible .mgd-powered-by__text {
+  text-decoration: underline;
+}
+
+.mgd-powered-by__logo {
+  display: block;
+  width: auto;
+  height: 24px;
+  min-height: 20px;
+}
+
+.mgd-powered-by__logo--dark { display: none; }
+
+:root[data-theme="dark"] .mgd-powered-by__logo--light { display: none; }
+:root[data-theme="dark"] .mgd-powered-by__logo--dark { display: block; }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .mgd-powered-by__logo--light { display: none; }
+  :root:not([data-theme]) .mgd-powered-by__logo--dark { display: block; }
+}

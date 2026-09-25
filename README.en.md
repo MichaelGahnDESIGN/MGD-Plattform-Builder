@@ -6,7 +6,7 @@
 
 Privacy, security, compliance, modular backends, administration, moderation, Docker workflows, documentation and AI-agent collaboration in one project-neutral blueprint.
 
-[![Version](https://img.shields.io/badge/version-0.5.1%20Pre--Alpha-orange?style=flat-square)](version.json)
+[![Version](https://img.shields.io/badge/version-0.6.0%20Pre--Alpha-orange?style=flat-square)](version.json)
 [![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-compatible-6B5CE7?style=flat-square)](AGENTS.md)
 [![ChatGPT Codex](https://img.shields.io/badge/ChatGPT%20Codex-compatible-10A37F?style=flat-square)](AGENTS.md)
@@ -17,7 +17,20 @@ Privacy, security, compliance, modular backends, administration, moderation, Doc
 
 ---
 
-## New in 0.5.1 Pre-Alpha: AI-generated CMS with mandatory features
+## New in 0.6.0 Pre-Alpha: MGD-Plattform-Builder, license label, users, media and modules
+
+The project is now called **MGD-Plattform-Builder**.
+
+- **Dual license:** CLI, schemas and docs stay MIT; starter templates, the reference platform and the label are under the [MGD License](MGD-Lizenz.md) – see [LICENSING.md](LICENSING.md).
+- **Mandatory label** "powered by: Michael Gahn DESIGN" (logo, link in a new tab) in footers, landing pages, login, backoffice and settings, plus **Settings › License**.
+- **White-label** (EUR 500 one-time per project/domain) via a signed license key.
+- **Starter:** user management, my account, optional e-mail password reset, media library, full GrapesJS saving (HTML, CSS, project data), updater channels, module interface (free and paid modules).
+
+More: [Licensing, label, white-label and modules](WIKI/18-CMS/LICENSING.md)
+
+---
+
+## Since 0.5.1: AI-generated CMS with mandatory features
 
 With 0.5.1 the foundation becomes an **AI-agent driven CMS**. Claude Code, ChatGPT Codex and other agents use it to build websites for games, projects and platforms – from a **briefing**, a **starter template** and **mandatory features** that every project always contains.
 
@@ -442,7 +455,7 @@ See [Domain Packs](WIKI/10-DOMAIN-PACKS/README.md).
 
 ## Maturity
 
-Current status: **0.5.1 Pre-Alpha** (see [`version.json`](version.json) and [`release-notes.json`](release-notes.json))
+Current status: **0.6.0 Pre-Alpha** (see [`version.json`](version.json) and [`release-notes.json`](release-notes.json))
 
 Schemas and recommendations may change before 1.0. Real-world feedback and contributions are welcome.
 
@@ -462,7 +475,7 @@ Security issues should follow [SECURITY.md](SECURITY.md).
 
 ## License
 
-MIT License. See [LICENSE](LICENSE).
+Dual licensed, see [LICENSING.md](LICENSING.md): **MIT** for CLI, validator, schemas, registries, scripts and docs; **MGD License** ([MGD-Lizenz.md](MGD-Lizenz.md)) for starter templates, the reference platform, the "powered by" label and projects built from them. Versions up to 0.5.1 remain MIT.
 
 ---
 

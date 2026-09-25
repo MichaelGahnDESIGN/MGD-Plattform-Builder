@@ -23,7 +23,8 @@ final class SiteLayout
         $settings = $this->app->settings();
         $toggle = new ThemeToggle($settings);
         $version = $this->app->versionDisplay();
-        $landing = ($options['landing'] ?? false) ? $version->render('landing_public') : '';
+        $isLanding = (bool) ($options['landing'] ?? false);
+        $landing = $isLanding ? $version->render('landing_public') : '';
         $canonicalBase = rtrim($settings->string('seo.canonical_base'), '/');
         $ogImage = $settings->string('seo.og_image');
 
@@ -36,7 +37,9 @@ final class SiteLayout
             'og_image' => $ogImage !== '' ? ($canonicalBase !== '' ? $canonicalBase : '') . View::url($ogImage) : '',
             'loader' => true,
             'body' => $this->header($toggle, $version->render('public_header'))
-                . '<main id="main" class="site-main">' . $landing . $body . '</main>'
+                . '<main id="main" class="site-main">' . $landing . $body
+                    . ($isLanding ? '<div class="container">' . $this->app->poweredBy()->render('landing_public') . '</div>' : '')
+                    . '</main>'
                 . $this->footer($toggle, $version->render('public_footer'))
                 . $toggle->render('floating')
                 . $this->cookieBox(),
@@ -100,6 +103,7 @@ final class SiteLayout
             . $this->withdrawalButton()
             . '<div class="site-footer__meta"><span>' . View::e($settings->string('general.footer_text')) . '</span>'
             . $versionHtml . $toggle->render('footer') . '</div>'
+            . $this->app->poweredBy()->render('public_footer')
             . '</div></footer>';
     }
 

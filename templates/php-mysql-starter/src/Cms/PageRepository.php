@@ -16,7 +16,7 @@ use Throwable;
  */
 final class PageRepository
 {
-    private const COLUMNS = 'id, slug, title, page_type, status, content_format, content_source, content_html,
+    private const COLUMNS = 'id, slug, title, page_type, status, content_format, content_source, content_html, content_css,
         meta_description, current_revision, created_at, updated_at, deleted_at';
 
     public function __construct(private readonly PDO $database)
@@ -111,9 +111,9 @@ final class PageRepository
 
         return $this->transaction(function () use ($data, $author, $note): int {
             $this->database->prepare(
-                'INSERT INTO pages (slug, title, page_type, status, content_format, content_source, content_html,
+                'INSERT INTO pages (slug, title, page_type, status, content_format, content_source, content_html, content_css,
                                     meta_description, created_by, updated_by, created_at, updated_at)
-                 VALUES (:slug, :title, :page_type, :status, :content_format, :content_source, :content_html,
+                 VALUES (:slug, :title, :page_type, :status, :content_format, :content_source, :content_html, :content_css,
                          :meta_description, :created_by, :updated_by, UTC_TIMESTAMP(), UTC_TIMESTAMP())'
             )->execute([...$this->pageParams($data), 'created_by' => $author?->id, 'updated_by' => $author?->id]);
             $id = (int) $this->database->lastInsertId();
@@ -139,7 +139,7 @@ final class PageRepository
             $this->database->prepare(
                 'UPDATE pages SET slug = :slug, title = :title, page_type = :page_type, status = :status,
                         content_format = :content_format, content_source = :content_source, content_html = :content_html,
-                        meta_description = :meta_description, updated_by = :updated_by, updated_at = UTC_TIMESTAMP()
+                        content_css = :content_css, meta_description = :meta_description, updated_by = :updated_by, updated_at = UTC_TIMESTAMP()
                   WHERE id = :id'
             )->execute([...$this->pageParams($data), 'updated_by' => $author?->id, 'id' => (int) $existing['id']]);
 
@@ -209,6 +209,7 @@ final class PageRepository
             'content_format' => (string) $revision['content_format'],
             'content_source' => $revision['content_source'],
             'content_html' => (string) $revision['content_html'],
+            'content_css' => $revision['content_css'] ?? null,
             'meta_description' => (string) $revision['meta_description'],
         ];
 
@@ -225,9 +226,9 @@ final class PageRepository
 
         $this->database->prepare(
             'INSERT INTO page_revisions (page_id, revision_no, title, status, content_format, content_source, content_html,
-                                         meta_description, author_id, author_label, note, created_at)
+                                         content_css, meta_description, author_id, author_label, note, created_at)
              VALUES (:page_id, :revision_no, :title, :status, :content_format, :content_source, :content_html,
-                     :meta_description, :author_id, :author_label, :note, UTC_TIMESTAMP())'
+                     :content_css, :meta_description, :author_id, :author_label, :note, UTC_TIMESTAMP())'
         )->execute([
             'page_id' => $pageId,
             'revision_no' => $revisionNo,
@@ -236,6 +237,7 @@ final class PageRepository
             'content_format' => $data['content_format'],
             'content_source' => $data['content_source'],
             'content_html' => $data['content_html'],
+            'content_css' => $data['content_css'] ?? null,
             'meta_description' => $data['meta_description'],
             'author_id' => $author?->id,
             'author_label' => $author !== null ? mb_substr($author->displayName, 0, 120) : 'System',
@@ -257,6 +259,7 @@ final class PageRepository
             'content_format' => $data['content_format'],
             'content_source' => $data['content_source'],
             'content_html' => $data['content_html'],
+            'content_css' => $data['content_css'] ?? null,
             'meta_description' => $data['meta_description'],
         ];
     }
