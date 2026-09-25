@@ -78,3 +78,16 @@
 .media-card__body strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .media-picker-hint { font-size: var(--font-size-small); }
 .one-time-password { font-size: 1.25rem; letter-spacing: 0.05em; user-select: all; }
+
+/* Mobiles Backoffice-Menü: ohne JavaScript immer sichtbar, mit JavaScript ein-/ausklappbar */
+.admin-menu-toggle { display: none; }
+.admin-sidebar a { min-height: 2.75rem; display: flex; align-items: center; transition: background-color var(--transition), color var(--transition); }
+.settings-categories a { min-height: 2.75rem; align-items: center; }
+@media (max-width: 900px) {
+  .admin-sidebar { padding: var(--space-3) var(--space-4); border-right: 0; border-bottom: 1px solid var(--color-border); }
+  .admin-sidebar .admin-brand { margin-bottom: 0; }
+  .admin-sidebar__head { display: flex; justify-content: space-between; align-items: center; gap: var(--space-3); }
+  .js .admin-menu-toggle { display: inline-flex; }
+  .js .admin-sidebar nav[data-collapsed="true"] { display: none; }
+  .admin-main, .admin-topbar, .admin-footer { padding-inline: var(--space-4); }
+}

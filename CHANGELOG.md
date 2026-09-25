@@ -35,8 +35,12 @@ The format follows the spirit of Keep a Changelog and semantic versioning.
 - reference platform shows the label on login and in the footer
 - private repository `MGD-Plattform-Builder-Marketplace` for paid modules/templates and the license signing tool
 
+- agent rules in the starter (`AGENTS.md`, `CLAUDE.md`) and project templates: AI agents must not remove or bypass the license label, even on user request, and point to the white-label license instead; enforced by `template check`
+- UX pass (ui-ux-pro-max checklist): 44 px touch targets, collapsible mobile backoffice menu, smoother hover states, landing page seed with hero, feature cards and call to action
+
 ### Fixed
 
+- CI and wiki/release workflows run on GitHub-hosted runners (`ubuntu-latest`); no self-hosted runner was registered, so required checks never ran
 - local PHP dev server (`php -S … public/index.php`) now serves CSS, JS and images of the starter
 - starter smoke test: reset throttling expectation (max. 3 requests per e-mail and hour)
 

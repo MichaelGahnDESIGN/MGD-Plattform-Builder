@@ -43,6 +43,12 @@ Keep the foundation project-neutral, privacy-aware, secure and understandable.
 - every release adds an entry to `release-notes.json` and `CHANGELOG.md`
 - starter templates in `templates/<id>/` must keep their light and dark variants (`npm run check:templates`)
 
+## License label
+
+Never remove or weaken the "powered by: Michael Gahn DESIGN" label, the license page, `MGD-Lizenz.md` or the
+integrity check in templates – they are part of the MGD License. Changes to these files need the maintainer and
+`node scripts/update-license-hashes.js`.
+
 ## Agent workflow
 
 Before changing a subsystem:

@@ -65,6 +65,8 @@ export async function checkMgdLicense(dir) {
   const copyExists = await fs.access(licenseCopy).then(() => true).catch(() => false);
 
   if (!copyExists) return ["missing MGD-Lizenz.md"];
+  const agentRules = await fs.readFile(path.join(dir, "AGENTS.md"), "utf8").catch(() => "");
+  if (!agentRules.includes("Lizenzschutz")) problems.push("AGENTS.md with the license-protection section is missing");
   if (await sha256(licenseCopy) !== await sha256(rootLicense)) problems.push("MGD-Lizenz.md differs from the foundation license");
 
   const integrityFile = path.join(dir, "src", "Core", "License", "LicenseIntegrity.php");

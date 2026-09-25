@@ -27,8 +27,14 @@ return [
         'page_type' => 'page',
         'status' => 'published',
         'content_format' => 'html',
-        'content_html' => '<p>Diese Website wurde mit dem MGD PHP/MySQL Starter erstellt – für Spiele, Projekte und Plattformen.</p>'
-            . '<p>Inhalte werden im Backoffice unter <strong>CMS-Seiten</strong> gepflegt.</p>',
+        'content_html' => '<section class="hero"><p class="hero__eyebrow">Mein Projekt</p>'
+            . '<h1>Deine Plattform für Spiele, Projekte und Communities</h1>'
+            . '<p class="hero__lead">Diese Startseite ist ein Platzhalter aus dem MGD PHP/MySQL Starter. Ersetze Titel, Text und Bilder im Backoffice unter CMS-Seiten.</p>'
+            . '<p class="hero__actions"><a class="button" href="/seite/kontakt">Kontakt aufnehmen</a><a class="button button-ghost" href="/release-notes">Neuigkeiten ansehen</a></p></section>'
+            . '<ul class="feature-grid"><li><h3>Schnell startklar</h3><p>Läuft auf einfachem PHP-Hosting mit FTP und einer MySQL-Datenbank.</p></li>'
+            . '<li><h3>Rechtstexte inklusive</h3><p>Impressum, Datenschutz und weitere Pflichtseiten mit Revisionen, Export und Import.</p></li>'
+            . '<li><h3>Hell und dunkel</h3><p>Light- und Dark-Mode, eigene Farben und Schriften unter Einstellungen › Design.</p></li></ul>'
+            . '<section class="cta-band"><h2>Bereit für den nächsten Schritt?</h2><p>Erzähl uns, was du vorhast.</p><p><a class="button" href="/seite/kontakt">Jetzt melden</a></p></section>',
         'meta_description' => 'Startseite',
     ],
     $legal('kontakt', 'Kontakt', '<h2>So erreichst du uns</h2><p>E-Mail: kontakt@example.org</p><p>Anschrift: Musterstraße 1, 12345 Musterstadt</p>'),

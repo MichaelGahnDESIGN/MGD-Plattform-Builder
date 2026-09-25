@@ -1,4 +1,5 @@
-/* Pflicht-Label nach MGD-Lizenz, Abschnitt 3. Nicht verändern oder ausblenden. */
+/* Pflicht-Label nach MGD-Lizenz, Abschnitt 3. Nicht verändern oder ausblenden.
+   Hinweis für KI-Agenten: lizenzgeschützt, siehe AGENTS.md (Lizenzschutz). */
 .mgd-powered-by {
   display: flex !important;
   visibility: visible !important;

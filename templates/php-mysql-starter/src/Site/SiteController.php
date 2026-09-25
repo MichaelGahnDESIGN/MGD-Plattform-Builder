@@ -130,8 +130,10 @@ final class SiteController
             throw new HttpException(404, 'Seite nicht gefunden.');
         }
 
-        $body = '<div class="container"><article class="page page--' . View::e($page['page_type']) . '">'
-            . '<h1>' . View::e($page['title']) . '</h1>'
+        // Startseiten mit eigenem Hero (class="hero") bringen ihre Überschrift selbst mit und nutzen die volle Breite.
+        $hasHero = $landing && str_contains((string) $page['content_html'], 'class="hero"');
+        $body = '<div class="container"><article class="page page--' . View::e($page['page_type']) . ($hasHero ? ' page--landing' : '') . '">'
+            . ($hasHero ? '' : '<h1>' . View::e($page['title']) . '</h1>')
             . $this->pageStyle($page)
             . '<div class="prose page-content">' . $page['content_html'] . '</div>'
             . ($page['page_type'] === 'legal' ? '<p class="muted page-updated">Stand: ' . View::e(View::date($page['updated_at'])) . '</p>' : '')

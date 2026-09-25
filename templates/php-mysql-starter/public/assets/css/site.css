@@ -167,3 +167,26 @@ input[type="color"] { padding: 0.15rem; width: 3rem; height: 2.25rem; }
   .timeline { padding-left: var(--space-4); }
   .timeline__entry-head time { margin-left: 0; }
 }
+
+/* Startseite: Hero, Funktionskarten, Handlungsaufruf (Klassen für CMS-Inhalte) */
+.hero { padding: var(--space-6) 0 var(--space-5); }
+.hero__eyebrow { color: var(--color-primary); font-weight: 700; font-size: var(--font-size-small); text-transform: uppercase; letter-spacing: 0.08em; }
+.hero h1 { font-size: clamp(2rem, 1.5rem + 2.5vw, 3.25rem); line-height: 1.15; margin: var(--space-2) 0 var(--space-4); max-width: 20ch; text-wrap: balance; }
+.hero__lead { font-size: var(--font-size-lead); color: var(--color-muted); max-width: 60ch; }
+.hero__actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-5); }
+.feature-grid { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); margin: var(--space-6) 0; padding: 0; list-style: none; }
+.feature-grid > li { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-5); box-shadow: var(--shadow-small); }
+.feature-grid h3 { margin-top: 0; font-size: var(--font-size-h3); }
+.feature-grid p { color: var(--color-muted); margin-bottom: 0; }
+.cta-band { background: color-mix(in srgb, var(--color-primary) 10%, var(--color-surface)); border: 1px solid color-mix(in srgb, var(--color-primary) 30%, var(--color-border)); border-radius: var(--radius); padding: var(--space-6) var(--space-5); text-align: center; margin: var(--space-6) 0; }
+.cta-band h2 { margin-top: 0; }
+
+/* Bedienbarkeit: Mindestgröße 44 px für Klickflächen, weiche Übergänge */
+.button, button.button, .theme-toggle { min-height: 2.75rem; }
+.button-small { min-height: 2.25rem; }
+.footer-links a, .site-nav a { display: inline-flex; align-items: center; min-height: 2.75rem; }
+@media (pointer: coarse) {
+  .button-small { min-height: 2.75rem; }
+}
+a, .link-button { transition: color var(--transition), background-color var(--transition); }
+.page--landing { max-width: none; }

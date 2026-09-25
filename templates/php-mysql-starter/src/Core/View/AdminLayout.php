@@ -56,8 +56,10 @@ final class AdminLayout
             'scripts' => $assets['scripts'] ?? [],
             'styles' => $assets['styles'] ?? [],
             'body' => '<div class="admin-shell">'
-                . '<aside class="admin-sidebar"><a class="admin-brand" href="' . View::e(View::url('/admin')) . '">'
-                . View::e($siteName) . '<small>Backoffice</small></a>' . $this->navigation($user, $active) . '</aside>'
+                . '<aside class="admin-sidebar"><div class="admin-sidebar__head"><a class="admin-brand" href="' . View::e(View::url('/admin')) . '">'
+                . View::e($siteName) . '<small>Backoffice</small></a>'
+                . '<button type="button" class="button button-ghost admin-menu-toggle" aria-controls="admin-nav" aria-expanded="false">Menü</button>'
+                . '</div>' . $this->navigation($user, $active) . '</aside>'
                 . '<div class="admin-content"><header class="admin-topbar"><span>' . View::e($user->displayName)
                 . ' · ' . View::e($user->role->label()) . '</span><div class="admin-topbar__tools">'
                 . Ui::link('/', 'Website ansehen', 'button button-ghost')
@@ -92,7 +94,7 @@ final class AdminLayout
 
     private function navigation(User $user, string $active): string
     {
-        $html = '<nav aria-label="Backoffice">';
+        $html = '<nav id="admin-nav" aria-label="Backoffice">';
 
         foreach (self::NAVIGATION as [$group, $items]) {
             $links = '';
