@@ -113,6 +113,12 @@ Never claim automatic legal compliance.
 
 Run a project-level security gap review using the foundation's threat and control model.
 
+### /platform loop
+
+Run repeatable work as small, stateless iterations to save tokens. Follow `platform/LOOP.md`:
+state in `.loop/STATE.md`, one small step per iteration, deterministic check, hard stop rules.
+Never loop over legal, privacy, cost or production decisions.
+
 ### /platform update
 
 Compare the project's declared foundation version with the repository version and produce a migration plan before changing files.
@@ -124,7 +130,7 @@ Prefer, when installed:
 - /todo for task tracking
 - /dev for release/readiness
 - /backup before risky changes
-- /autopilot only with explicit safe goals
+- /autopilot only with explicit safe goals (same limits as the loop protocol)
 - /thread for handoff
 - /projectclean after completion
 
