@@ -67,6 +67,7 @@ It is organized so humans and coding agents can enter at different depths withou
 
 - [Agent Workflow](07-AGENTS/AGENT-WORKFLOW.md)
 - [Skill Ecosystem](07-AGENTS/SKILL-ECOSYSTEM.md)
+- [Loop Protocol](07-AGENTS/LOOP-PROTOCOL.md)
 - [AI-assisted Moderation](07-AGENTS/AI-MODERATION.md)
 
 ## Support & Moderation

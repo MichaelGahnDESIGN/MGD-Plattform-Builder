@@ -10,6 +10,7 @@
 * [[23-AI-CMS-Pflichtfunktionen]]
 * [[24-Briefing-Templates-und-Empfehlungen]]
 * [[25-Lizenz-Label-Whitelabel-und-Module]]
+* [[26-Loop-System]]
 
 **Werkzeuge**
 * [[18-CLI-Validator-und-Automatisierung]]

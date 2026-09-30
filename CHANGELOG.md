@@ -6,6 +6,10 @@ The format follows the spirit of Keep a Changelog and semantic versioning.
 
 ## [Unreleased]
 
+### Added
+
+- agent-neutral **Loop Protocol** (`platform/LOOP.md`, `platform/loop/`) and `/platform loop` mode: stateless iterations with a state file, deterministic check, hard stop rules and a headless runner for Claude Code and ChatGPT Codex
+
 ### Planned
 
 - Node/PostgreSQL reference implementation
