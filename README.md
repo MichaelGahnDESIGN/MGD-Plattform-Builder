@@ -371,6 +371,16 @@ Betrieb, Dokumentation und Release-Gates. Ändere noch nichts.
 
 ---
 
+## Zugänge sicher einrichten
+
+KI-Agenten können Server, Shop, WordPress oder Datenbank selbstständig testen und deployen, ohne dass Passwörter im Chat landen:
+Zugangs-`.md` ins Projekt legen, Agent schützt sie per `.gitignore`, erzeugt eine lokale env und einen eigenen SSH-Key,
+du trägst den öffentlichen Schlüssel beim Hoster ein, danach testet der Agent den Zugang selbst.
+
+- Skill: `/zugang` (`platform/skills/zugang/SKILL.md`)
+- Oberfläche zum Klicken: `tools/zugang-ui/start.command` (lokal, nur Python, kein Token verlässt den Rechner)
+- Anleitung: [WIKI/Zugaenge-einrichten.md](WIKI/Zugaenge-einrichten.md) · [Wiki](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/wiki/26-Zugaenge-einrichten)
+
 ## Projektprofil: `MGD_PLATFORM.yml`
 
 Die Datei beschreibt die Eigenschaften eines konkreten Projekts, ohne die Foundation selbst projektspezifisch zu machen.
