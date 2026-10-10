@@ -8,6 +8,9 @@ The format follows the spirit of Keep a Changelog and semantic versioning.
 
 ### Added
 
+- `tools/zugang-ui/`: local zero-dependency web UI to set up server access safely (gitignore, local env, project SSH key, test, permission rules).
+### Added
+
 - Skill `platform/skills/zugang`: secure access setup workflow (server, shop, WordPress, database) with local env and project SSH key.
 ### Planned
 
