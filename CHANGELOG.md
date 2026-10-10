@@ -6,6 +6,9 @@ The format follows the spirit of Keep a Changelog and semantic versioning.
 
 ## [Unreleased]
 
+### Added
+
+- Skill `platform/skills/zugang`: secure access setup workflow (server, shop, WordPress, database) with local env and project SSH key.
 ### Planned
 
 - Node/PostgreSQL reference implementation
