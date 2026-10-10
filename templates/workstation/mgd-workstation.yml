@@ -1,0 +1,38 @@
+# MGD Workstation Preset
+# Optional personal preset. The generic installer does not require this profile.
+
+profile:
+  name: mgd-workstation
+  description: "Full MGD Codex development workstation"
+
+skill_groups:
+  general: true
+  ui_ux: true
+  web_development: true
+  wordpress: true
+  ecommerce: true
+  php_backend: true
+  flutter: true
+  godot: true
+  game_development: true
+
+sources:
+  github_accounts:
+    - MichaelGahnDESIGN
+  foundations:
+    - MichaelGahnDESIGN/Projekt-Plattform-System
+
+external_required:
+  - ui-ux-pro-max
+  - Graphiphy
+  - frontend-design
+
+discovery:
+  include_all_matching_owned_skills: true
+  scan_foundation_references: true
+  scan_existing_local_environment: true
+
+safety:
+  allow_paid_actions: false
+  allow_unreviewed_sudo: false
+  overwrite_dirty_repositories: false
