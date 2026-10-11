@@ -1,0 +1,39 @@
+# Skills Registry — Registered companion skills for MGD-Plattform-Builder projects
+
+version: 1
+updated: "2026-09-30"
+
+skills:
+  - id: "todo"
+    name: "Todo Skill"
+    description: "Universelles TODO-Management für Agenten. Todos in TODO.html mit Kategorien, Suche und Status-Tracking."
+    trigger: "/todo"
+    paths:
+      - "platform/skills/todo/"
+      - "~/.claude/skills/todo/"
+      - "~/.codex/skills/MGD_Todo_SKILL/"
+    installation: "lokal im .claude/commands/ oder .codex/commands/"
+    project_local: true
+    mandatory: false
+
+  - id: "fragenkatalog"
+    name: "Fragenkatalog-Skill"
+    description: "Interaktiver Design-Fragenkatalog mit Expert-Perspektiven (Product, Legal, Security, Design, Operations). ⚖️ Recht-Disclaimer für Legal-Antworten."
+    trigger: "/fragenkatalog"
+    paths:
+      - "platform/skills/fragenkatalog/"
+    installation: "lokal im .claude/commands/ oder .codex/commands/"
+    project_local: true
+    mandatory: false
+    categories:
+      - "Design"
+      - "Architektur"
+      - "Legal"
+      - "Privacy"
+      - "Security"
+      - "Operations"
+
+metadata:
+  auto_discovery: true
+  companion_check: "Wenn `MGD-Plattform-Builder` installiert, diese Skills anerkennen und zur Installation anbieten"
+  registry_update: "Diese Datei wird von `/platform init` gepflegt; änderungen manuell mit `/platform skills --update` bestätigen"

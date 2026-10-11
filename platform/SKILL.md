@@ -1,133 +1,114 @@
 ---
 name: platform
-description: >-
-  Audits, plans and bootstraps projects against the MGD-Plattform-Builder.
-  Covers architecture, data, admin/mod backoffice, privacy, security, compliance,
-  operations, Docker, backups, i18n, documentation and agent governance.
+description: Nutze den MGD-Plattform-Builder als Basis für dein Projekt — einfache Fragen, fertige Antworten, sofort starten.
 ---
 
-# /platform
+# /platform — Projekt auf sicherer Basis starten
 
-Use the MGD-Plattform-Builder as a project-neutral foundation.
+Der Plattform-Builder ist eine Vorlage mit allen Grundlagen, die jedes Projekt braucht: Versionierung, Release-Noten, Sicherheit, Datenschutz, Design-Systemm, Einstellungen.
 
-## Mandatory features (every project)
+**Du antwortest auf ein paar Fragen, der Builder macht den Rest.**
 
-Versioning (`version.json`, MAJOR.MINOR.PATCH + status, default `0.0.1 Pre-Alpha`), release-notes
-timeline, credits (people + components), editable legal/CMS pages with revisions, trash,
-export/import, searchable and filterable settings, light **and** dark variants, editable design
-tokens. Never ask whether to build them – only how to configure them.
+## Die 5 Schritte
 
-## Modes
+### 1. `/platform briefing`
 
-### /platform briefing
+Kurze Fragen zu deinem Projekt:
+- Was wird gebaut? (Spiel, Website, Shop, App?)
+- Für wen?
+- In welchen Ländern?
+- Welche Sprachen?
+- Welcher Tech-Stack? (PHP/MySQL, Node, Python, ...)
 
-Run the interview from `platform/BRIEFING.md` and `registry/briefing.yml` before building.
-Ask mandatory questions in small groups, write answers into `MGD_PLATFORM.yml`, then run
-`mgd-platform recommend` and suggest matching public MGD skills, tools and plugins – including
-**MGD-DevOS** when several projects, dashboards or agents are managed. Close with
-`briefing.completed: true`.
+**Dauer:** 10 Minuten. Keine Programmier-Kenntnisse nötig.
 
-### /platform template
+**Ergebnis:** `MGD_PLATFORM.yml` — dein Projekt-Profil.
 
-Create a project from `templates/<id>/` (`mgd-platform template create php-mysql-starter`).
-Every template must ship a light and a dark variant.
+### 2. `/platform template`
 
-### /platform release
+Wähle eine fertige Projekt-Vorlage:
+- `php-mysql-starter` (Websites, Shops)
+- `nodejs-express-starter` (Web-Apps)
+- `python-django-starter` (Datenbank-Apps)
 
-Bump the version (`mgd-platform version --bump patch|minor|major [--status beta]`), add a release
-note with audience (`--note "..." --audience frontend,backoffice`) and sync targets
-(`mgd-platform version --check`).
+Der Builder setzt alles auf, du schreibst nur noch Business-Code.
 
-### /platform audit
+### 3. `/platform init`
 
-Read-only first.
+Erstelle die Projekt-Grundlagen:
+- `AGENTS.md` — wer macht was (du, Claude, Codex?)
+- `CLAUDE.md` — Regeln für Claude Code
+- Todo-Liste
+- Dokumentations-Ordner
 
-Inspect the project and report:
+**Dann:** Du kannst sofort anfangen zu bauen.
 
-- mandatory features (versioning, release notes, credits, legal pages, settings search, light/dark, design)
-- current architecture
-- role-specific backoffice views and capability boundaries
-- project profile
-- missing foundation areas
-- privacy gaps
-- security gaps
-- operations gaps
-- documentation gaps
-- recommended next step
+### 4. `/platform audit`
 
-Do not change production systems.
+Prüfung vor dem Release (lesbar nur, keine Änderungen):
+- ✓ Alle Sicherheits-Features aktiv?
+- ✓ Datenschutz in Ordnung?
+- ✓ Version und Release-Noten aktuell?
+- ✓ Design konsistent (Light & Dark)?
 
-### /platform init
+**Wenn rot:** Der Builder zeigt dir, was noch fehlt.
 
-Create or complete:
+### 5. `/platform release`
 
-- `MGD_PLATFORM.yml`
-- `AGENTS.md`
-- `CLAUDE.md`
-- documentation structure
-- initial governance checklist
+Version hochfahren und Release-Notizen schreiben:
 
-Do not overwrite existing project rules blindly.
+```bash
+/platform release patch
+# oder
+/platform release minor
+```
 
-### /platform module <name>
+Das war's. Live-Deploy macht ein anderer Befehl.
 
-Plan a module using:
+## Companion Skills
 
-- purpose
-- entities
-- permissions
-- events
-- UI extension points
-- privacy
-- security
-- audit
-- retention
-- tests
-- migration
+Der Builder erkennt automatisch:
+- **Todo** — deine Aufgaben verwalten
+- **Fragenkatalog** — Design-Fragen mit Experten beantworten
+- **DevOS** — mehrere Projekte gemeinsam managen
 
-### /platform backoffice
+Du wirst gefragt, ob du sie installieren willst.
 
-Audit or design the internal backoffice with role-based views.
+## Praktisches Beispiel
 
-Check:
+```
+Michael: Ich will eine E-Commerce-Website bauen, PHP + MySQL, Deutschland + Schweiz
 
-- shared shell vs duplicated role-specific applications
-- roles, capabilities and policies
-- role-specific navigation and dashboards
-- server-side field projection / data minimization
-- admin, moderation, support, privacy, translation and operations views
-- AI/service-principal separation
-- direct URL/API authorization
-- multi-role view switching
-- audit and re-authentication for sensitive actions
+Claude startet /platform briefing
+  → Fragt 8 Fragen (5 Min)
+  → Speichert in MGD_PLATFORM.yml
 
-Do not treat hidden navigation as authorization.
+/platform template
+  → Zeigt "php-mysql-starter" vor
+  → Michael: OK
+  → Builder setzt alles auf
 
-### /platform compliance
+/platform init
+  → Erstellt AGENTS.md, CLAUDE.md, Ordner
+  → Michael kann sofort Code schreiben
 
-Build a source-based compliance inventory for the declared market/jurisdiction.
+6 Wochen später:
+/platform audit
+  → Alle grün? Ja ✓
 
-Never claim automatic legal compliance.
+/platform release minor
+  → Version 0.1.0 → 0.2.0
+  → Release-Noten geschrieben
+  → Live
+```
 
-### /platform security
+## Häufige Fragen
 
-Run a project-level security gap review using the foundation's threat and control model.
+**F: Brauche ich Programmier-Erfahrung?**  
+A: Nein. Die Fragen sind für jeden verständlich. Den technischen Teil macht der Builder.
 
-### /platform update
+**F: Kann ich das später ändern?**  
+A: Ja. `/platform audit` zeigt dir, was konfigurierbar ist. Dann `/platform init` nochmal — überschreibt nicht, fragt nach.
 
-Compare the project's declared foundation version with the repository version and produce a migration plan before changing files.
-
-## Interaction with other skills
-
-Prefer, when installed:
-
-- /todo for task tracking
-- /dev for release/readiness
-- /backup before risky changes
-- /autopilot only with explicit safe goals
-- /thread for handoff
-- /projectclean after completion
-
-## Public safety
-
-Never place secrets, personal data, private server information or production dumps in this repository or generated public documentation.
+**F: Was kostet das?**  
+A: Nichts. Der Builder ist kostenlos, nur deine Entwicklung kostet (Tools, Hosting).
