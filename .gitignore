@@ -28,3 +28,8 @@ MGD_PLATFORM.local.yml
 # Leere Sicherungsordner der Starter-Templates (Inhalt bleibt über die Template-.gitignore ausgeschlossen):
 !templates/*/storage/backups/
 !templates/*/public/assets/vendor/
+
+.ssh/
+.access.local.md
+.env.access.local
+*.local.md

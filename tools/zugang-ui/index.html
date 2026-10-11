@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zugang-UI</title>
+<style>
+:root{--bg:#f5f6f8;--card:#fff;--ink:#16181d;--mut:#667085;--line:#e3e6eb;--acc:#c8102e;--ok:#157f3b;--warn:#b54708;--bad:#b42318;--code:#f0f2f5}
+@media (prefers-color-scheme:dark){:root{--bg:#121316;--card:#1b1d22;--ink:#eceef2;--mut:#98a2b3;--line:#2c3038;--acc:#ff4d63;--ok:#4ade80;--warn:#fbbf24;--bad:#f87171;--code:#14161a}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+main{max-width:860px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:22px;margin:0 0 4px}.sub{color:var(--mut);margin:0 0 20px}
+.badge{display:inline-block;font-size:12px;padding:2px 9px;border-radius:99px;border:1px solid var(--line);color:var(--mut);margin-left:8px;vertical-align:middle}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:16px}
+h2{font-size:16px;margin:0 0 12px;display:flex;gap:10px;align-items:center}
+h2 .n{background:var(--acc);color:#fff;border-radius:99px;width:24px;height:24px;display:inline-grid;place-items:center;font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+label{display:block;font-size:12px;color:var(--mut);margin-bottom:4px}
+input,select{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
+input:focus,select:focus{outline:2px solid var(--acc);outline-offset:1px}
+button{font:inherit;border:0;border-radius:8px;padding:9px 14px;background:var(--acc);color:#fff;cursor:pointer;font-weight:600}
+button.sec{background:transparent;color:var(--ink);border:1px solid var(--line)}button:disabled{opacity:.5;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:end;margin-top:12px}.row>.grow{flex:1;min-width:200px}
+details{margin-top:12px}summary{cursor:pointer;color:var(--mut)}
+pre{background:var(--code);border:1px solid var(--line);border-radius:8px;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-all;margin:8px 0;font:12.5px/1.45 ui-monospace,Menlo,monospace}
+.msg{margin-top:12px;padding:10px 12px;border-radius:8px;border:1px solid var(--line);background:var(--code)}
+.msg.err{border-color:var(--bad);color:var(--bad)}.ok{color:var(--ok)}.warn{color:var(--warn)}.bad{color:var(--bad)}
+ul{margin:8px 0 0;padding-left:20px}.hint{color:var(--mut);font-size:13px;margin-top:8px}
+</style>
+</head>
+<body>
+<main>
+<h1>Zugang-UI <span class="badge" id="rootBadge">nur lokal · nichts verlässt deinen Rechner</span></h1>
+<p class="sub">Zugangsdaten sicher einrichten: .gitignore, lokale env, eigener SSH-Key, Test. Passwörter werden nie angezeigt oder committet.</p>
+
+<section>
+<h2><span class="n">1</span>Projekt</h2>
+<div class="grid">
+<div><label for="dir">Projektordner</label><input id="dir" placeholder="/Volumes/…/KUNDENPROJEKTE/MeinProjekt"></div>
+<div><label for="src">Zugangs-.md (optional, zum Vorausfüllen)</label><input id="src" placeholder="…/MeinProjekt/Zugaenge.md"></div>
+</div>
+<div class="row"><button class="sec" id="btnParse">Aus .md übernehmen</button></div>
+<div id="parseMsg"></div>
+</section>
+
+<section>
+<h2><span class="n">2</span>Zugang</h2>
+<div class="grid">
+<div><label for="name">Projektname</label><input id="name" placeholder="Mein Kundenprojekt"></div>
+<div><label for="cms">System</label><select id="cms"><option>JTL-Shop 5</option><option>WordPress</option><option>Shopware</option><option>WooCommerce</option><option>Shopify</option><option>Sonstiges</option></select></div>
+<div><label for="domain">Domain</label><input id="domain" placeholder="beispiel.de"></div>
+<div><label for="host">SSH-Host</label><input id="host" placeholder="server.hoster.com"></div>
+<div><label for="user">SSH-User</label><input id="user"></div>
+<div><label for="port">Port</label><input id="port" value="22"></div>
+<div><label for="fingerprint">Host-Fingerprint (ED25519, SHA256:…)</label><input id="fingerprint"></div>
+<div><label for="webroot">Webroot auf dem Server</label><input id="webroot" placeholder="/www/htdocs/…/Shop"></div>
+</div>
+<details><summary>Datenbank &amp; Shop-/Admin-Login (optional)</summary>
+<div class="grid" style="margin-top:10px">
+<div><label for="db_host">DB-Host</label><input id="db_host" value="localhost"></div>
+<div><label for="db_name">DB-Name</label><input id="db_name"></div>
+<div><label for="db_user">DB-User</label><input id="db_user"></div>
+<div><label for="db_pass">DB-Passwort</label><input id="db_pass" type="password" autocomplete="off"></div>
+<div><label for="admin_url">Admin-URL</label><input id="admin_url"></div>
+<div><label for="admin_user">Admin-User</label><input id="admin_user"></div>
+<div><label for="admin_pass">Admin-Passwort</label><input id="admin_pass" type="password" autocomplete="off"></div>
+</div></details>
+<div class="row"><button id="btnSetup">Einrichten &amp; Schlüssel erzeugen</button></div>
+<div id="setupMsg"></div>
+</section>
+
+<section>
+<h2><span class="n">3</span>Schlüssel beim Hoster eintragen</h2>
+<p class="hint">Kopiere den öffentlichen Schlüssel und trage ihn beim Hoster ein (all-inkl/KAS: <b>Tools → SSH-Schlüssel</b>, beim SSH-User, speichern). Er ist ungefährlich, der private Schlüssel bleibt im Projektordner.</p>
+<pre id="pub">– erscheint nach Schritt 2 –</pre>
+<div class="row"><button class="sec" id="btnCopyPub" disabled>Schlüssel kopieren</button></div>
+</section>
+
+<section>
+<h2><span class="n">4</span>Verbindung testen</h2>
+<div class="row"><button id="btnTest">Jetzt testen</button></div>
+<div id="testMsg"></div>
+</section>
+
+<section>
+<h2><span class="n">5</span>Selbstständig arbeiten</h2>
+<p class="hint">Mit einem SSH-Alias und Berechtigungsregeln kann Claude Code ohne Dauer-Nachfragen per Schlüssel arbeiten. Löschen und Massenänderungen am Live-System bleiben bewusst bestätigungspflichtig.</p>
+<div class="row"><button class="sec" id="btnRules">Regeln anzeigen</button><button class="sec" id="btnAlias" disabled>SSH-Alias in ~/.ssh/config eintragen</button></div>
+<div id="rulesMsg"></div>
+</section>
+</main>
+
+<script>
+const TOKEN = new URLSearchParams(location.search).get("t") || "";
+const $ = id => document.getElementById(id);
+const FIELDS = ["name","cms","domain","host","user","port","fingerprint","webroot","db_host","db_name","db_user","db_pass","admin_url","admin_user","admin_pass"];
+
+async function api(path, body) {
+  const res = await fetch(path + (body ? "" : (path.includes("?") ? "&" : "?") + "t=" + encodeURIComponent(TOKEN)), {
+    method: body ? "POST" : "GET",
+    headers: {"X-Token": TOKEN, ...(body ? {"Content-Type": "application/json"} : {})},
+    body: body ? JSON.stringify(body) : undefined
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || "Fehler");
+  return data;
+}
+function show(el, text, kind) {
+  el.replaceChildren();
+  const d = document.createElement("div");
+  d.className = "msg" + (kind === "err" ? " err" : "");
+  d.textContent = text;
+  el.appendChild(d);
+}
+function collect() {
+  const out = {dir: $("dir").value.trim(), source_md: $("src").value.trim()};
+  FIELDS.forEach(f => out[f] = $(f).value.trim());
+  return out;
+}
+function guard(btn, fn) {
+  btn.addEventListener("click", async () => {
+    btn.disabled = true;
+    try { await fn(); } catch (e) { alert(e.message); } finally { btn.disabled = false; }
+  });
+}
+
+api("/api/info").then(i => { $("rootBadge").title = "Wurzelordner: " + i.root; if (!$("dir").value) $("dir").value = i.root + "/"; })
+  .catch(() => { document.body.textContent = "Kein gültiges Token. Bitte den Link aus dem Terminal öffnen."; });
+
+guard($("btnParse"), async () => {
+  const d = await api("/api/parse", {path: $("src").value.trim()});
+  const map = {host:"host", user:"user", fingerprint:"fingerprint", domain:"domain", admin_url:"admin_url", db_user:"db_user", db_name:"db_name", db_pass:"db_pass"};
+  const filled = [];
+  Object.entries(map).forEach(([k, id]) => { if (d[k]) { $(id).value = d[k]; filled.push(id); } });
+  if (d.webroot_hint && !$("webroot").value) $("webroot").value = d.webroot_hint;
+  if (d.domain && !$("name").value) $("name").value = d.domain.split(".")[0];
+  show($("parseMsg"), "Übernommen: " + filled.join(", ") + ". Bitte prüfen (Passwörter werden nicht angezeigt).");
+});
+
+guard($("btnSetup"), async () => {
+  const r = await api("/api/setup", collect());
+  $("pub").textContent = r.pubkey; $("btnCopyPub").disabled = false; $("btnAlias").disabled = false;
+  const lines = ["Erstellt: " + (r.created.join(", ") || "nichts Neues"),
+    "Neu in .gitignore: " + (r.gitignore_added.join(", ") || "alles war schon geschützt")];
+  if (r.env_kept) lines.push(".env.access.local existierte schon und wurde nicht überschrieben.");
+  show($("setupMsg"), lines.join("\n"));
+});
+
+guard($("btnCopyPub"), async () => { await navigator.clipboard.writeText($("pub").textContent); $("btnCopyPub").textContent = "Kopiert ✓"; setTimeout(() => $("btnCopyPub").textContent = "Schlüssel kopieren", 1800); });
+
+guard($("btnTest"), async () => {
+  const r = await api("/api/test", {dir: $("dir").value.trim()});
+  const box = $("testMsg"); box.replaceChildren();
+  const ul = document.createElement("ul");
+  r.steps.forEach(s => {
+    const li = document.createElement("li");
+    const b = document.createElement("b"); b.className = s.status === "ok" ? "ok" : s.status === "warn" ? "warn" : "bad";
+    b.textContent = (s.status === "ok" ? "✓ " : s.status === "warn" ? "! " : "✗ ") + s.name;
+    const pre = document.createElement("pre"); pre.textContent = s.text;
+    li.append(b, pre); ul.appendChild(li);
+  });
+  box.appendChild(ul);
+});
+
+guard($("btnRules"), async () => {
+  const r = await api("/api/rules?dir=" + encodeURIComponent($("dir").value.trim()));
+  const box = $("rulesMsg"); box.replaceChildren();
+  [["~/.ssh/config", r.ssh_config], [".claude/settings.json (im Projektordner, zusammenführen)", r.settings]].forEach(([t, c]) => {
+    const h = document.createElement("div"); h.className = "hint"; h.textContent = t;
+    const pre = document.createElement("pre"); pre.textContent = c; box.append(h, pre);
+  });
+  $("btnAlias").disabled = false;
+});
+
+guard($("btnAlias"), async () => { const r = await api("/api/sshconfig", {dir: $("dir").value.trim()}); show($("rulesMsg"), r.text); });
+</script>
+</body>
+</html>
