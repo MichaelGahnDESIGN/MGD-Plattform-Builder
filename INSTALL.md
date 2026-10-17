@@ -123,6 +123,33 @@ mkdir -p ~/.claude/commands
 cp MGD-Plattform-Builder/.claude/commands/platform.md ~/.claude/commands/
 ```
 
+## Standalone access skill: zugang
+
+From the repository root, with Python 3.9 or newer:
+
+```bash
+python3 scripts/install-zugang.py --agent both
+```
+
+This installs only `platform/skills/zugang/`, including its references and MIT license, into
+`~/.agents/skills/zugang` for Codex and `~/.claude/skills/zugang` for Claude Code.
+Use `--agent codex` or `--agent claude` for one client. For a Codex setup using `~/.codex/skills`,
+use `--agent codex-legacy` instead of the current Codex target; avoid duplicate installations.
+Use `--project /path/to/existing-project` for project-scoped installation. On Windows, `py -3`
+can replace `python3`. Existing destinations are never overwritten; review local customizations
+and move the old installation outside discovery paths before a deliberate update.
+
+Invoke `/zugang private/access.md` in Claude Code or `$zugang private/access.md` in Codex.
+Restart the client/start a new chat if discovery needs refreshing. Local personal installation
+does not automatically install a skill in cloud sessions. Plain ChatGPT without local execution
+can provide instructions but cannot perform the file protection or access checks.
+
+The workflow imports a supplied Markdown credential file, preserves existing env files, verifies
+Git/upload exclusions and platform-specific file protection, and tests authentication without
+changing application data or security settings. It does not create SSH keys or deploy by default.
+The older standalone SSH access UI remains separate and does not inherit these protections.
+See [the access guide](WIKI/Zugaenge-einrichten.md) for details and migration notes.
+
 ## Release evidence
 
 Projects using release gates store machine-readable evidence under:

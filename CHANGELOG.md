@@ -6,6 +6,16 @@ The format follows the spirit of Keep a Changelog and semantic versioning.
 
 ## [Unreleased]
 
+### Changed
+
+- `zugang` ist jetzt ein eigenständig installierbarer, projektneutraler Skill für Codex und Claude Code: Markdown-Zugangsdaten übernehmen, Git-/Upload-Ausschlüsse sowie Dateischutz prüfen und vorhandene Zugänge minimal testen.
+- Kein obligatorischer Fragenkatalog, keine automatische SSH-Key-Erzeugung oder Serverlog-Analyse mehr. Vorhandene dotenv-Dateien bleiben erhalten; bisherige `.env.access.local`-Installationen benötigen keine Migration.
+
+### Added
+
+- Installer `scripts/install-zugang.py` mit festen öffentlichen Dateien, Schutz bestehender Installationen und isolierten Tests; MIT-Lizenz und Referenzen reisen im Skill mit.
+- Dokumentierte Grenzen für NAS, Windows, Linux, macOS, MFA, API-Sperren und lokale gegenüber Cloud-Installationen. Die separate Zugang-UI bleibt unverändert.
+
 ### Added
 
 - `tools/zugang-ui/`: local zero-dependency web UI to set up server access safely (gitignore, local env, project SSH key, test, permission rules).

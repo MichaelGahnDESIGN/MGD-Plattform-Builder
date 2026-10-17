@@ -1,0 +1,4 @@
+interface:
+  display_name: "Zugang sicher einrichten"
+  short_description: "Login-Daten übernehmen, schützen und gezielt testen"
+  default_prompt: "Nutze $zugang, um meine lokale Zugangsdatei in eine geschützte dotenv-Datei zu übernehmen und den Zugang kontrolliert zu testen."

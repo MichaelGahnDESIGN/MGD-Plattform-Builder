@@ -31,6 +31,9 @@ jobs:
       - name: Run foundation checks
         run: npm run check
 
+      - name: Test portable access skill installer
+        run: python3 -m unittest discover -s test -p 'test_zugang_install.py' -v
+
       - name: Smoke test project bootstrap
         run: |
           rm -rf /tmp/mgd-platform-smoke

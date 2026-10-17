@@ -1,88 +1,106 @@
-# Zugänge sicher einrichten
+# Zugänge sicher übernehmen und testen
 
-Diese Anleitung zeigt, wie du einem KI-Agenten (Claude Code) **sicher** Zugang zu Server, Shop, WordPress oder Datenbank gibst,
-damit er selbstständig testen, analysieren und deployen kann – ohne dass du Passwörter in den Chat kopierst oder ständig Befehle tippst.
+Der allgemeine Skill **zugang** funktioniert in ChatGPT Codex und Claude Code, unabhängig von
+WordPress, Hostinganbieter, Shop oder Programmiersprache. Du legst eine lokale Markdown-Datei mit
+Zugangsdaten ins neue oder vorhandene Projekt und beauftragst den Ablauf mit dieser Datei.
 
-## Das Prinzip
+## Installation
 
-1. Du legst eine **Zugangs-Datei (.md)** ins Projekt. Sie bleibt lokal und steht in der `.gitignore`.
-2. Der Agent erzeugt daraus eine **lokale env-Datei** (`.env.access.local`, Rechte `600`).
-3. Er erstellt einen **projekteigenen SSH-Schlüssel**. Du trägst nur den *öffentlichen* Teil beim Hoster ein.
-4. Der Agent **testet den Zugang selbst** und arbeitet danach per Schlüssel statt per Passwort.
+Repository klonen, dann aus dessen Hauptordner mit Python 3.9 oder neuer:
 
-## Drei Wege
-
-| Weg | Wann | Start |
-|---|---|---|
-| **Skill `/zugang`** | Du arbeitest im Chat mit Claude Code | `/zugang` bzw. „ich gebe dir Zugangsdaten" |
-| **Zugang-UI** | Du willst klicken statt tippen | `tools/zugang-ui/start.command` |
-| **Berechtigungsregeln** | Der Agent soll nicht dauernd nachfragen | siehe unten |
-
-Der Skill liegt unter `platform/skills/zugang/SKILL.md`, die Oberfläche unter `tools/zugang-ui`.
-
-## Schritt für Schritt
-
-### 1. Zugangsdaten ablegen
-Lege eine `.md` in den Projektordner, zum Beispiel mit Host, SSH-User, Fingerprints, Datenbank und Shop-Login.
-Die Datei darf **nicht** committet werden. Der Skill und die Oberfläche tragen sie automatisch in die `.gitignore` ein.
-
-### 2. Zugangsart klären
-Der Skill fragt zuerst, was eingerichtet werden soll: SSH/SFTP, Shop-Backend (JTL, Shopware, Shopify, WooCommerce), WordPress,
-Datenbank, Hosting-Panel oder API-Token. Für jede Art gibt es einen eigenen, möglichst passwortfreien Weg.
-
-### 3. Schlüssel eintragen
-Der Agent gibt dir eine Zeile aus, die mit `ssh-ed25519 …` beginnt. Trage sie beim Hoster ein:
-
-- **all-inkl/KAS:** *Tools → SSH-Schlüssel*, beim SSH-User, speichern.
-- **Andere Hoster:** in `~/.ssh/authorized_keys` des SSH-Users.
-
-Der öffentliche Schlüssel ist ungefährlich. Der private Schlüssel bleibt im Projektordner unter `.ssh/`.
-
-### 4. Zugang testen
-Der Agent prüft zuerst den **Host-Fingerprint** gegen deine Datei und meldet sich dann mit dem Schlüssel an
-(`BatchMode`, ohne Passwortabfrage). Danach liest er nur Logs und Konfiguration.
-
-### 5. Selbstständig arbeiten
-Damit der Agent nicht bei jedem Befehl fragt, kannst du in `.claude/settings.json` des Projekts erlauben, was er ohne Rückfrage darf:
-
-```json
-{
-  "permissions": {
-    "allow": [
-      "Bash(ssh <alias>:*)",
-      "Bash(scp:*)",
-      "Bash(rsync:*)",
-      "Bash(git status:*)",
-      "Bash(git diff:*)",
-      "Bash(git log:*)"
-    ]
-  }
-}
+```sh
+python3 scripts/install-zugang.py --agent both
 ```
 
-`<alias>` ist der SSH-Alias aus `~/.ssh/config`. Die Oberfläche zeigt dir den passenden Block und trägt den Alias auf Wunsch ein.
-Diese Regeln setzt du bewusst selbst – sie sind Sicherheitseinstellungen.
+Das installiert den eigenständigen Skill für alle lokalen Projekte nach `~/.agents/skills/zugang`
+(Codex) und `~/.claude/skills/zugang` (Claude Code). Die Plattform-CLI ist dafür nicht erforderlich.
+Für Codex-Installationen, die weiterhin `~/.codex/skills` verwenden, stattdessen
+`python3 scripts/install-zugang.py --agent codex-legacy` ausführen. Nicht beide Codex-Pfade zugleich
+installieren, wenn der Client beide durchsucht: sonst kann der Skill doppelt erscheinen.
 
-## Was bewusst bestätigungspflichtig bleibt
+Nur für ein bestimmtes vorhandenes Projekt:
 
-- **Löschen** von Dateien oder Tabellen und **Massenänderungen** am Live-System.
-- **Schreibzugriffe auf die Datenbank** – immer mit vorherigem Backup und im kleinsten Umfang.
-- **Passwörter eintippen** in Logins oder Terminal-Abfragen. Backend-Logins mit Passwort und 2FA machst du selbst.
+```sh
+python3 scripts/install-zugang.py --agent both --project /pfad/zum/projekt
+```
 
-## Sicherheitsregeln
+Unter Windows gegebenenfalls `py -3` statt `python3` verwenden. Der Installer kopiert nur die
+festgelegten öffentlichen Skill-Dateien, keine Projektzugangsdaten. Vorhandene Installationen
+werden nicht überschrieben. Für Updates zuerst eigene Anpassungen vergleichen und die alte
+Installation bewusst außerhalb der Skill-Suchpfade sichern; dann neu installieren. Rücknahme:
+ausschließlich die installierten `zugang`-Ordner entfernen. Keine Konten oder Berechtigungen
+werden durch die Installation eingerichtet oder verändert.
 
-- Keine Zugangsdaten in Chat, Logs, Commits, Issues oder öffentlichen Repos.
-- Quelldatei, `.env.access.local`, `.access.local.md` und `.ssh/` stehen in der `.gitignore`.
-- Bei jedem Fingerprint-Unterschied wird abgebrochen. Er ist kein Hinweis zum Wegklicken.
-- Wurden Passwörter im Klartext abgelegt oder geteilt: danach ändern.
-- Nach Projektende den öffentlichen Schlüssel beim Hoster wieder entfernen.
+Nach Installation gegebenenfalls einen neuen Chat starten bzw. den Client neu laden.
 
-## Fehlerbehebung
+## Aufruf
 
-| Meldung | Ursache | Lösung |
-|---|---|---|
-| `Permission denied (publickey)` | Schlüssel beim Hoster nicht eingetragen oder beim falschen User | Schlüssel beim SSH-User eintragen, ggf. einige Minuten warten |
-| Fingerprint stimmt nicht | falscher Host oder Man-in-the-Middle | Host prüfen, nicht fortfahren |
-| `Connection timed out` | Port oder Firewall | Port prüfen, Hoster fragen |
-| Der Agent fragt ständig nach | keine Berechtigungsregeln gesetzt | Abschnitt „Selbstständig arbeiten" |
-| Eine Löschung wird abgelehnt | Schutzmechanismus von Claude Code | feste, kleine Liste freigeben oder selbst ausführen |
+Claude Code:
+
+```text
+/zugang private/zugaenge.md
+```
+
+Codex:
+
+```text
+$zugang private/zugaenge.md
+```
+
+Alternativ den Skill im jeweiligen Selektor auswählen. `/zugang` ist der Claude-Befehl;
+Codex verwendet die Skill-Auswahl bzw. `$zugang`. Alle Anleitungen sind normale Markdown-Dateien,
+keine proprietären APIs sind für den Ablauf erforderlich. Eine gewöhnliche ChatGPT-Sitzung ohne
+lokalen Dateizugriff und Ausführungswerkzeuge kann nur anleiten, keinen lokalen Test ausführen.
+Persönlich installierte Skills sind nicht automatisch in Cloud-Sitzungen verfügbar.
+
+Die dokumentierten Installationsorte und Aufrufe folgen den offiziellen Anleitungen von
+[OpenAI](https://developers.openai.com/codex/skills) und
+[Claude Code](https://code.claude.com/docs/en/skills) (geprüft am 17. Oktober 2026).
+
+## Ablauf
+
+1. Quelle, Projektregeln und vorhandene Schutz-/Deployment-Verfahren prüfen. Nur fehlende Angaben erfragen.
+2. Quelldatei und Ziel aus Git sowie dem vorhandenen Upload-/Build-Prozess ausschließen.
+3. `.env` sicher erstellen. Existiert sie, unverändert bewahren und `.env.access.local` verwenden;
+   bestehen beide, notwendige Aktualisierung klären. Kein automatisches Überschreiben.
+4. Original erhalten, Zugriff beschränken und Schreib-/Löschschutz abhängig von Betriebssystem und
+   Dateisystem setzen sowie tatsächlich prüfen. Eine gezielte Entsperranleitung hinterlassen.
+5. Minimalen authentifizierten Zugriff testen, Sitzungen aufräumen und Ergebnisse ohne Geheimnisse melden.
+
+Der Agent liest Kennwörter direkt im lokalen Prozess ein, ohne sie in Tool-Aufrufen, Chat oder
+Logs auszugeben. Er legt keine neuen SSH-Schlüssel, Tokens oder Konten ungefragt an. MFA/Captcha
+übernimmst du selbst. Eine Wartungsseite wird nicht freigegeben, ein Sicherheitsplugin nicht deaktiviert.
+
+## Schutzwirkung und Grenzen
+
+| Schutz | Was er leistet |
+|---|---|
+| `.gitignore` | Verhindert normales Hinzufügen zu Git, entfernt aber keine bereits versionierten Daten |
+| Upload-/Build-Regeln | Schützen nur den konkret eingebundenen und geprüften Übertragungsweg |
+| Dateirechte und Sperren | Erschweren versehentliches Bearbeiten/Löschen; Wirkung unter macOS, Linux, Windows und NAS unterschiedlich |
+| Verschlüsselte Sicherung/Passwortmanager | Separate Maßnahme zur Wiederherstellung; nicht durch Git oder Dateisperren ersetzt |
+
+Lokale Klartextdateien sind nicht verschlüsselt. Der Skill erstellt keine zusätzlichen Klartext-Backups.
+Manuelle FTP-Uploads, ZIP-Dateien und Cloud-Synchronisierung beachten `.gitignore` nicht automatisch.
+Eine genaue Grenze ist hilfreicher als die Behauptung, die Dateien seien gegen alles geschützt.
+
+Ein erfolgreiches HTTP-Ergebnis beweist keinen Login. Der Bericht unterscheidet Anmeldung,
+API-Zugang und öffentliche Erreichbarkeit. Beispielsweise kann ein Admin-Login funktionieren,
+während ein Sicherheitsplugin die API blockiert. Dann bleibt das API-Kennwort unbestätigt.
+
+## Bestehende Installationen und Zugang-UI
+
+Der Skill bleibt unter `platform/skills/zugang/`. Bisherige `.env.access.local`-Dateien bleiben gültig;
+es gibt keine automatische Datenmigration. Die neue Anleitung ersetzt den früheren obligatorischen
+Fragenkatalog, die automatische SSH-Key-Erzeugung und den allgemeinen Serverlog-Lesedurchlauf
+zugunsten des begrenzten Zugangstests.
+
+Die separate [Zugang-UI](../tools/zugang-ui/README.md) bleibt ein Werkzeug für den bisherigen
+SSH-Key-Workflow. Sie wurde nicht auf diesen allgemeinen Skill-Ablauf umgebaut und bietet nicht
+automatisch dessen zusätzlichen Schreib-/Lösch- oder Upload-Schutz. Der Skill setzt sie nicht voraus.
+
+## Weitergabe und Lizenz
+
+Der Skill einschließlich seiner Referenzen und des Installers ist MIT-lizenziert und darf auch
+von anderen und in eigenen Projekten genutzt werden. Beim Kopieren den beiliegenden Lizenztext
+mitnehmen. Echte Zugangsdateien gehören niemals in das öffentliche Skill-Repository.
