@@ -373,13 +373,18 @@ Betrieb, Dokumentation und Release-Gates. Ändere noch nichts.
 
 ## Zugänge sicher einrichten
 
-KI-Agenten können Server, Shop, WordPress oder Datenbank selbstständig testen und deployen, ohne dass Passwörter im Chat landen:
-Zugangs-`.md` ins Projekt legen, Agent schützt sie per `.gitignore`, erzeugt eine lokale env und einen eigenen SSH-Key,
-du trägst den öffentlichen Schlüssel beim Hoster ein, danach testet der Agent den Zugang selbst.
+Der allgemeine Skill `zugang` übernimmt eine lokale Zugangs-`.md` in eine geschützte dotenv-Datei,
+prüft Git-/Upload-Ausschlüsse und Schreib-/Löschschutz und testet die Anmeldung ohne fachliche
+Änderungen am Zielsystem. Für neue und vorhandene Projekte, unabhängig vom Hostinganbieter.
 
-- Skill: `/zugang` (`platform/skills/zugang/SKILL.md`)
-- Oberfläche zum Klicken: `tools/zugang-ui/start.command` (lokal, nur Python, kein Token verlässt den Rechner)
-- Anleitung: [WIKI/Zugaenge-einrichten.md](WIKI/Zugaenge-einrichten.md) · [Wiki](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/wiki/26-Zugaenge-einrichten)
+```sh
+python3 scripts/install-zugang.py --agent both
+```
+
+- Claude Code: `/zugang private/zugaenge.md`
+- ChatGPT Codex: `$zugang private/zugaenge.md`
+- [Installation und Ablauf](WIKI/Zugaenge-einrichten.md) · [Skill](platform/skills/zugang/SKILL.md)
+- Die separate [Zugang-UI](tools/zugang-ui/README.md) bleibt für den bisherigen SSH-Key-Workflow verfügbar.
 
 ## Projektprofil: `MGD_PLATFORM.yml`
 

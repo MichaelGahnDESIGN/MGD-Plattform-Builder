@@ -6,6 +6,7 @@ The foundation can work alone, but existing MGD skills provide specialized workf
 
 | Skill | Purpose |
 |---|---|
+| [zugang](../Zugaenge-einrichten.md) | local credential import, verified file protection and minimal authentication tests; Codex and Claude Code |
 | MGD DEV | state, tests, release/readiness |
 | MGD Todo | tasks and project documentation index |
 | MGD Backup | backup/restore |

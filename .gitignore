@@ -33,3 +33,7 @@ MGD_PLATFORM.local.yml
 .access.local.md
 .env.access.local
 *.local.md
+
+# Lokale Python-Prüfungen
+__pycache__/
+*.pyc

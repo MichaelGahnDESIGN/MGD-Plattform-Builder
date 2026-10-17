@@ -417,6 +417,20 @@ See [Agent Workflow](WIKI/07-AGENTS/AGENT-WORKFLOW.md).
 
 ---
 
+## Reusable access skill
+
+The standalone `zugang` skill imports a local Markdown credential file into a protected dotenv
+file, verifies Git/upload exclusions and platform-specific write/delete protection, and performs
+a minimal authentication check. It preserves existing files and does not deploy, create keys or
+change security settings by default. Available for new and existing projects under the MIT license.
+
+```sh
+python3 scripts/install-zugang.py --agent both
+```
+
+Invoke `/zugang private/access.md` in Claude Code or `$zugang private/access.md` in Codex.
+See [installation](INSTALL.md) and [the access guide](WIKI/Zugaenge-einrichten.md).
+
 ## MGD skill ecosystem
 
 | Project | Purpose |
