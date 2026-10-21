@@ -2,6 +2,27 @@
   "$schema": "./schema/release-notes.schema.json",
   "entries": [
     {
+      "version": "0.7.0",
+      "status": "pre-alpha",
+      "date": "2026-10-22",
+      "audience": [
+        "platform",
+        "backoffice"
+      ],
+      "type": "feature",
+      "title": "Pflicht-Begleiter: Living Documentation, Graphify und Todo",
+      "items": [
+        "Living Documentation (Stand), Graphify (Karte) und Todo (Arbeit) gehören zu jedem Projekt und werden bei jeder Änderung gepflegt; Graphify ist in die Living Documentation eingebunden",
+        "Updates an einer Stelle: ein neues Todo-, Living-Documentation- oder Graphify-Release wird von jedem danach angelegten Projekt genutzt, ohne Änderung im Builder",
+        "Neuer Befehl `mgd-platform companions status|install`: Skills aus dem neuesten Release des jeweiligen Repos (`--pinned` für das getestete), keine Überschreibung vorhandener Installationen, Rückfrage nach Geltungsbereich und Graphify-Installation",
+        "`init --companions` richtet Projekt und Begleiter in einem Lauf ein; legt DOKUMENTATION/README.md und TODO/TODO.html an und baut den ersten Graphen",
+        "Gehärtete Installation (unabhängig geprüft): keine Programme aus dem Projektordner, kein Schreiben über Symlinks, Clone wird vor dem Checkout gegen den abgefragten Commit geprüft, Graphify-Hooks nur mit `--hooks`",
+        "`doctor` zeigt die Begleiter, `validate` lehnt das Abschalten ab, `release-check` blockiert bei fehlenden Begleitern",
+        "Arbeitszyklus in den Agentenregeln der Templates: zuerst den Graphen fragen, danach Todo, Living Documentation und `graphify update .` nachziehen",
+        "Zugang-Skill: eigenständig installierbar für Codex und Claude Code (Installer, Dateischutz, Zugang-UI)"
+      ]
+    },
+    {
       "version": "0.6.0",
       "status": "pre-alpha",
       "date": "2026-09-25",

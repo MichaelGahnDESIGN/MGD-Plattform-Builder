@@ -71,6 +71,18 @@ FEATURE-GOVERNANCE.md
 
 Bestehende Dateien werden standardmäßig nicht überschrieben. Für einen bewussten Ersatz kann `--force` verwendet werden.
 
+### `mgd-platform companions` (ab 0.7.0)
+
+Installiert und prüft die Pflicht-Begleiter Living Documentation, Graphify und Todo.
+
+```bash
+mgd-platform companions status [PATH]
+mgd-platform companions install [PATH] [--scope project|user] [--agent claude|codex|both] [--graphify user|project|skip] [--hooks] [--pinned] [--yes]
+mgd-platform init --target DIR --companions
+```
+
+Ohne `--yes` zeigt `install` nur den Plan. Mit `--yes` sind `--scope` und (solange Graphify fehlt) `--graphify` Pflicht. Die Skills stammen aus dem neuesten Release des jeweiligen Repos (`--pinned`: aus dem getesteten Release der Registry); Vorhandenes wird nie überschrieben. `doctor` listet die Begleiter, `validate` lehnt `enabled: false` ab, `release-check` blockiert bei fehlenden Begleitern. Siehe [[27-Begleiter-Living-Documentation-Graphify-Todo]].
+
 ### `mgd-platform validate`
 
 Prüft `MGD_PLATFORM.yml` gegen das JSON Schema und zusätzliche Foundation-Regeln.

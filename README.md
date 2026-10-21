@@ -6,7 +6,7 @@
 
 Privacy, security, compliance, modular backends, administration, moderation, Docker workflows, documentation and AI-agent collaboration in one project-neutral blueprint.
 
-[![Version](https://img.shields.io/badge/version-0.6.0%20Pre--Alpha-orange?style=flat-square)](version.json)
+[![Version](https://img.shields.io/badge/version-0.7.0%20Pre--Alpha-orange?style=flat-square)](version.json)
 [![License](https://img.shields.io/badge/license-MIT%20%2B%20MGD-blue?style=flat-square)](LICENSING.md)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-compatible-6B5CE7?style=flat-square)](AGENTS.md)
 [![ChatGPT Codex](https://img.shields.io/badge/ChatGPT%20Codex-compatible-10A37F?style=flat-square)](AGENTS.md)
@@ -18,7 +18,40 @@ Privacy, security, compliance, modular backends, administration, moderation, Doc
 
 ---
 
-## Neu in 0.6.0 Pre-Alpha: MGD-Plattform-Builder, Lizenz-Label, Benutzer, Medien und Module
+## Neu in 0.7.0 Pre-Alpha: Pflicht-Begleiter – Living Documentation, Graphify und Todo
+
+Jedes Projekt, das mit dem Builder entsteht oder betreut wird, bringt jetzt **drei Begleiter** mit. Sie werden mit dem Projekt installiert und danach bei **jeder Änderung** gepflegt – von Menschen und von KI-Agenten.
+
+| Begleiter | Verantwortet | Ort im Projekt | Skill / Werkzeug |
+|---|---|---|---|
+| [**Living Documentation**](https://github.com/MichaelGahnDESIGN/MGD_Living-Documentation) | den **Stand**: bestätigte Fakten, Entscheidungen, offene Punkte, Risiken, Nachweise | `DOKUMENTATION/` | `living-documentation` |
+| [**Graphify**](https://github.com/Graphify-Labs/graphify) | die **Karte**: was existiert und wovon es abhängt (maschinell, lokal, ohne LLM) | `graphify-out/` | `graphify` |
+| [**Todo**](https://github.com/MichaelGahnDESIGN/MGD_Todo_SKILL) | die **Arbeit**: Aufgaben und ihr Status | `TODO/TODO.html` | `todo` |
+
+Graphify ist in die Living Documentation eingebunden: Der Graph ist ihre **Karte**. Die Dokumentation verweist auf `graphify-out/GRAPH_REPORT.md`, Architekturaussagen nennen ihren Beleg (`graphify explain`, `graphify path`), und `graphify update .` ist fester Teil jedes Arbeitszyklus.
+
+```bash
+mgd-platform companions status ./mein-projekt        # was ist installiert, was fehlt?
+mgd-platform companions install ./mein-projekt       # Trockenlauf: zeigt den Plan, ändert nichts
+mgd-platform companions install ./mein-projekt --scope project --graphify user --yes
+```
+
+| Bereich | Was ist neu |
+|---|---|
+| **Installation** | `mgd-platform companions install` holt die Skills aus dem **neuesten Release** des jeweiligen Repos (Standard; `--pinned` für das getestete Release, z. B. in CI), prüft den Clone gegen den abgefragten Commit, installiert sie für Claude Code (`.claude/skills`) und Codex (`.agents/skills`), legt `DOKUMENTATION/README.md` und `TODO/TODO.html` an, richtet Graphify ein und baut den ersten Graphen. Vorhandene Installationen (auch unter dem Alias `mgd-todo`) werden nie überschrieben |
+| **Sicherheit** | Die CLI führt nie Programme aus dem Projektordner aus (auch nicht im Trockenlauf), folgt keinen Symlinks beim Schreiben und prüft den Clone gegen den abgefragten Commit, bevor sie ihn auscheckt. Graphifys Git-Hooks sind nur mit `--hooks` aktiv. Ein unabhängiger Security-Review hat das vor dem Release geprüft |
+| **Updates an einer Stelle** | Neues Todo-, Living-Documentation- oder Graphify-Release im jeweiligen Repo veröffentlichen – jedes danach angelegte Projekt nutzt es. Im Builder muss nichts angepasst werden (die Registry hält nur den Mindeststand). Vorhandene Installationen werden nie überschrieben, ein lokal aktualisierter Skill wird also weiterverwendet |
+| **Rückfrage statt Automatik** | Mit `--yes` müssen `--scope project\|user` (nur dieses Projekt oder alle Projekte) und, solange Graphify fehlt, `--graphify user\|project\|skip` angegeben werden. Der Agent fragt den Nutzer, nichts wird still installiert |
+| **Arbeitszyklus** | `AGENTS.md`/`CLAUDE.md` der Templates schreiben ihn vor: zuerst den Graphen fragen, nach jedem Teilziel Todo, Living Documentation und `graphify update .` nachziehen |
+| **Durchsetzung** | `doctor` zeigt die Begleiter, `validate` lehnt `enabled: false` ab, `release-check` ist **blockiert**, solange einer fehlt |
+| **Sauberer Graph** | Installierte Agenten-Skills und `TODO/` landen per `.graphifyignore` nicht im Graphen; `graphify-out/cache/` bleibt aus Git |
+| **Schnellweg** | `mgd-platform init --target ./mein-projekt --companions --scope project --graphify user` richtet Projekt und Begleiter in einem Lauf ein (auch hier ist `--scope` Pflicht) |
+
+Mehr: [Begleiter: Living Documentation, Graphify und Todo](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/wiki/27-Begleiter-Living-Documentation-Graphify-Todo)
+
+---
+
+## Seit 0.6.0: MGD-Plattform-Builder, Lizenz-Label, Benutzer, Medien und Module
 
 Das Projekt heißt jetzt **MGD-Plattform-Builder**. Neu:
 
@@ -309,7 +342,7 @@ Beispiel:
 project:
   name: "Example Platform"
   type: "community"
-  foundation_version: "0.6.0"
+  foundation_version: "0.7.0"
 
 market:
   countries: ["DE"]
@@ -332,14 +365,29 @@ infrastructure:
   git_source: "github"
 ```
 
-### 3. Agentenregeln übernehmen
+### 3. Pflicht-Begleiter installieren
+
+Living Documentation, Graphify und Todo gehören zu jedem Projekt. Vorher den Nutzer fragen: Skills nur für dieses Projekt (`--scope project`) oder für alle Projekte (`--scope user`)? Graphify für den Benutzer (`--graphify user`, über `uv` oder `pipx`) oder in einer projektlokalen Python-Umgebung (`--graphify project`)?
+
+```bash
+mgd-platform companions install . --scope project --graphify user --yes
+mgd-platform companions status
+```
+
+Ohne `--yes` zeigt der Befehl nur den Plan. Details: [INSTALL.md](INSTALL.md#mandatory-companions-living-documentation-graphify-todo).
+
+### 4. Agentenregeln übernehmen
+
+`mgd-platform init` hat `AGENTS.md` und `CLAUDE.md` bereits angelegt. Manuell:
 
 ```bash
 cp templates/AGENTS.md ./AGENTS.md
 cp templates/CLAUDE.md ./CLAUDE.md
 ```
 
-### 4. Foundation automatisch prüfen
+Darin steht der verbindliche Arbeitszyklus für die drei Begleiter.
+
+### 5. Foundation automatisch prüfen
 
 ```bash
 mgd-platform validate
@@ -353,7 +401,7 @@ Vor einem Release:
 mgd-platform release-check
 ```
 
-### 5. Optionales Agenten-Audit
+### 6. Optionales Agenten-Audit
 
 Mit installiertem Platform-Skill:
 
@@ -642,12 +690,12 @@ Mehr: [Agent Workflow](WIKI/07-AGENTS/AGENT-WORKFLOW.md)
 
 ## Zusammenspiel mit den MGD Skills
 
-Die Foundation dupliziert vorhandene Skills nicht, sondern kann sie orchestrieren.
+Die Foundation dupliziert vorhandene Skills nicht, sondern orchestriert sie. Drei davon sind Pflicht (siehe oben); die übrigen sind optionale Empfehlungen.
 
 | Projekt | Rolle |
 |---|---|
 | [MGD DEV Skill](https://github.com/MichaelGahnDESIGN/MGD_DEV_SKILL) | Projektstatus, Tests, Release, Sync und Deployment Readiness |
-| [MGD Todo Skill](https://github.com/MichaelGahnDESIGN/MGD_Todo_SKILL) | operative Aufgaben und Dokumentationsindex |
+| [MGD Todo Skill](https://github.com/MichaelGahnDESIGN/MGD_Todo_SKILL) | **Pflicht-Begleiter:** operative Aufgaben und Dokumentationsindex |
 | [MGD Backup Skill](https://github.com/MichaelGahnDESIGN/MGD_Backup_SKILL) | Backup- und Restore-Workflows |
 | [MGD Autopilot Skill](https://github.com/MichaelGahnDESIGN/MGD_Autopilot_SKILL) | kontrollierte autonome Arbeitsläufe |
 | [MGD ProjectClean Skill](https://github.com/MichaelGahnDESIGN/MGD_ProjectClean_SKILL) | Abschluss und Cleanup |
@@ -655,7 +703,8 @@ Die Foundation dupliziert vorhandene Skills nicht, sondern kann sie orchestriere
 | [MGD AI PlayTest Skill](https://github.com/MichaelGahnDESIGN/MGD_AI-PlayTest_SKILL) | rollenbasierte Play-/Produkttests |
 | [MGD Docker Projektbuilder](https://github.com/MichaelGahnDESIGN/MGD_Docker_Projektbuilder) | erzeugt technische Startgerüste; diese Foundation definiert Architektur, Betrieb und Governance |
 | [MGD-DevOS](https://github.com/MichaelGahnDESIGN/MGD-DevOS) | Desktop-Projektzentrale mit Dashboards; wird im Briefing empfohlen, wenn mehrere Projekte oder Agenten betreut werden |
-| [MGD Living Documentation](https://github.com/MichaelGahnDESIGN/MGD_Living-Documentation) | belegbare, versionierte Projektdokumentation |
+| [MGD Living Documentation](https://github.com/MichaelGahnDESIGN/MGD_Living-Documentation) | **Pflicht-Begleiter:** belegbare, versionierte Projektdokumentation |
+| [Graphify](https://github.com/Graphify-Labs/graphify) | **Pflicht-Begleiter:** Wissensgraph des Projekts, die maschinell erzeugte Karte der Living Documentation |
 | [MGD Software Updater Skill](https://github.com/MichaelGahnDESIGN/MGD_Software-Updater_SKILL) | Updater planen und umsetzen, wenn im Briefing gewünscht |
 | [Fragenkatalog Skill](https://github.com/MichaelGahnDESIGN/Fragenkatalog-Skill) | vertieft das Briefing für Konzept- und Designfragen |
 
@@ -708,6 +757,7 @@ MGD-Plattform-Builder/
 ├── registry/
 │   ├── capabilities.yml
 │   ├── briefing.yml           # Pflichtfragen des Agenten-Briefings
+│   ├── companions.yml         # Pflicht-Begleiter: Living Documentation, Graphify, Todo (Mindeststand und --pinned-Pin)
 │   └── recommendations.yml    # MGD Skills, Tools, Plugins, MGD-DevOS
 ├── reference/
 │   ├── php-mariadb/
@@ -723,7 +773,8 @@ MGD-Plattform-Builder/
 │   ├── capability-registry.schema.json
 │   ├── version.schema.json
 │   ├── release-notes.schema.json
-│   └── template-manifest.schema.json
+│   ├── template-manifest.schema.json
+│   └── companion-registry.schema.json
 │
 ├── templates/
 │   ├── MGD_PLATFORM.example.yml
@@ -731,6 +782,7 @@ MGD-Plattform-Builder/
 │   ├── CLAUDE.md
 │   ├── version.example.json
 │   ├── release-notes.example.json
+│   ├── living-docs/           # Dokumentations-Gerüst für DOKUMENTATION/README.md
 │   └── php-mysql-starter/     # FTP-fähiges CMS, Light + Dark
 │
 ├── compliance/
@@ -746,7 +798,7 @@ MGD-Plattform-Builder/
 
 ## Reifegrad
 
-Aktueller Stand: **0.6.0 Pre-Alpha** (siehe [`version.json`](version.json) und [`release-notes.json`](release-notes.json))
+Aktueller Stand: **0.7.0 Pre-Alpha** (siehe [`version.json`](version.json) und [`release-notes.json`](release-notes.json))
 
 Vor 1.0 können sich Schemas und Empfehlungen noch ändern. Beiträge aus realen Projekten sind ausdrücklich erwünscht.
 

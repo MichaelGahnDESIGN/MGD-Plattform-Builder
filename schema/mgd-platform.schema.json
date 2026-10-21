@@ -828,6 +828,54 @@
         }
       },
       "additionalProperties": false
+    },
+    "companions": {
+      "type": "object",
+      "description": "Mandatory companions. `enabled: false` is rejected by the mandatory-feature rules.",
+      "properties": {
+        "living_documentation": {
+          "type": "object",
+          "description": "Canonical documentation folder maintained with the living-documentation skill.",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "path": {
+              "type": "string",
+              "pattern": "^(?!/)(?!\\.{1,2}(/|$))(?!.*(^|/)\\.\\.(/|$))[A-Za-z0-9_./-]+$"
+            }
+          },
+          "additionalProperties": false
+        },
+        "graphify": {
+          "type": "object",
+          "description": "Graphify always writes to graphify-out/; the path is fixed.",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "path": {
+              "const": "graphify-out"
+            }
+          },
+          "additionalProperties": false
+        },
+        "todo": {
+          "type": "object",
+          "description": "Path of the TODO.html maintained with the todo skill.",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "path": {
+              "type": "string",
+              "pattern": "^(?!/)(?!\\.{1,2}(/|$))(?!.*(^|/)\\.\\.(/|$))[A-Za-z0-9_./-]+$"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
     }
   },
   "additionalProperties": true,

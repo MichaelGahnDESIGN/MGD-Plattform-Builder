@@ -19,8 +19,8 @@ export async function recommendCommand(target = ".") {
   }
 
   for (const entry of results) {
-    const mark = entry.accepted ? "✓" : "•";
-    console.log("\n" + mark + " " + entry.name + " (" + entry.kind + ")");
+    const mark = entry.accepted || entry.mandatory ? "✓" : "•";
+    console.log("\n" + mark + " " + entry.name + " (" + entry.kind + (entry.mandatory ? ", Pflicht – mgd-platform companions install" : "") + ")");
     console.log("  " + entry.summary);
     console.log("  Warum: " + entry.reason);
     console.log("  Treffer: " + entry.reasons.join(", "));

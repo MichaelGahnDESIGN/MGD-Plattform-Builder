@@ -42,6 +42,41 @@ questions. After each delivery bump the version and add a release note:
 mgd-platform version --bump patch --note "Kurzbeschreibung" --audience frontend,backoffice
 ```
 
+## Mandatory companions: living documentation, Graphify, Todo
+
+Every project keeps three companions in step with the code. They are mandatory: never remove or
+disable them (`companions` in `MGD_PLATFORM.yml`), only configure them.
+
+| Companion | Owns | Where | Skill / tool |
+|---|---|---|---|
+| Living documentation | the **state**: confirmed facts, decisions, open points, risks, evidence | `DOKUMENTATION/` | `living-documentation` |
+| Graphify | the **map**: what exists and what depends on what (machine-generated) | `graphify-out/` | `graphify` |
+| Todo | the **work**: tasks and their status | `TODO/TODO.html` | `todo` |
+
+One canonical owner per fact – link instead of copying. Check with `mgd-platform companions status`.
+If something is missing, ask the user where to install it, then run
+`mgd-platform companions install . --scope project|user --graphify user|project|skip --yes`.
+
+### Work cycle (every change that is more than a typo)
+
+1. **Start.** Read `DOKUMENTATION/README.md` and the open items in `TODO/TODO.html`. Ask structural
+   questions to the graph before searching the source tree: `graphify query "<question>"`,
+   `graphify path "<A>" "<B>"`, `graphify explain "<term>"`.
+2. **Work** in small steps and verify each one against the real target, not only with a tool.
+3. **After every finished sub-goal:**
+   - *Todo:* add, update or close the affected items (`/todo`).
+   - *Living documentation:* change only the statements that changed. Label each one as confirmed,
+     decision, open point or risk. Record checks with their real scope (checked / result / not checked).
+   - *Graphify:* run `graphify update .` (local AST analysis, no LLM, no network; with a project-local install use
+     `.mgd/graphify-venv/bin/graphify update .`). If Graphify refuses
+     to write a smaller graph, find out why – never force it.
+4. **Delivery.** Bump the version and add a release note (see above), then run `mgd-platform doctor`
+   and `mgd-platform release-check`. A missing companion blocks the release.
+
+Rules: document only what was verified – a build, a local commit or a plan is not a release. Never
+put secrets or personal data into the documentation, the TODO file or the graph. The graph is derived:
+never edit `graphify-out/` by hand and never cite it as a decision.
+
 ## License label (MGD License)
 
 Projects built from MGD starter templates show the label "powered by: Michael Gahn DESIGN" and the page

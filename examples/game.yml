@@ -1,7 +1,7 @@
 project:
   name: "Example Game"
   type: "game"
-  foundation_version: "0.6.0"
+  foundation_version: "0.7.0"
   description: "Beispiel-Browserspiel mit Spielerkonten, Shop, Moderation und Editor für Spielinhalte"
 market:
   countries: ["DE"]
@@ -39,8 +39,10 @@ agents:
   read_project_rules_first: true
   production_changes_require_approval: true
   skills:
-    - "dev"
+    - "living-documentation"
+    - "graphify"
     - "todo"
+    - "dev"
     - "backup"
 release_gates:
   - "anti-abuse-reviewed"
@@ -48,6 +50,17 @@ release_gates:
   - "security-reviewed"
   - "payment-flow-tested"
   - "restore-tested"
+
+companions:
+  living_documentation:
+    enabled: true
+    path: "DOKUMENTATION"
+  graphify:
+    enabled: true
+    path: "graphify-out"
+  todo:
+    enabled: true
+    path: "TODO/TODO.html"
 
 versioning:
   source_file: "version.json"

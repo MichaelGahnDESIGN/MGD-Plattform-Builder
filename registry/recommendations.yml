@@ -3,6 +3,9 @@
 # condition matches (project type, enabled feature, experience topic, stack
 # keyword or description keyword). Recommendations are suggestions only;
 # the user decides, and accepted ones are stored in briefing.accepted_recommendations.
+# Entries with `mandatory: true` are not optional: they are the mandatory companions of
+# registry/companions.yml (installed by `mgd-platform companions install`, verified by doctor,
+# validate and release-check).
 version: 1
 owner: "https://github.com/MichaelGahnDESIGN"
 recommendations:
@@ -30,7 +33,8 @@ recommendations:
     kind: "skill"
     url: "https://github.com/MichaelGahnDESIGN/MGD_Todo_SKILL"
     summary: "Sortierbare, durchsuchbare TODO.html im eigenen Repo."
-    reason: "Offene Briefing-Fragen und Pflichtfunktionen als Aufgaben nachverfolgen."
+    reason: "Pflichtbegleiter: Aufgaben, offene Briefing-Fragen und Pflichtfunktionen stehen in TODO/TODO.html und werden nach jeder Änderung gepflegt."
+    mandatory: true
     when:
       always: true
   - id: "mgd-living-documentation"
@@ -38,7 +42,18 @@ recommendations:
     kind: "skill"
     url: "https://github.com/MichaelGahnDESIGN/MGD_Living-Documentation"
     summary: "Versionierte, belegbare Projektdokumentation (Ist-Zustand, Entscheidungen, Risiken)."
-    reason: "Dokumentiert Entscheidungen aus dem Briefing nachvollziehbar."
+    reason: "Pflichtbegleiter: Entscheidungen, Stand, offene Punkte und Risiken stehen im Projekt und werden nach jeder Änderung gepflegt; Graphify liefert die Karte dazu."
+    mandatory: true
+    when:
+      always: true
+  - id: "graphify"
+    name: "Graphify"
+    kind: "tool"
+    url: "https://github.com/Graphify-Labs/graphify"
+    license: "Apache-2.0"
+    summary: "Wissensgraph des Projekts per lokaler AST-Analyse (graphify-out/): abfragbare Karte statt erneutem Durchsuchen des Quellbaums."
+    reason: "Pflichtbegleiter: Die Living Documentation verweist auf die Karte; `graphify update .` gehört zu jedem Arbeitszyklus."
+    mandatory: true
     when:
       always: true
   - id: "fragenkatalog-skill"

@@ -38,6 +38,19 @@ These are always part of every project. The briefing only clarifies their config
 | Light/Dark | Both variants exist; ask for default mode, whether the toggle is shown and where |
 | Design | Color tokens (primary, secondary, accent, ...) editable under Settings → Design |
 
+## Companions – never ask *whether*, only *where*
+
+Living documentation, Graphify and Todo are mandatory (see `registry/companions.yml`). Run
+`mgd-platform companions status`; when something is missing ask exactly two questions and then run
+`mgd-platform companions install`:
+
+1. Install the skills only for this project (`--scope project`) or for all projects (`--scope user`)?
+2. Install the Graphify CLI for the user (`--graphify user`, via `uv`/`pipx`) or in a project-local
+   virtual environment (`--graphify project`)?
+
+If the project already keeps its documentation elsewhere (for example `docs/` or `WIKI/`), set
+`companions.living_documentation.path` in `MGD_PLATFORM.yml` instead of creating a second folder.
+
 ## Topics the agent must ask about
 
 - **CMS editor:** TinyMCE, GrapesJS, Quill, Editor.js, Markdown or plain – and whether the editor is
