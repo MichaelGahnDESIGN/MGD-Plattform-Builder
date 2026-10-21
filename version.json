@@ -1,8 +1,8 @@
 {
   "$schema": "./schema/version.schema.json",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "status": "pre-alpha",
-  "released_at": "2026-09-25",
+  "released_at": "2026-10-22",
   "sync_targets": [
     "VERSION",
     "package.json"

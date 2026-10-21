@@ -6,22 +6,6 @@ The format follows the spirit of Keep a Changelog and semantic versioning.
 
 ## [Unreleased]
 
-### Changed
-
-- `zugang` ist jetzt ein eigenständig installierbarer, projektneutraler Skill für Codex und Claude Code: Markdown-Zugangsdaten übernehmen, Git-/Upload-Ausschlüsse sowie Dateischutz prüfen und vorhandene Zugänge minimal testen.
-- Kein obligatorischer Fragenkatalog, keine automatische SSH-Key-Erzeugung oder Serverlog-Analyse mehr. Vorhandene dotenv-Dateien bleiben erhalten; bisherige `.env.access.local`-Installationen benötigen keine Migration.
-
-### Added
-
-- Installer `scripts/install-zugang.py` mit festen öffentlichen Dateien, Schutz bestehender Installationen und isolierten Tests; MIT-Lizenz und Referenzen reisen im Skill mit.
-- Dokumentierte Grenzen für NAS, Windows, Linux, macOS, MFA, API-Sperren und lokale gegenüber Cloud-Installationen. Die separate Zugang-UI bleibt unverändert.
-
-### Added
-
-- `tools/zugang-ui/`: local zero-dependency web UI to set up server access safely (gitignore, local env, project SSH key, test, permission rules).
-### Added
-
-- Skill `platform/skills/zugang`: secure access setup workflow (server, shop, WordPress, database) with local env and project SSH key.
 ### Planned
 
 - Node/PostgreSQL reference implementation
@@ -29,6 +13,33 @@ The format follows the spirit of Keep a Changelog and semantic versioning.
 - translation CSV workflows and review queues
 - compliance automation
 - richer agent integration
+
+## [0.7.0 Pre-Alpha] - 2026-10-22
+
+### Added
+
+- **Mandatory companions**: living documentation (`living-documentation` skill, `DOKUMENTATION/`), Graphify (`graphify-out/`) and the Todo skill (`TODO/TODO.html`) are part of every project. Graphify is the machine-generated map of the living documentation.
+- `mgd-platform companions status|install`: installs the skills from the **newest release** of each companion's own repository (resolved with `git ls-remote` at install time, never below the tested floor, verified against the looked-up commit; `--pinned` installs the tested release instead), only regular files, never overwrites existing installs (also recognises the alias `mgd-todo`), creates `DOKUMENTATION/README.md` and `TODO/TODO.html`, installs the newest Graphify (`graphifyy>=0.9.65`) via `uv`/`pipx` or a project-local venv and builds the first graph. Without `--yes` it only prints the plan and every command; `--scope` and `--graphify` must be chosen explicitly. Graphify's git hooks are opt-in (`--hooks`).
+- Hardened install (found by an independent security review): read-only commands never execute a program from inside the project, no write follows a symbolic link in the project, `git`/`uv`/`pipx`/`python`/`pip` run in a neutral directory, the clone is verified against the looked-up commit before checkout (LFS and `GIT_*` overrides off), a project-local Graphify environment is created fresh and never reused or executed by later runs, skill folders appear atomically, companion paths from the profile are validated at runtime (plain names only), every child process starts with a PATH free of relative and in-project entries, the clone runs with hooks, fsmonitor, submodules and LFS off, `init` no longer writes through symlinks, and a project-local Graphify environment is trusted only if this CLI recorded it in the user's cache (forged metadata inside a repository proves nothing). The dry run shows which release would be installed.
+- `mgd-platform init --companions --scope project|user` sets up a project and its companions in one run; like `companions install` it needs an explicit scope.
+- **Updates in one place:** a new Todo, Living Documentation or Graphify release is used by every project installed afterwards, without any change in this repository. `registry/companions.yml` only holds the tested floor and the `--pinned` pin.
+- `registry/companions.yml` and `schema/companion-registry.schema.json`; `npm run check:schemas` validates the registry.
+- `companions` section in `MGD_PLATFORM.yml` (schema, examples, template): `validate` rejects `enabled: false` and warns when the section is missing, so older profiles stay valid.
+- `doctor` reports the companions; `release-check` is **blocked** while one is missing.
+- Work cycle in the project templates (`templates/AGENTS.md`, `templates/CLAUDE.md`, starter `AGENTS.md`/`CLAUDE.md`): ask the graph first, then update todo list, living documentation and `graphify update .` after every finished sub-goal.
+- `templates/living-docs/README.md`: documentation skeleton with state, map (Graphify), decisions, open points, risks and verification.
+- `.graphifyignore` and `.gitignore` entries so installed agent skills and `TODO/` stay out of the graph and the extraction cache stays out of Git.
+- Installer `scripts/install-zugang.py` with a fixed list of public files, protection of existing installs and isolated tests; the MIT license and references travel with the skill. Documented limits for NAS, Windows, Linux, macOS, MFA, API locks and local versus cloud installs. The separate access UI stays unchanged.
+- `tools/zugang-ui/`: local zero-dependency web UI to set up server access safely (gitignore, local env, project SSH key, test, permission rules).
+- Skill `platform/skills/zugang`: secure access setup workflow (server, shop, WordPress, database) with local env and project SSH key.
+- Wiki: [27 – Begleiter: Living Documentation, Graphify und Todo](wiki/27-Begleiter-Living-Documentation-Graphify-Todo.md) and `WIKI/07-AGENTS/COMPANIONS.md`.
+
+### Changed
+
+- `zugang` is now a standalone, project-neutral skill for Codex and Claude Code: import Markdown credentials, verify Git/upload exclusions and file protection, and test existing access minimally. No mandatory question catalogue, no automatic SSH key creation or server-log analysis any more. Existing dotenv files are preserved; earlier `.env.access.local` installations need no migration.
+- `registry/recommendations.yml`: Todo and Living Documentation are marked `mandatory`, Graphify is added; `mgd-platform recommend` labels them as mandatory.
+- `platform/SKILL.md`, `platform/BRIEFING.md` and the `/platform` command files: new mode `companions`; init, template and update check and install the companions after asking for scope.
+- Example profiles and `templates/MGD_PLATFORM.example.yml` declare the companions and `foundation_version: "0.7.0"`.
 
 ## [0.6.0 Pre-Alpha] - 2026-09-25
 

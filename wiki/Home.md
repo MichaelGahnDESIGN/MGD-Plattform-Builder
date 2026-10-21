@@ -4,7 +4,9 @@ Willkommen im öffentlichen Wiki des **MGD-Plattform-Builders**.
 
 Diese Dokumentation erklärt die Foundation so, dass Entwickler, Projektverantwortliche, Agenten und externe Dritte verstehen können, **was das System ist, wie es eingesetzt wird, welche Sicherheits- und Datenschutzprinzipien gelten und wie ein Projekt damit betrieben und weiterentwickelt wird**.
 
-> **Neu in 0.5.1 Pre-Alpha:** Die Foundation wird zum **AI-Agenten-gesteuerten CMS** – mit Pflichtfunktionen (Versionierung, Release Notes, Credits, editierbare Rechtstexte, durchsuchbare Einstellungen, Design, Light/Dark), Agenten-Briefing, Empfehlungen für MGD-DevOS und MGD Skills sowie einem FTP-fähigen PHP/MySQL-Starter. → [[23-AI-CMS-Pflichtfunktionen]] · [[24-Briefing-Templates-und-Empfehlungen]]
+> **Neu in 0.7.0 Pre-Alpha:** **Living Documentation, Graphify und Todo** sind Pflicht-Begleiter jedes Projekts: Sie werden mit `mgd-platform companions install` zusammen mit dem Projekt installiert und bei jeder Änderung gepflegt. → [[27-Begleiter-Living-Documentation-Graphify-Todo]]
+
+> **Seit 0.5.1 Pre-Alpha:** Die Foundation wird zum **AI-Agenten-gesteuerten CMS** – mit Pflichtfunktionen (Versionierung, Release Notes, Credits, editierbare Rechtstexte, durchsuchbare Einstellungen, Design, Light/Dark), Agenten-Briefing, Empfehlungen für MGD-DevOS und MGD Skills sowie einem FTP-fähigen PHP/MySQL-Starter. → [[23-AI-CMS-Pflichtfunktionen]] · [[24-Briefing-Templates-und-Empfehlungen]]
 
 > **Kurz gesagt:** Das MGD-Plattform-Builder ist eine projektneutrale Grundlage für moderne digitale Plattformen mit Accounts, Rollen, Admin- und Moderatorbereichen, Datenschutz, Sicherheit, Compliance, Backups, Staging, Support, Dokumentation und AI-Agenten.
 
@@ -16,13 +18,14 @@ Wenn du das System zum ersten Mal siehst, lies in dieser Reihenfolge:
 2. [[02-Schnellstart]]
 3. [[23-AI-CMS-Pflichtfunktionen]]
 4. [[24-Briefing-Templates-und-Empfehlungen]]
-5. [[03-Projektprofil-und-Konfiguration]]
-6. [[04-Architektur]]
-7. [[05-Rollen-Berechtigungen-und-Backoffice]]
-8. [[07-Datenschutz-und-Compliance]]
-9. [[08-Sicherheit-und-Threat-Model]]
-10. [[18-CLI-Validator-und-Automatisierung]]
-11. [[11-Betrieb-Staging-Deployment-Backup-und-Monitoring]]
+5. [[27-Begleiter-Living-Documentation-Graphify-Todo]]
+6. [[03-Projektprofil-und-Konfiguration]]
+7. [[04-Architektur]]
+8. [[05-Rollen-Berechtigungen-und-Backoffice]]
+9. [[07-Datenschutz-und-Compliance]]
+10. [[08-Sicherheit-und-Threat-Model]]
+11. [[18-CLI-Validator-und-Automatisierung]]
+12. [[11-Betrieb-Staging-Deployment-Backup-und-Monitoring]]
 
 Danach kannst du über die Sidebar gezielt in einzelne Themen einsteigen. Auf jeder Wiki-Seite stellt außerdem der globale Footer die wichtigsten Projekt- und Rechtshinweise bereit.
 
@@ -56,6 +59,7 @@ Sie eignet sich unter anderem für:
 | Governance | Dokumentation, Feature Governance, Release-Gates |
 | CLI & Automation | Init, Validator, Doctor, Audit, Module Generator, Release-Checks |
 | AI-CMS | Versionierung, Release Notes, Credits, Rechtstexte mit Revisionen, durchsuchbare Einstellungen, Design, Light/Dark |
+| Begleiter (Pflicht) | Living Documentation (Stand), Graphify (Karte) und Todo (Arbeit): Installation, Arbeitszyklus, Durchsetzung durch `doctor`, `validate`, `release-check` |
 | Briefing & Templates | Pflichtfragen für Agenten, Empfehlungen (MGD-DevOS, Skills, Plugins), PHP/MySQL-Starter für FTP |
 | Referenzen | startbare PHP/MariaDB Plattform, Review Workflows, Agenten-Historie, idempotente Jobs und reale Integrationstests |
 

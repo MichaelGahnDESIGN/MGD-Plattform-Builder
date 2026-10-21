@@ -48,7 +48,8 @@ Abschluss: `briefing.completed: true`, Datum, offene Punkte in `briefing.open_qu
 | Empfehlung | Wann |
 |---|---|
 | [MGD-DevOS](https://github.com/MichaelGahnDESIGN/MGD-DevOS) | AI-Agenten, mehrere Projekte oder Dashboards – Desktop-Projektzentrale mit `/projektstart` und `/dashboard` |
-| DEV, Todo, Living Documentation, Backup, ProjectClean | immer (Basis) |
+| **Todo, Living Documentation, Graphify** | **Pflicht** – werden nicht empfohlen, sondern mit `mgd-platform companions install` installiert ([[27-Begleiter-Living-Documentation-Graphify-Todo]]) |
+| DEV, Backup, ProjectClean | immer (Basis) |
 | Software Updater Skill | wenn ein Updater gewünscht ist |
 | AI Project Updater Skill | bei Staging |
 | Fragenkatalog Skill | bei konzeptlastigen Projekten (Spiele, Creator, Community) |

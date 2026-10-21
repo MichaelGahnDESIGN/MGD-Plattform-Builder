@@ -40,6 +40,23 @@ jobs:
           node ./bin/mgd-platform.js init --preset game --target /tmp/mgd-platform-smoke
           node ./bin/mgd-platform.js doctor /tmp/mgd-platform-smoke
 
+      - name: Smoke test mandatory companions (plan only, nothing is downloaded)
+        run: |
+          # status must fail while living documentation, Graphify and Todo are missing ...
+          if node ./bin/mgd-platform.js companions status /tmp/mgd-platform-smoke --home /tmp/mgd-platform-smoke-home; then
+            echo "companions status should report missing companions" >&2
+            exit 1
+          fi
+          # ... and an install without explicit choices must refuse to run
+          if node ./bin/mgd-platform.js companions install /tmp/mgd-platform-smoke --home /tmp/mgd-platform-smoke-home --yes; then
+            echo "companions install --yes must require --scope" >&2
+            exit 1
+          fi
+          # the dry run prints the plan and exits 0
+          node ./bin/mgd-platform.js companions install /tmp/mgd-platform-smoke --home /tmp/mgd-platform-smoke-home
+          test ! -e /tmp/mgd-platform-smoke/DOKUMENTATION
+          test ! -e /tmp/mgd-platform-smoke/.claude
+
   php-reference:
     runs-on: ubuntu-latest
     services:

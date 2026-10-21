@@ -1,7 +1,7 @@
 project:
   name: "Example Platform"
   type: "general"
-  foundation_version: "0.6.0"
+  foundation_version: "0.7.0"
   description: "Project-neutral example profile"
   public_repository: false
 
@@ -115,8 +115,10 @@ agents:
   read_project_rules_first: true
   production_changes_require_approval: true
   skills:
-    - "dev"
+    - "living-documentation"
+    - "graphify"
     - "todo"
+    - "dev"
     - "backup"
 
 release_gates:
@@ -124,6 +126,17 @@ release_gates:
   - "security-reviewed"
   - "backup-tested"
   - "rollback-documented"
+
+companions:
+  living_documentation:
+    enabled: true
+    path: "DOKUMENTATION"
+  graphify:
+    enabled: true
+    path: "graphify-out"
+  todo:
+    enabled: true
+    path: "TODO/TODO.html"
 
 versioning:
   source_file: "version.json"

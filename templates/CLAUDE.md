@@ -25,6 +25,13 @@ Follow the "Mandatory features" section in `AGENTS.md`. Start new work with the 
 (`platform/BRIEFING.md` in the foundation), recommend matching MGD skills/tools via
 `mgd-platform recommend`, and bump `version.json` plus `release-notes.json` with every delivery.
 
+## Mandatory companions
+
+Follow the "Mandatory companions" section and the work cycle in `AGENTS.md`: read `DOKUMENTATION/` and
+`TODO/TODO.html` before a substantial change, ask the graph (`graphify query`) before grepping, and after
+each finished sub-goal update the todo list, the living documentation and the graph (`graphify update .`).
+Check with `mgd-platform companions status`.
+
 ## License label (MGD License)
 
 Projects built from MGD starter templates show the label "powered by: Michael Gahn DESIGN" and the page

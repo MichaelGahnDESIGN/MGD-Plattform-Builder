@@ -34,6 +34,10 @@ Bevor eine größere Funktion umgesetzt wird, sollte geklärt werden:
 * Welche Tests und Release-Gates werden benötigt?
 * Welche Dokumentation ändert sich?
 
+## Living Documentation, Graphify und Todo (ab 0.7.0)
+
+Die Quellen der Wahrheit eines Projekts sind **Living Documentation** (belegbarer Stand, Entscheidungen, offene Punkte, Risiken), **Graphify** (maschinell erzeugte Karte) und **Todo** (Aufgaben). Alle drei werden mit `mgd-platform companions install` zusammen mit dem Projekt eingerichtet und nach jeder Änderung gepflegt; `release-check` blockiert, solange einer fehlt. Details: [[27-Begleiter-Living-Documentation-Graphify-Todo]].
+
 ## Dokumentationspflicht
 
 Eine Änderung ist nicht vollständig, wenn relevante Dokumentation wissentlich falsch bleibt.

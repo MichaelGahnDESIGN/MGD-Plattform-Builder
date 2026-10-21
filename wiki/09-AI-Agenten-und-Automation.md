@@ -73,9 +73,13 @@ AI kann Reports priorisieren, Fälle zusammenfassen, Duplikate erkennen oder Kat
 
 Agenten-Aktionen sollten Principal, Scope, Aktion, Ergebnis und Zeitpunkt nachvollziehbar dokumentieren. Tokens selbst gehören nicht in Logs.
 
+## Pflicht-Begleiter und Arbeitszyklus (ab 0.7.0)
+
+Jeder Agent, der an einem Projekt arbeitet, pflegt **Living Documentation** (Stand), **Graphify** (Karte) und **Todo** (Arbeit): Strukturfragen zuerst an den Graphen, nach jedem Teilziel Todo-Liste, Dokumentation und `graphify update .` nachziehen. Der Zyklus steht in `AGENTS.md` und `CLAUDE.md` jedes Projekts. Details: [[27-Begleiter-Living-Documentation-Graphify-Todo]].
+
 ## MGD Skill Ecosystem
 
-Das Repository ist so aufgebaut, dass spezialisierte MGD Skills für Development, Backups, Todos, Autopilot, Project Cleanup, Thread-Handover und Playtests ergänzt werden können.
+Das Repository ist so aufgebaut, dass spezialisierte MGD Skills für Development, Backups, Todos, Autopilot, Project Cleanup, Thread-Handover und Playtests ergänzt werden können. Todo, Living Documentation und Graphify sind davon Pflicht, alle anderen optional.
 
 Weiter: [[14-Governance-Dokumentation-und-Releases]]
 ## Briefing vor dem Bauen (ab 0.5.1)

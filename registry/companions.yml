@@ -1,0 +1,90 @@
+# Mandatory companions of the MGD-Plattform-Builder.
+#
+# Every project built or managed with the Builder carries these three companions:
+# living documentation (state, decisions, open points, risks, evidence), Graphify (the
+# machine-generated map of the project) and the Todo skill (operational tasks).
+# They are NOT recommendations (see recommendations.yml); `mgd-platform companions`
+# installs them; `doctor` and `release-check` verify them and `validate` rejects disabling them.
+#
+# Versions live in ONE place: the companion's own repository. By default `mgd-platform companions install`
+# installs the newest release tag (vX.Y.Z) of each skill companion, resolved at install time, and the
+# newest Graphify from PyPI. Nothing in this file has to change when a companion ships a new release.
+#
+# `ref`/`commit` (skills) and `min_version`/`install_version` (Graphify) are the tested floor and the
+# known-good pin: nothing older than the floor is ever installed, and `--pinned` installs exactly the pin
+# (reproducible installs, CI). Raise them only when a new release needs a newer floor.
+#
+# Supply chain: a tracked repository must belong to `owner`; the commit of the newest tag is read from
+# `git ls-remote` and the clone is verified against it, so the tag cannot move in between.
+version: 1
+owner: "https://github.com/MichaelGahnDESIGN"
+companions:
+  - id: "living-documentation"
+    name: "MGD Living Documentation"
+    kind: "skill"
+    role: "documentation"
+    mandatory: true
+    summary: "Versionierte, belegbare Projektdokumentation: Ist-Zustand, Entscheidungen, offene Punkte, Risiken, Nachweise."
+    source:
+      repo: "https://github.com/MichaelGahnDESIGN/MGD_Living-Documentation"
+      track: "latest-release"
+      ref: "v0.3.0"
+      commit: "a420b110563cac7b0556052b01b3b07ba8e75410"
+    skills:
+      - name: "living-documentation"
+        path: "skills/living-documentation"
+        required: true
+      - name: "project-start-assistant"
+        path: "skills/project-start-assistant"
+        required: false
+    aliases: ["mgd-living-documentation"]
+    project:
+      profile_key: "living_documentation"
+      default_path: "DOKUMENTATION"
+      marker: "README.md"
+      scaffold: "templates/living-docs/README.md"
+  - id: "todo"
+    name: "MGD Todo Skill"
+    kind: "skill"
+    role: "tasks"
+    mandatory: true
+    summary: "Sortierbare, durchsuchbare TODO.html im eigenen Repository: Aufgaben, Status, Kategorien."
+    source:
+      repo: "https://github.com/MichaelGahnDESIGN/MGD_Todo_SKILL"
+      track: "latest-release"
+      ref: "v1.3.0"
+      commit: "88f05e2d0f388badbe60b0ce8f4fb2719e2d4a6c"
+    skills:
+      - name: "todo"
+        path: "."
+        include: ["SKILL.md", "LICENSE", "docs", "todo"]
+        required: true
+    aliases: ["mgd-todo"]
+    project:
+      profile_key: "todo"
+      default_path: "TODO/TODO.html"
+      marker: "TODO.html"
+      scaffold_from_source: "todo/TODO.template.html"
+  - id: "graphify"
+    name: "Graphify"
+    kind: "tool"
+    role: "map"
+    mandatory: true
+    summary: "Wissensgraph des Projekts (lokale AST-Analyse, kein Vektor-Store): die maschinell erzeugte Karte der Living Documentation."
+    source:
+      repo: "https://github.com/Graphify-Labs/graphify"
+      license: "Apache-2.0"
+    package:
+      manager: "pip"
+      name: "graphifyy"
+      min_version: "0.9.65"
+      install_version: "0.9.93"
+      requires_python: "3.10"
+      command: "graphify"
+    aliases: []
+    project:
+      profile_key: "graphify"
+      default_path: "graphify-out"
+      marker: "graph.json"
+      refresh: "graphify update ."
+      hook: "graphify hook install"

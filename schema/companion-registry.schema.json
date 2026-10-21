@@ -1,0 +1,250 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/schema/companion-registry.schema.json",
+  "title": "MGD companion registry",
+  "description": "Mandatory companions (living documentation, Graphify, Todo) installed and verified by `mgd-platform companions`.",
+  "type": "object",
+  "required": [
+    "version",
+    "owner",
+    "companions"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "owner": {
+      "type": "string",
+      "pattern": "^https://github\\.com/[A-Za-z0-9-]+$"
+    },
+    "companions": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "kind",
+          "role",
+          "mandatory",
+          "summary",
+          "source",
+          "project"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "enum": [
+              "skill",
+              "tool"
+            ]
+          },
+          "role": {
+            "enum": [
+              "documentation",
+              "tasks",
+              "map"
+            ]
+          },
+          "mandatory": {
+            "type": "boolean"
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 1
+          },
+          "aliases": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]*$"
+            },
+            "uniqueItems": true
+          },
+          "source": {
+            "type": "object",
+            "required": [
+              "repo"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "repo": {
+                "type": "string",
+                "pattern": "^https://github\\.com/[A-Za-z0-9-]+/[A-Za-z0-9_.-]+$"
+              },
+              "ref": {
+                "type": "string",
+                "pattern": "^v\\d+\\.\\d+\\.\\d+$"
+              },
+              "commit": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{40}$"
+              },
+              "license": {
+                "type": "string"
+              },
+              "track": {
+                "const": "latest-release",
+                "description": "Install the newest release tag of the repository (at or above ref); ref and commit are the floor and the --pinned pin."
+              }
+            }
+          },
+          "skills": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "name",
+                "path"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9-]*$"
+                },
+                "path": {
+                  "type": "string",
+                  "pattern": "^(\\.|[A-Za-z0-9_-]+(/[A-Za-z0-9_-]+)*)$"
+                },
+                "include": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_.-]+$"
+                  },
+                  "minItems": 1
+                },
+                "required": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "package": {
+            "type": "object",
+            "required": [
+              "manager",
+              "name",
+              "min_version",
+              "install_version",
+              "requires_python",
+              "command"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "manager": {
+                "const": "pip"
+              },
+              "name": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_.-]+$"
+              },
+              "min_version": {
+                "type": "string",
+                "pattern": "^\\d+\\.\\d+\\.\\d+$"
+              },
+              "command": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]*$"
+              },
+              "requires_python": {
+                "type": "string",
+                "pattern": "^\\d+\\.\\d+$"
+              },
+              "install_version": {
+                "type": "string",
+                "pattern": "^\\d+\\.\\d+\\.\\d+$"
+              }
+            }
+          },
+          "project": {
+            "type": "object",
+            "required": [
+              "profile_key",
+              "default_path",
+              "marker"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "profile_key": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]*$"
+              },
+              "default_path": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-][A-Za-z0-9_.-]*(/[A-Za-z0-9_-][A-Za-z0-9_.-]*)*$"
+              },
+              "marker": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_.-]+$"
+              },
+              "scaffold": {
+                "type": "string"
+              },
+              "scaffold_from_source": {
+                "type": "string"
+              },
+              "refresh": {
+                "type": "string"
+              },
+              "hook": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "kind": {
+                  "const": "skill"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "skills"
+              ],
+              "properties": {
+                "source": {
+                  "required": [
+                    "repo",
+                    "ref",
+                    "commit"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "kind": {
+                  "const": "tool"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "package"
+              ]
+            }
+          }
+        ]
+      }
+    }
+  }
+}
