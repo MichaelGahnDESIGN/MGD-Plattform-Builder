@@ -1,9 +1,10 @@
 import os from "node:os";
 import path from "node:path";
 import { loadProjectProfile } from "../lib/profile.js";
-import { AGENTS, SCOPES, findCommand, findPython, inspectCompanions, loadCompanionRegistry, runProcess } from "../lib/companions.js";
+import { AGENTS, SCOPES, findCommand, findPython, inspectCompanions, loadCompanionRegistry, printable, runProcess, withTrustedPath } from "../lib/companions.js";
 import { GRAPHIFY_METHODS, actionLabel, buildPlan, describeAction, plannedCommands } from "../lib/companion-plan.js";
 import { executePlan, fetchSource } from "../lib/companion-install.js";
+import { describeResolved, resolveSource } from "../lib/companion-source.js";
 
 const VALUE_OPTIONS = new Set(["--scope", "--agent", "--graphify", "--home"]);
 const DEFAULT_SCOPE = "project";
@@ -56,7 +57,7 @@ export function printStatus(items, root) {
       ? (item.tool.installed ? "version " + item.tool.version + (item.tool.versionOk ? "" : " (older than " + item.companion.package.min_version + ")") : "not installed")
       : skillSummary(item);
     console.log((item.installed ? "✓" : "✗") + " " + item.companion.name.padEnd(28) + " " + detail);
-    console.log((item.project.present ? "✓" : "✗") + "   in project: " + item.project.path + (item.project.present ? "" : " — " + (item.project.error || "missing")));
+    console.log((item.project.present ? "✓" : "✗") + "   in project: " + item.project.path + (item.project.present ? "" : " — " + (printable(item.project.error || "missing"))));
   }
 }
 
@@ -79,6 +80,22 @@ async function status(root, options) {
   return 1;
 }
 
+/** Read-only: asks the companion repositories which release a real install would use. */
+async function printResolvedReleases(plan, registry, options) {
+  const tracked = plan.fetches.filter((source) => source.track === "latest-release" && !plan.pinned);
+  if (tracked.length === 0) return;
+  console.log("\nReleases that would be installed:");
+  for (const source of tracked) {
+    const name = source.repo.split("/").pop();
+    try {
+      const resolved = await resolveSource(source, { run: options.run, owner: registry.owner });
+      console.log("  " + name + ": " + describeResolved(resolved) + (resolved.ref !== source.ref ? " – newer than the tested " + source.ref : ""));
+    } catch (error) {
+      console.log("  " + name + ": could not be looked up (" + printable(error.message) + ")");
+    }
+  }
+}
+
 async function install(root, options) {
   const registry = await loadCompanionRegistry();
   const profile = await readProfile(root);
@@ -86,7 +103,7 @@ async function install(root, options) {
   const before = await inspectCompanions({ root, profile, registry, home, run: options.run, env: options.env });
   const invalid = before.filter((item) => item.project.error);
   if (invalid.length > 0) {
-    for (const item of invalid) console.error("✗ " + item.companion.name + ": " + item.project.error + " (check companions." + item.companion.project.profile_key + ".path in MGD_PLATFORM.yml)");
+    for (const item of invalid) console.error("✗ " + item.companion.name + ": " + printable(item.project.error) + " (check companions." + item.companion.project.profile_key + ".path in MGD_PLATFORM.yml)");
     return 1;
   }
   const hasUv = Boolean(await findCommand("uv", { root, home, env: options.env }));
@@ -122,6 +139,7 @@ async function install(root, options) {
   }
 
   if (!options.yes) {
+    await printResolvedReleases(plan, registry, options);
     console.log("\nDry run — nothing was changed. Skills come from the newest release of each companion's GitHub repository" + (plan.pinned ? " (--pinned: the tested release from the registry)" : "") + ".");
     console.log("Run again with --scope <project|user> [--graphify <user|project|skip>] [--hooks] [--pinned] --yes to install.");
     return 0;
@@ -153,7 +171,7 @@ export async function companionsCommand(args = [], overrides = {}) {
   const options = {
     ...parsed,
     home: path.resolve(option(args, "--home") || os.homedir()),
-    run: overrides.run || runProcess,
+    run: withTrustedPath(overrides.run || runProcess, root, overrides.env || process.env),
     fetch: overrides.fetch || fetchSource,
     env: overrides.env || process.env
   };

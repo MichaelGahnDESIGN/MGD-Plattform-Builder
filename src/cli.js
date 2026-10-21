@@ -44,6 +44,9 @@ function help() {
 }
 
 export async function runCli(args) {
+  // On Windows, Node looks for programs in the working directory first unless this is set in our own environment.
+  if (process.platform === "win32") process.env.NoDefaultCurrentDirectoryInExePath = "1";
+
   const command = args[0];
   const rest = args.slice(1);
 

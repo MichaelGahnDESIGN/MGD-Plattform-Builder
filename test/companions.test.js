@@ -11,8 +11,13 @@ import {
   findPython,
   inspectCompanions,
   inspectTool,
+  isInsideProject,
+  printable,
   loadCompanionRegistry,
-  resolveInside
+  recordProjectVenv,
+  resolveInside,
+  trustedPathEntries,
+  withTrustedPath
 } from "../src/lib/companions.js";
 import { buildPlan, graphifyInstallCommands, plannedCommands } from "../src/lib/companion-plan.js";
 import {
@@ -26,6 +31,7 @@ import {
 } from "../src/lib/companion-install.js";
 import { companionsCommand } from "../src/commands/companions.js";
 import { initCommand } from "../src/commands/init.js";
+import { gitEnvironment } from "../src/lib/companion-source.js";
 import { releaseCheckCommand } from "../src/commands/release-check.js";
 import { validateProfile } from "../src/lib/validation.js";
 import { foundationRoot } from "../src/lib/paths.js";
@@ -104,7 +110,7 @@ function fakeRun({ graphify = null, venvVersion = "0.9.93", extra = {} } = {}) {
   const calls = [];
   const run = async (command, args, options = {}) => {
     const name = path.basename(command);
-    calls.push({ command, name, args, cwd: options.cwd, line: [name, ...args].join(" ") });
+    calls.push({ command, name, args, cwd: options.cwd, env: options.env, line: [name, ...args].join(" ") });
     if (name === "graphify" && args[0] === "--version") {
       const inVenv = command.includes(path.join(".mgd", "graphify-venv"));
       const version = inVenv ? venvVersion : graphify;
@@ -166,15 +172,19 @@ test("project paths cannot escape the project", () => {
   }
 });
 
-test("the profile schema rejects paths that leave the project", async () => {
+test("the profile schema and the runtime accept only plain project-relative names", async () => {
   const base = { project: { name: "x", type: "general", foundation_version: "0.7.0" }, market: { countries: ["DE"] }, languages: { default: "de", enabled: ["de"] }, features: {}, infrastructure: { docker: false, staging: "none", git_source: "github" } };
-  for (const bad of [".", "..", "../shared", "/etc", "a/../../b"]) {
-    const result = await validateProfile({ ...base, companions: { living_documentation: { path: bad } } });
-    assert.equal(result.valid, false, bad + " must be rejected");
+  const root = path.resolve("/tmp/example-project");
+  const bad = [".", "..", "../shared", "/etc", "a/../../b", ".git/hooks/post-commit", ".claude/settings.json", ".docs", "a//b", "TODO/", "node_modules/x", "docs/<img src=x onerror=alert(1)>", "line\nbreak", "esc\u001b[2J"];
+  for (const value of bad) {
+    const result = await validateProfile({ ...base, companions: { living_documentation: { path: value } } });
+    assert.equal(result.valid, false, JSON.stringify(value) + " must be rejected by the schema");
+    assert.throws(() => resolveInside(root, value), undefined, JSON.stringify(value) + " must be rejected at runtime");
   }
-  for (const good of ["docs", "docs/living", ".docs", "DOKUMENTATION"]) {
-    const result = await validateProfile({ ...base, companions: { living_documentation: { path: good } } });
-    assert.deepEqual(result.schemaErrors, [], good + " must be accepted");
+  for (const value of ["docs", "docs/living", "DOKUMENTATION", "my-docs_v2", "TODO/TODO.html"]) {
+    const result = await validateProfile({ ...base, companions: { todo: { path: value } } });
+    assert.deepEqual(result.schemaErrors, [], value + " must be accepted by the schema");
+    assert.doesNotThrow(() => resolveInside(root, value), value + " must be accepted at runtime");
   }
   const graph = await validateProfile({ ...base, companions: { graphify: { path: "docs/graph" } } });
   assert.equal(graph.valid, false, "Graphify always writes to graphify-out");
@@ -521,45 +531,101 @@ test("findPython skips interpreters that are too old and picks the first suitabl
   assert.equal(await findPython("3.10", { root, home, env: { PATH: "" }, run }), null);
 });
 
-test("programs that live inside the project are never executed by read-only commands", async () => {
+test("programs that live inside the project are never executed by read-only commands or by installers", async () => {
   const root = await tempDir("root");
   const home = await tempDir("home");
-  const planted = [".mgd/graphify-venv/bin/graphify", ".mgd/graphify-venv/bin/python3.13", "bin/uv", "python3.13", "graphify"];
+  const planted = [".mgd/graphify-venv/bin/graphify", ".mgd/graphify-venv/bin/python3.13", "bin/uv", "node_modules/.bin/git", "node_modules/.bin/graphify", "python3.13", "graphify"];
   for (const file of planted) await write(path.join(root, file), "#!/bin/sh\n", 0o755);
+  const alias = path.join(await tempDir("alias"), "project-link");
+  await fs.symlink(root, alias);
   const { run, calls } = fakeRun();
-  const env = { PATH: ["", ".", "bin", root].join(path.delimiter) };
+  const env = { PATH: ["", ".", "bin", root, path.join(root, "node_modules/.bin"), path.join(alias, "node_modules/.bin"), "/usr/bin"].join(path.delimiter) };
 
   const registry = await loadCompanionRegistry();
   await inspectCompanions({ root, home, registry, run, env });
+  await inspectCompanions({ root: alias, home, registry, run, env });
   await captured(() => companionsCommand(["status", root, "--home", home], { run, env }));
   await captured(() => companionsCommand(["install", root, "--home", home, "--graphify", "project"], { run, env }));
-  assert.deepEqual(calls.filter((call) => call.command.startsWith(root) || !path.isAbsolute(call.command)).map((call) => call.line), [], "no planted or relative program was run");
-  assert.equal(await findCommand("graphify", { root, home, env }), null, "a PATH entry inside the project is ignored too");
+  const { fetch } = await fixtureSources();
+  await install({ root, home, fetch, run, env, agents: ["claude"], graphify: "skip" });
+
+  assert.ok(calls.length > 0);
+  for (const call of calls) {
+    if (path.isAbsolute(call.command)) {
+      assert.ok(!(await isInsideProject(root, path.dirname(call.command))), "ran a program from inside the project: " + call.command);
+    } else {
+      const entries = String(call.env && call.env.PATH).split(path.delimiter);
+      assert.ok(entries.every((entry) => entry && path.isAbsolute(entry) && !entry.startsWith(root)), call.name + " was started with a PATH that reaches into the project: " + call.env.PATH);
+    }
+  }
+  assert.equal(await findCommand("graphify", { root, home, env }), null);
+  assert.equal(await findCommand("git", { root: alias, home, env: { PATH: path.join(alias, "node_modules/.bin") } }), null, "a PATH entry that reaches the project through a symlink is ignored too");
 });
 
-test("a project-local Graphify environment counts as installed by its metadata but is not executed", async () => {
+test("PATH entries are compared by real path, relative entries are dropped, and the wrapper sanitizes every child", async () => {
+  const root = await tempDir("root");
+  const alias = path.join(await tempDir("alias"), "link");
+  await fs.symlink(root, alias);
+  await fs.mkdir(path.join(root, "node_modules/.bin"), { recursive: true });
+  const outside = await tempDir("outside");
+  assert.equal(await isInsideProject(root, path.join(alias, "node_modules/.bin")), true);
+  assert.equal(await isInsideProject(root, outside), false);
+  const entries = await trustedPathEntries(root, { PATH: ["", ".", "bin", root, path.join(alias, "node_modules/.bin"), outside, outside].join(path.delimiter) });
+  assert.deepEqual(entries, [outside]);
+
+  let seen;
+  const wrapped = withTrustedPath(async (command, args, options) => { seen = options; return { code: 0, stdout: "", stderr: "" }; }, root, { PATH: root + path.delimiter + outside, KEEP: "1" });
+  await wrapped("git", ["--version"], {});
+  assert.equal(seen.env.PATH, outside);
+  assert.equal(seen.env.KEEP, "1");
+});
+
+test("a project-local Graphify environment counts as installed only if this CLI created it", async () => {
   const root = await tempDir("root");
   const home = await tempDir("home");
+  const registry = await loadCompanionRegistry();
+  const { run, calls } = fakeRun();
+  const status = async () => (await inspectCompanions({ root, home, registry, run, env: { PATH: "" } })).find((item) => item.companion.kind === "tool");
+
+  // a repository can forge anything inside the project, including package metadata
   await write(path.join(root, ".mgd/graphify-venv/bin/graphify"), "#!/bin/sh\n", 0o755);
-  await write(path.join(root, ".mgd/graphify-venv/lib/python3.12/site-packages/graphifyy-0.9.93.dist-info/METADATA"), "Name: graphifyy\n");
+  await write(path.join(root, ".mgd/graphify-venv/lib/python3.12/site-packages/graphifyy-99.0.0.dist-info/METADATA"), "Name: graphifyy\n");
+  assert.equal((await status()).installed, false, "forged metadata proves nothing");
+
+  await recordProjectVenv({ root, home, version: "0.9.93" });
+  const known = await status();
+  assert.equal(known.installed, true);
+  assert.equal(known.tool.projectVenv, true);
+  assert.equal(known.tool.executable, null, "never executed");
+  assert.equal(known.tool.version, "0.9.93", "the recorded version, not what the environment claims");
+  assert.deepEqual(calls.filter((call) => call.command.startsWith(root)), []);
+
+  // the record lives outside the project
+  assert.ok(await exists(path.join(home, ".cache/mgd-platform/venvs.json")));
+  assert.equal(await exists(path.join(root, ".cache")), false);
+
+  // a replaced folder (different inode) is no longer the environment that was created
+  await fs.rm(path.join(root, ".mgd/graphify-venv"), { recursive: true });
+  await fs.mkdir(path.join(root, ".mgd/graphify-venv"));
+  assert.equal((await status()).installed, false);
+
+  // a symlink is ignored even with a matching record
+  await fs.rm(path.join(root, ".mgd/graphify-venv"), { recursive: true });
+  await fs.symlink(await tempDir("elsewhere"), path.join(root, ".mgd/graphify-venv"));
+  assert.equal((await status()).installed, false);
+});
+
+test("a later install run skips the graph steps for a recorded project environment instead of executing it", async () => {
+  const root = await tempDir("root");
+  const home = await tempDir("home");
   const { fetch } = await fixtureSources();
   const { run, calls } = fakeRun();
-  const registry = await loadCompanionRegistry();
-
-  const graph = (await inspectCompanions({ root, home, registry, run, env: { PATH: "" } })).find((item) => item.companion.kind === "tool");
-  assert.equal(graph.installed, true);
-  assert.equal(graph.tool.projectVenv, true);
-  assert.equal(graph.tool.executable, null);
-
+  await write(path.join(root, ".mgd/graphify-venv/bin/graphify"), "#!/bin/sh\n", 0o755);
+  await recordProjectVenv({ root, home, version: "0.9.93" });
   const { results } = await install({ root, home, fetch, run, env: { PATH: "" }, agents: ["claude"] });
   assert.equal(find(results, "graphify-refresh").status, "skipped");
   assert.match(find(results, "graphify-refresh").detail, /does not run programs from inside the project/);
   assert.deepEqual(calls.filter((call) => call.command.startsWith(root)), []);
-
-  await fs.rm(path.join(root, ".mgd/graphify-venv"), { recursive: true });
-  await fs.symlink(await tempDir("elsewhere"), path.join(root, ".mgd/graphify-venv"));
-  const linked = (await inspectCompanions({ root, home, registry, run, env: { PATH: "" } })).find((item) => item.companion.kind === "tool");
-  assert.equal(linked.installed, false, "a symlinked environment is ignored");
 });
 
 test("the project-local Graphify environment is created fresh and is the only project program that runs", async () => {
@@ -580,6 +646,10 @@ test("the project-local Graphify environment is created fresh and is the only pr
   const refresh = calls.find((c) => c.line === "graphify update .");
   assert.equal(refresh.command, path.join(root, ".mgd", "graphify-venv", "bin", "graphify"), "the environment this run created is used");
   assert.equal(refresh.cwd, root);
+
+  const known = (await inspectCompanions({ root, home, registry: await loadCompanionRegistry(), run, env: { PATH: "" } })).find((item) => item.companion.kind === "tool");
+  assert.equal(known.installed, true, "the environment this CLI created is remembered");
+  assert.equal(known.tool.projectVenv, true);
 });
 
 test("an existing or symlinked environment location is refused, and a failed pip run cleans up", async () => {
@@ -715,4 +785,47 @@ test("release-check is blocked while a mandatory companion is missing, and says 
   assert.match(output, /✗ companion living-documentation — not installed/);
   assert.match(output, /✗ companion graphify — not installed/);
   assert.doesNotMatch(output, /evidence missing/, "the block comes from the companions, not from release gates");
+});
+
+test("init never writes through a symbolic link, with or without --force", async () => {
+  const outside = await tempDir("outside");
+  const victim = path.join(outside, "victim.md");
+  await write(victim, "keep me\n");
+
+  const forced = await tempDir("root");
+  await fs.symlink(victim, path.join(forced, "CLAUDE.md"));
+  await assert.rejects(() => captured(() => initCommand(["--target", forced, "--force"])), /symbolic link/);
+  assert.equal(await fs.readFile(victim, "utf8"), "keep me\n");
+
+  const dangling = await tempDir("root");
+  await fs.symlink(path.join(outside, "does-not-exist"), path.join(dangling, "version.json"));
+  await assert.rejects(() => captured(() => initCommand(["--target", dangling])), /symbolic link/);
+  assert.equal(await exists(path.join(outside, "does-not-exist")), false);
+
+  const mgd = await tempDir("root");
+  await fs.symlink(outside, path.join(mgd, ".mgd"));
+  await assert.rejects(() => captured(() => initCommand(["--target", mgd])), /symbolic link/);
+  assert.equal(await exists(path.join(outside, "evidence")), false);
+
+  const clean = await tempDir("root");
+  assert.equal((await captured(() => initCommand(["--target", clean]))).result, 0);
+  assert.ok(await exists(path.join(clean, "MGD_PLATFORM.yml")));
+});
+
+test("git runs without hooks, fsmonitor, submodules, LFS downloads or inherited repository overrides", () => {
+  const env = gitEnvironment({ PATH: "/usr/bin", GIT_DIR: "/x", GIT_WORK_TREE: "/y", GIT_CONFIG_GLOBAL: "/z", GIT_CONFIG_COUNT: "1", GIT_CONFIG_KEY_0: "core.sshCommand", GIT_CONFIG_VALUE_0: "evil" });
+  assert.equal(env.GIT_DIR, undefined);
+  assert.equal(env.GIT_WORK_TREE, undefined);
+  assert.equal(env.GIT_CONFIG_GLOBAL, undefined);
+  const settings = Object.fromEntries(Array.from({ length: Number(env.GIT_CONFIG_COUNT) }, (_, index) => [env["GIT_CONFIG_KEY_" + index], env["GIT_CONFIG_VALUE_" + index]]));
+  assert.deepEqual(settings, { "core.hooksPath": "/dev/null", "core.fsmonitor": "false", "submodule.recurse": "false" });
+  assert.equal(env.GIT_TERMINAL_PROMPT, "0");
+  assert.equal(env.GIT_LFS_SKIP_SMUDGE, "1");
+  assert.equal(env.PATH, "/usr/bin");
+});
+
+test("values from untrusted files are made printable and cannot inject terminal escapes", () => {
+  assert.equal(printable("a\u001b[2Jb\nc"), "a?[2Jb?c");
+  assert.equal(printable("x".repeat(500)).length, 200);
+  assert.throws(() => resolveInside("/tmp/p", "a/\u001b[31mred"), (error) => !/\u001b/.test(error.message));
 });

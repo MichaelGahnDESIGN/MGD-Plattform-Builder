@@ -42,15 +42,31 @@ async function exists(target) {
   return fs.access(target).then(() => true).catch(() => false);
 }
 
-/** Resolves a project-relative path and refuses anything that escapes the project root. */
+/** A value from an untrusted file, safe to print: control characters (terminal escapes, newlines) become "?". */
+export function printable(value) {
+  return String(value).replace(/[^\x20-\x7e\u00a0-\uffff]/g, "?").slice(0, 200);
+}
+
+const SEGMENT = /^[A-Za-z0-9_-][A-Za-z0-9_.-]*$/;
+const RESERVED_SEGMENTS = new Set(["node_modules"]);
+
+/**
+ * Resolves a project-relative path from the profile (untrusted input). Every segment must be a plain name
+ * (no dot-folders such as .git or .claude, no "..", no control characters), so the path can never escape the
+ * project or point at tooling folders.
+ */
 export function resolveInside(root, relative) {
   if (typeof relative !== "string" || relative.length === 0 || path.isAbsolute(relative)) {
-    throw new Error("Companion path must be a relative path inside the project: " + relative);
+    throw new Error("Companion path must be a relative path inside the project: " + printable(relative));
   }
-  const resolved = path.resolve(root, relative);
+  const segments = relative.split("/");
+  if (segments.some((segment) => !SEGMENT.test(segment) || RESERVED_SEGMENTS.has(segment))) {
+    throw new Error("Companion path leaves the project directory or uses a reserved name: " + printable(relative));
+  }
+  const resolved = path.resolve(root, ...segments);
   const inside = path.relative(root, resolved);
   if (inside === "" || inside.startsWith("..") || path.isAbsolute(inside)) {
-    throw new Error("Companion path leaves the project directory: " + relative);
+    throw new Error("Companion path leaves the project directory: " + printable(relative));
   }
   return resolved;
 }
@@ -129,20 +145,53 @@ async function isExecutable(file) {
   return fs.access(file, fs.constants.X_OK).then(() => true).catch(() => false);
 }
 
+const CASE_INSENSITIVE = process.platform === "darwin" || process.platform === "win32";
+const canonical = (value) => (CASE_INSENSITIVE ? value.toLowerCase() : value);
+
+/** True when `folder` is, or resolves into, the project: compared by real path, so symlinks, /var vs /private/var and case do not matter. */
+export async function isInsideProject(root, folder) {
+  if (!root) return false;
+  const [realRoot, realFolder] = await Promise.all([fs.realpath(root).catch(() => path.resolve(root)), fs.realpath(folder).catch(() => path.resolve(folder))]);
+  const relative = path.relative(canonical(realRoot), canonical(realFolder));
+  return !relative.startsWith("..") && !path.isAbsolute(relative);
+}
+
+/** PATH entries a child process may use: absolute, existing, and not inside the project. */
+export async function trustedPathEntries(root, env = process.env) {
+  const entries = [];
+  for (const entry of String(env.PATH || "").split(path.delimiter)) {
+    if (!entry || !path.isAbsolute(entry) || entries.includes(entry)) continue;
+    if (!await isInsideProject(root, entry)) entries.push(entry);
+  }
+  return entries;
+}
+
+/**
+ * Wraps a process runner so every child gets a PATH without relative or in-project entries. Without this,
+ * a bare `git`, `uv` or `python3` could resolve to a program inside the cloned repository.
+ */
+export function withTrustedPath(run, root, defaultEnv = process.env) {
+  return async (command, args, options = {}) => {
+    const base = options.env || defaultEnv;
+    const PATH = (await trustedPathEntries(root, base)).join(path.delimiter);
+    return run(command, args, { ...options, env: { ...base, PATH } });
+  };
+}
+
 /**
  * Every executable called `command` in the user's own program folders: the absolute entries of PATH and
  * the folders uv and pipx install tools into. Nothing inside the project is ever looked at (not even a PATH entry that
- * points into it), because a read-only command must not run a program that a cloned repository brought along.
+ * points into it, however it is spelled), because a read-only command must not run a program that a cloned
+ * repository brought along.
  */
 export async function findCommands(command, { root, home, env = process.env }) {
   const suffixes = process.platform === "win32" ? [".exe", ".cmd", ""] : [""];
-  const insideProject = (folder) => Boolean(root) && !path.relative(root, folder).startsWith("..");
   // Where uv and pipx put tools: their documented defaults and the environment variables that move them.
   const toolFolders = [env.UV_TOOL_BIN_DIR, env.XDG_BIN_HOME, env.PIPX_BIN_DIR, path.join(home, ".local", "bin")];
-  const folders = [
-    ...String(env.PATH || "").split(path.delimiter),
-    ...toolFolders
-  ].filter((entry) => entry && path.isAbsolute(entry) && !insideProject(entry));
+  const folders = [];
+  for (const entry of [...String(env.PATH || "").split(path.delimiter), ...toolFolders]) {
+    if (entry && path.isAbsolute(entry) && !folders.includes(entry) && !await isInsideProject(root, entry)) folders.push(entry);
+  }
   const found = [];
   for (const folder of folders) {
     for (const suffix of suffixes) {
@@ -181,29 +230,46 @@ export async function findPython(minimum, context) {
 export const PROJECT_VENV = path.join(".mgd", "graphify-venv");
 
 /**
- * Reads the version of a project-local virtual environment from its package metadata. Nothing in the
- * environment is executed, and symbolic links are not followed.
+ * Environments this CLI created are remembered in the user's own cache, never inside the project, because
+ * anything inside a cloned repository can be forged. A record is only trusted if the folder is still the same
+ * one (same device and inode) and not a symbolic link.
  */
-export async function inspectProjectVenv(root, pkg) {
+export function venvRecordFile(home) {
+  return path.join(home, ".cache", "mgd-platform", "venvs.json");
+}
+
+async function readVenvRecords(home) {
+  try {
+    return JSON.parse(await fs.readFile(venvRecordFile(home), "utf8"));
+  } catch {
+    return {};
+  }
+}
+
+export async function recordProjectVenv({ root, home, version }) {
   const venv = path.join(root, PROJECT_VENV);
-  for (const link of [path.join(root, ".mgd"), venv]) {
-    const stat = await fs.lstat(link).catch(() => null);
-    if (!stat || stat.isSymbolicLink() || !stat.isDirectory()) return null;
-  }
-  const libraries = process.platform === "win32" ? [path.join(venv, "Lib")] : await fs.readdir(path.join(venv, "lib")).then((names) => names.map((name) => path.join(venv, "lib", name))).catch(() => []);
-  for (const library of libraries) {
-    const names = await fs.readdir(path.join(library, "site-packages")).catch(() => []);
-    const dist = names.find((name) => name.toLowerCase().startsWith(pkg.name.toLowerCase() + "-") && name.endsWith(".dist-info"));
-    const match = dist && VERSION_PATTERN.exec(dist);
-    if (match) return { version: match[0], versionOk: compareVersions(match[0], pkg.min_version) >= 0 };
-  }
-  return null;
+  const stat = await fs.lstat(venv);
+  const records = await readVenvRecords(home);
+  records[await fs.realpath(root)] = { dev: stat.dev, ino: stat.ino, version, recorded_at: new Date().toISOString() };
+  await fs.mkdir(path.dirname(venvRecordFile(home)), { recursive: true });
+  await fs.writeFile(venvRecordFile(home), JSON.stringify(records, null, 2) + "\n", "utf8");
+}
+
+/** The version of a project-local environment this CLI created. Nothing in the project is read for it or executed. */
+export async function inspectProjectVenv(root, pkg, home) {
+  if (!home) return null;
+  const record = (await readVenvRecords(home))[await fs.realpath(root).catch(() => "")];
+  if (!record || !record.version) return null;
+  const stat = await fs.lstat(path.join(root, PROJECT_VENV)).catch(() => null);
+  if (!stat || stat.isSymbolicLink() || !stat.isDirectory() || stat.dev !== record.dev || stat.ino !== record.ino) return null;
+  return { version: record.version, versionOk: compareVersions(record.version, pkg.min_version) >= 0 };
 }
 
 /**
  * Looks at every copy of the tool in the user's program folders (an old one earlier on PATH must not hide a
  * new one) and returns the first copy that is new enough, otherwise the first copy that runs at all. A
- * project-local environment counts as installed by its metadata, but is never executed by this CLI.
+ * project-local environment counts as installed if this CLI created it (see inspectProjectVenv), but is
+ * never executed by this CLI after that run.
  */
 export async function inspectTool(companion, context) {
   const { package: pkg } = companion;
@@ -216,7 +282,7 @@ export async function inspectTool(companion, context) {
     if (found.versionOk) return found;
     fallback = fallback || found;
   }
-  const venv = await inspectProjectVenv(context.root, pkg);
+  const venv = await inspectProjectVenv(context.root, pkg, context.home);
   if (venv && venv.versionOk) return { installed: true, executable: null, projectVenv: true, ...venv };
   return fallback || { installed: false, executable: null, version: null, versionOk: false };
 }
@@ -240,7 +306,7 @@ export async function inspectProjectArtifact(companion, settings, root) {
 }
 
 export async function inspectCompanions({ root, profile = {}, registry, home = os.homedir(), run = runProcess, env = process.env } = {}) {
-  const context = { root, home, run, env };
+  const context = { root, home, run: withTrustedPath(run, root, env), env };
   const results = [];
   for (const companion of registry.companions) {
     const settings = companionSettings(companion, profile);

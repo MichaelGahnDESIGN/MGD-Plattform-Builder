@@ -1,12 +1,15 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { foundationRoot, resolveProjectPath } from "../lib/paths.js";
+import { assertNoSymlink } from "../lib/companions.js";
 import { companionsCommand } from "./companions.js";
 
 const allowedPresets = new Set(["general", "game", "community", "creator", "ecommerce"]);
 
-async function copyUnlessExists(source, destination, force) {
-  const exists = await fs.access(destination).then(() => true).catch(() => false);
+async function copyUnlessExists(source, destination, force, root) {
+  // lstat, not access: a dangling symbolic link must count as "there", and no copy may follow a link out of the project.
+  await assertNoSymlink(root, destination);
+  const exists = await fs.lstat(destination).then(() => true).catch(() => false);
   if (exists && !force) {
     return { path: destination, status: "kept" };
   }
@@ -46,14 +49,15 @@ export async function initCommand(args = []) {
   );
 
   const operations = [
-    await copyUnlessExists(sourceProfile, path.join(target, "MGD_PLATFORM.yml"), force),
-    await copyUnlessExists(path.join(foundationRoot, "templates", "AGENTS.md"), path.join(target, "AGENTS.md"), force),
-    await copyUnlessExists(path.join(foundationRoot, "templates", "CLAUDE.md"), path.join(target, "CLAUDE.md"), force),
-    await copyUnlessExists(path.join(foundationRoot, "templates", "FEATURE-GOVERNANCE.md"), path.join(target, "FEATURE-GOVERNANCE.md"), force),
-    await copyUnlessExists(path.join(foundationRoot, "templates", "version.example.json"), path.join(target, "version.json"), false),
-    await copyUnlessExists(path.join(foundationRoot, "templates", "release-notes.example.json"), path.join(target, "release-notes.json"), false)
+    await copyUnlessExists(sourceProfile, path.join(target, "MGD_PLATFORM.yml"), force, target),
+    await copyUnlessExists(path.join(foundationRoot, "templates", "AGENTS.md"), path.join(target, "AGENTS.md"), force, target),
+    await copyUnlessExists(path.join(foundationRoot, "templates", "CLAUDE.md"), path.join(target, "CLAUDE.md"), force, target),
+    await copyUnlessExists(path.join(foundationRoot, "templates", "FEATURE-GOVERNANCE.md"), path.join(target, "FEATURE-GOVERNANCE.md"), force, target),
+    await copyUnlessExists(path.join(foundationRoot, "templates", "version.example.json"), path.join(target, "version.json"), false, target),
+    await copyUnlessExists(path.join(foundationRoot, "templates", "release-notes.example.json"), path.join(target, "release-notes.json"), false, target)
   ];
 
+  await assertNoSymlink(target, path.join(target, ".mgd", "evidence"));
   await fs.mkdir(path.join(target, ".mgd", "evidence"), { recursive: true });
 
   console.log("\nMGD Platform initialized with preset: " + preset);

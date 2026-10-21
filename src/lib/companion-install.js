@@ -2,9 +2,9 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { foundationRoot } from "./paths.js";
-import { assertNoSymlink, compareVersions, inspectTool, parseVersion, runProcess } from "./companions.js";
+import { assertNoSymlink, compareVersions, inspectTool, parseVersion, recordProjectVenv, runProcess, withTrustedPath } from "./companions.js";
 import { GRAPHIFY_GIT_IGNORE, projectVenvDir, venvExecutable } from "./companion-plan.js";
-import { describeResolved, resolveSource } from "./companion-source.js";
+import { describeResolved, gitEnvironment, resolveSource } from "./companion-source.js";
 
 /**
  * Executes an install plan. Safety rules, in the spirit of `scripts/install-zugang.py`:
@@ -29,7 +29,6 @@ const REPO_PATTERN = /^https:\/\/github\.com\/[A-Za-z0-9-]+\/[A-Za-z0-9_.-]+$/;
 const REF_PATTERN = /^v\d+\.\d+\.\d+$/;
 const COMMIT_PATTERN = /^[0-9a-f]{40}$/;
 const SOURCE_ACTIONS = new Set(["skill", "scaffold-todo"]);
-const UNSAFE_GIT_ENV = /^(GIT_DIR|GIT_WORK_TREE|GIT_INDEX_FILE|GIT_OBJECT_DIRECTORY|GIT_ALTERNATE_OBJECT_DIRECTORIES|GIT_COMMON_DIR|GIT_NAMESPACE|GIT_CONFIG.*)$/;
 const NO_LFS = ["-c", "filter.lfs.smudge=", "-c", "filter.lfs.process=", "-c", "filter.lfs.required=false"];
 
 export function assertSafeSource(source) {
@@ -38,13 +37,8 @@ export function assertSafeSource(source) {
   if (!COMMIT_PATTERN.test(source.commit || "")) throw new Error("Companion source needs a pinned 40-character commit SHA");
 }
 
-function gitEnvironment() {
-  const env = Object.fromEntries(Object.entries(process.env).filter(([key]) => !UNSAFE_GIT_ENV.test(key)));
-  return { ...env, GIT_TERMINAL_PROMPT: "0", GIT_LFS_SKIP_SMUDGE: "1" };
-}
-
 /** Resolves the release to install, clones it without checking it out, verifies the commit, then checks it out. */
-export async function fetchSource(registrySource, { run = runProcess, owner, pinned = false } = {}) {
+export async function fetchSource(registrySource, { run = withTrustedPath(runProcess, process.cwd()), owner, pinned = false } = {}) {
   assertSafeSource(registrySource);
   const source = await resolveSource(registrySource, { run, owner, pinned });
   assertSafeSource(source);
@@ -139,7 +133,9 @@ async function writeSkill(dest, files, guardRoot) {
     if (await pathExists(path.join(dest, "SKILL.md"))) return "kept";
     throw new Error(dest + " exists but contains no SKILL.md (an interrupted install?). Move it away and run the command again.");
   }
-  const partial = dest + ".partial-" + process.pid + "-" + Date.now();
+  await fs.mkdir(path.dirname(dest), { recursive: true });
+  if (guardRoot) await assertNoSymlink(guardRoot, dest);
+  const partial = await fs.mkdtemp(dest + ".partial-");
   try {
     for (const file of files) await writeNew(path.join(partial, file.relative), file.data, guardRoot);
     await fs.rename(partial, dest);
@@ -159,8 +155,8 @@ const HTML_ESCAPES = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" };
 
 /** Replaces the template's PROJEKT placeholders with the project name and the real file location. */
 export function personalizeTodo(html, projectName, relativePath) {
-  const name = projectName.replace(/[&<>"]/g, (char) => HTML_ESCAPES[char]);
-  return html.split("PROJEKT/TODO/TODO.html").join(relativePath).split("PROJEKT").join(name);
+  const escape = (text) => text.replace(/[&<>"]/g, (char) => HTML_ESCAPES[char]);
+  return html.split("PROJEKT/TODO/TODO.html").join(escape(relativePath)).split("PROJEKT").join(escape(projectName));
 }
 
 export function renderScaffold(template, variables) {
@@ -250,6 +246,8 @@ async function installGraphifyCli(action, context) {
     const result = await context.run(executable, ["--version"], { cwd: os.tmpdir() });
     const version = parseVersion(result.stdout + " " + result.stderr);
     context.created = { installed: Boolean(version), executable, version, versionOk: Boolean(version) && compareVersions(version, pkg.min_version) >= 0 };
+    // Remembered in the user's cache (never in the project) so later status runs trust exactly this environment.
+    if (context.created.versionOk) await recordProjectVenv({ root: context.root, home: context.home, version });
   }
   const tool = await resolveGraphify(context);
   if (!tool.installed) throw new Error("Graphify was installed but the " + pkg.command + " command was not found afterwards.");
@@ -333,7 +331,7 @@ async function prepareSources(plan, context, state) {
 
 /** Runs the plan. Every action reports its own result; one failure does not stop the others. */
 export async function executePlan(plan, { registry, root, home, profile = {}, run = runProcess, fetch = fetchSource, env = process.env, pinned = false }) {
-  const context = { registry, root, home, profile: profile || {}, run, fetch, env, created: null, pinned };
+  const context = { registry, root, home, profile: profile || {}, run: withTrustedPath(run, root, env), fetch, env, created: null, pinned };
   const state = { sources: new Map(), files: new Map(), errors: new Map() };
   const results = [];
 

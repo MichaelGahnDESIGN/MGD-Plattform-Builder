@@ -91,15 +91,30 @@ The CLI is run inside projects that may not be trusted (client repositories, pul
 agent that was told to run `companions status` first. Therefore:
 
 - Read-only commands (`status`, `doctor`, `release-check`, the dry run) never execute a program from inside the
-  project and ignore PATH entries that point into it. They look at the absolute PATH entries, the folders uv and
-  pipx install into (`~/.local/bin`, `UV_TOOL_BIN_DIR`, `XDG_BIN_HOME`, `PIPX_BIN_DIR`) and nothing else.
+  project. Programs are looked up only in the absolute PATH entries, the folders uv and pipx install into
+  (`~/.local/bin`, `UV_TOOL_BIN_DIR`, `XDG_BIN_HOME`, `PIPX_BIN_DIR`) and nothing else. Entries that reach into the
+  project are dropped however they are spelled: the comparison uses real paths, so a symlinked spelling, `/var`
+  versus `/private/var` and letter case make no difference.
+- Every child process (git, uv, pipx, python, pip, graphify) starts with a PATH that has no relative, empty or
+  in-project entries, so a bare `git` or `python3` cannot resolve to a program inside a cloned repository.
+  `git`, `uv`, `pipx`, `python -I` and `pip` also run in the system temp directory, never in the project, and on
+  Windows `NoDefaultCurrentDirectoryInExePath` is set for this process and for the children.
 - A project-local Graphify environment (`.mgd/graphify-venv`) is created fresh (an existing one is refused, a
   symbolic link anywhere on the way is refused) and is the only program inside the project that the CLI runs, in
-  that same run. Later runs read its version from the package metadata and never execute it.
-- `git`, `uv`, `pipx`, `python -I` and `pip` run in the system temp directory, never in the project, and the
-  child environment sets `NoDefaultCurrentDirectoryInExePath` so Windows does not prefer the working directory.
-- The profile is untrusted input: companion paths must stay inside the project, and the project name is flattened
-  to one short line before it is written into generated files.
+  that same run. The CLI then records the environment (real project path, device and inode of the folder, version)
+  in `~/.cache/mgd-platform/venvs.json`, outside the project. Later runs trust only a matching record, report the
+  recorded version, and never read the environment's own metadata or execute it: a repository can forge anything
+  inside the project, but it cannot write to your cache.
+- `git clone` and `git checkout` run with hooks, fsmonitor and submodules switched off and without inherited
+  `GIT_*` repository overrides, so neither your global Git configuration nor the cloned repository can make them
+  run anything.
+- The profile is untrusted input. Companion paths are validated at runtime, not only by the schema: every segment
+  must be a plain name (letters, digits, `_`, `-`, and `.` inside a name), so no `..`, no dot folders such as `.git`
+  or `.claude`, no empty segments, no control characters and no `node_modules`. Values from untrusted files are
+  made printable before they reach the terminal, the Todo file location is HTML-escaped, and the project name is
+  flattened to one short line before it is written into generated files.
+- `init` refuses to write through a symbolic link (also a dangling one) below the target folder, with or without
+  `--force`.
 - Accepted trade-offs: by default the CLI trusts the registry owner's GitHub account at install time (`--pinned` avoids
   that); existing skill folders are trusted as installed without verification; Graphify is not verified by hash; the user's own pip/uv configuration and `PATH` order are used as they are.
 

@@ -15,10 +15,19 @@ import { compareVersions } from "./companions.js";
 
 const TAG_LINE = /^([0-9a-f]{40})\trefs\/tags\/(v\d+\.\d+\.\d+)(\^\{\})?$/;
 const LIST_TIMEOUT_MS = 60000;
-const SAFE_GIT_ENV = (env) => {
-  const clean = Object.fromEntries(Object.entries(env).filter(([key]) => !/^(GIT_DIR|GIT_WORK_TREE|GIT_INDEX_FILE|GIT_OBJECT_DIRECTORY|GIT_ALTERNATE_OBJECT_DIRECTORIES|GIT_COMMON_DIR|GIT_NAMESPACE|GIT_CONFIG.*)$/.test(key)));
-  return { ...clean, GIT_TERMINAL_PROMPT: "0" };
-};
+const UNSAFE_GIT_ENV = /^(GIT_DIR|GIT_WORK_TREE|GIT_INDEX_FILE|GIT_OBJECT_DIRECTORY|GIT_ALTERNATE_OBJECT_DIRECTORIES|GIT_COMMON_DIR|GIT_NAMESPACE|GIT_CONFIG.*)$/;
+const GIT_SETTINGS = [["core.hooksPath", "/dev/null"], ["core.fsmonitor", "false"], ["submodule.recurse", "false"]];
+
+/**
+ * The environment for every git call: no inherited repository overrides, no prompts, no LFS download, and
+ * hooks, fsmonitor and submodules switched off, so neither the user's global config nor a cloned repository
+ * can make `git clone` or `git checkout` run anything.
+ */
+export function gitEnvironment(base = process.env) {
+  const clean = Object.fromEntries(Object.entries(base).filter(([key]) => !UNSAFE_GIT_ENV.test(key)));
+  const config = Object.fromEntries(GIT_SETTINGS.flatMap(([key, value], index) => [["GIT_CONFIG_KEY_" + index, key], ["GIT_CONFIG_VALUE_" + index, value]]));
+  return { ...clean, ...config, GIT_CONFIG_COUNT: String(GIT_SETTINGS.length), GIT_TERMINAL_PROMPT: "0", GIT_LFS_SKIP_SMUDGE: "1" };
+}
 
 export function isTracking(source) {
   return source.track === "latest-release";
@@ -63,7 +72,7 @@ export async function resolveSource(source, { run, owner, pinned = false }) {
   if (!owner || !source.repo.startsWith(owner + "/")) {
     throw new Error("Refusing to track the latest release of " + source.repo + ": it does not belong to " + owner);
   }
-  const listed = await run("git", ["ls-remote", "--tags", "--", source.repo], { cwd: os.tmpdir(), env: SAFE_GIT_ENV(process.env), timeout: LIST_TIMEOUT_MS });
+  const listed = await run("git", ["ls-remote", "--tags", "--", source.repo], { cwd: os.tmpdir(), env: gitEnvironment(), timeout: LIST_TIMEOUT_MS });
   if (listed.code !== 0) {
     throw new Error("Could not list the releases of " + source.repo + ": " + (listed.stderr.trim() || "git is not available") + ". Use --pinned to install the tested release " + source.ref + " instead.");
   }

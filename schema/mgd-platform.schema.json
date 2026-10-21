@@ -842,7 +842,10 @@
             },
             "path": {
               "type": "string",
-              "pattern": "^(?!/)(?!\\.{1,2}(/|$))(?!.*(^|/)\\.\\.(/|$))[A-Za-z0-9_./-]+$"
+              "pattern": "^[A-Za-z0-9_-][A-Za-z0-9_.-]*(/[A-Za-z0-9_-][A-Za-z0-9_.-]*)*$",
+              "not": {
+                "pattern": "(^|/)node_modules(/|$)"
+              }
             }
           },
           "additionalProperties": false
@@ -869,7 +872,10 @@
             },
             "path": {
               "type": "string",
-              "pattern": "^(?!/)(?!\\.{1,2}(/|$))(?!.*(^|/)\\.\\.(/|$))[A-Za-z0-9_./-]+$"
+              "pattern": "^[A-Za-z0-9_-][A-Za-z0-9_.-]*(/[A-Za-z0-9_-][A-Za-z0-9_.-]*)*$",
+              "not": {
+                "pattern": "(^|/)node_modules(/|$)"
+              }
             }
           },
           "additionalProperties": false

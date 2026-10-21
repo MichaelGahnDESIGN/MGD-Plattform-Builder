@@ -93,11 +93,16 @@ What the command does:
 The optional `/graphify` agent skill is **not** installed: `graphify install --platform claude` writes into your global `~/.claude/CLAUDE.md`,
 so run it yourself if you want it.
 
-Safety rules of the installer: it never runs a program that lives inside the project (read-only commands look only in your own program folders,
-and ignore PATH entries inside the project); installers (`git`, `uv`, `pipx`, `python`, `pip`) run in a neutral directory; a project-local
-Graphify environment is created fresh (an existing `.mgd/graphify-venv` is refused) and is the only project program that runs, in that same run;
-later runs read its version from the package metadata and tell you to run `.mgd/graphify-venv/bin/graphify update .` yourself; no write follows
-a symbolic link inside the project; the clone is verified against the commit it was resolved to before it is checked out.
+Safety rules of the installer: it never runs a program that lives inside the project (read-only commands look only in your own program folders;
+every child process gets a PATH without relative or in-project entries, compared by real path); installers (`git`, `uv`, `pipx`, `python`,
+`pip`) run in a neutral directory; a project-local Graphify environment is created fresh (an existing `.mgd/graphify-venv` is refused) and is
+the only project program that runs, in that same run; it is remembered in `~/.cache/mgd-platform/venvs.json` (outside the project, because
+anything inside a repository can be forged), and later runs tell you to run `.mgd/graphify-venv/bin/graphify update .` yourself; no write
+(including `init`) follows a symbolic link inside the project; paths from `MGD_PLATFORM.yml` must be plain project-relative names; the clone
+is verified against the commit it was resolved to before it is checked out, with Git hooks, fsmonitor, submodules and LFS switched off.
+The dry run (`companions install` without `--yes`) also asks GitHub which release would be installed and prints it, so you can see it before you
+confirm. Trade-off of the newest-release default: you trust your own GitHub account (and PyPI for Graphify) at install time; use `--pinned` to
+install exactly the tested releases instead.
 
 Shortcut for a new project: `mgd-platform init --target ../my-project --companions --scope project --graphify user` (add `--hooks` to opt in to the Git hooks). Like `install`, it refuses to run without an explicit `--scope`.
 
