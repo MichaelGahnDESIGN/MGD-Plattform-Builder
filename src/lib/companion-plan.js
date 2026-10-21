@@ -118,13 +118,14 @@ async function hookInstalled(root) {
 }
 
 async function graphifyActions({ item, todoPath, root, method, tools, hooks, pinned }) {
-  const present = item.installed;
+  // --pinned means "exactly the tested version": a different installed version is replaced, not kept.
+  const present = item.installed && !(pinned && item.tool.version !== item.companion.package.install_version);
   const actions = [{
     type: "graphify-cli",
     method: present ? "keep" : method,
     state: present ? "keep" : method === "skip" ? "skipped" : "install",
     commands: present ? [] : graphifyInstallCommands({ method, companion: item.companion, root, pinned, ...tools }),
-    detail: present ? "version " + item.tool.version + (item.tool.projectVenv ? " (project environment, not executed by this CLI)" : "") : method === "skip" ? "skipped by --graphify skip" : null
+    detail: present ? "version " + item.tool.version + (item.tool.projectVenv ? " (project environment, not executed by this CLI)" : "") : method === "skip" ? "skipped by --graphify skip" : item.installed ? "installed " + item.tool.version + ", --pinned wants " + item.companion.package.install_version : null
   }];
 
   actions.push({ type: "graphify-config", state: "run", ignore: graphifyIgnoreEntries(todoPath) });

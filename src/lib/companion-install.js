@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { foundationRoot } from "./paths.js";
-import { assertNoSymlink, compareVersions, inspectTool, parseVersion, recordProjectVenv, runProcess, withTrustedPath } from "./companions.js";
+import { assertNoSymlink, compareVersions, inspectTool, isOutside, parseVersion, recordProjectVenv, runProcess, withTrustedPath } from "./companions.js";
 import { GRAPHIFY_GIT_IGNORE, projectVenvDir, venvExecutable } from "./companion-plan.js";
 import { describeResolved, gitEnvironment, resolveSource } from "./companion-source.js";
 
@@ -67,7 +67,7 @@ export async function fetchSource(registrySource, { run = withTrustedPath(runPro
 async function realpathInside(base, target, label) {
   const [realBase, realTarget] = await Promise.all([fs.realpath(base), fs.realpath(target)]);
   const relative = path.relative(realBase, realTarget);
-  if (relative.startsWith("..") || path.isAbsolute(relative)) throw new Error(label + " leaves the companion source: " + target);
+  if (isOutside(relative)) throw new Error(label + " leaves the companion source: " + target);
 }
 
 async function walk(base, relative, files, budget) {
@@ -91,7 +91,7 @@ async function walk(base, relative, files, budget) {
 /** Reads the allowlisted files of one skill into memory (nothing is written yet). */
 export async function collectSkillFiles(sourceDir, skill) {
   const root = path.resolve(sourceDir, skill.path);
-  if (path.relative(sourceDir, root).startsWith("..")) throw new Error("Skill path leaves the companion source: " + skill.path);
+  if (isOutside(path.relative(sourceDir, root))) throw new Error("Skill path leaves the companion source: " + skill.path);
   await realpathInside(sourceDir, root, "Skill path");
   const files = [];
   const budget = { bytes: 0 };

@@ -12,6 +12,7 @@ import {
   inspectCompanions,
   inspectTool,
   isInsideProject,
+  isOutside,
   printable,
   loadCompanionRegistry,
   recordProjectVenv,
@@ -614,7 +615,9 @@ test("a project-local Graphify environment counts as installed only if this CLI 
   await fs.writeFile(path.join(root, ".mgd/graphify-venv/.mgd-venv-token"), "guessed-token");
   assert.equal((await status()).installed, false, "a wrong token proves nothing");
   await fs.writeFile(path.join(root, ".mgd/graphify-venv/.mgd-venv-token"), token);
-  assert.equal((await status()).installed, true, "the original token does");
+  assert.equal((await status()).installed, false, "the right token without the program is still not an installation");
+  await write(path.join(root, ".mgd/graphify-venv/bin/graphify"), "#!/bin/sh\n", 0o755);
+  assert.equal((await status()).installed, true, "the original token with the program does");
   assert.ok(!(await fs.readFile(path.join(home, ".cache/mgd-platform/venvs.json"), "utf8")).includes(token), "the cache holds only the hash");
 
   // a symlink is ignored even with a matching record
@@ -891,4 +894,53 @@ test("a companion artifact that is a symbolic link or the wrong file type does n
   await fs.rmdir(path.join(root, "TODO/TODO.html"));
   await write(path.join(root, "TODO/TODO.html"), "real todo");
   assert.equal((await item("todo")).project.present, true);
+});
+
+test("a folder whose name merely starts with two dots is inside the project", async () => {
+  assert.equal(isOutside(".."), true);
+  assert.equal(isOutside(".." + path.sep + "x"), true);
+  assert.equal(isOutside("..bin"), false);
+  assert.equal(isOutside("..bin" + path.sep + "x"), false);
+  assert.equal(isOutside(path.resolve("/abs")), true);
+
+  const root = await tempDir("root");
+  const dotted = path.join(root, "..bin");
+  await fs.mkdir(dotted);
+  assert.equal(await isInsideProject(root, dotted), true, "PATH entries like <project>/..bin are dropped");
+  assert.deepEqual(await trustedPathEntries(root, { PATH: dotted }), []);
+  const outside = await tempDir("outside");
+  await fs.symlink(outside, path.join(root, "..link"));
+  await assert.rejects(() => assertNoSymlink(root, path.join(root, "..link", "file")), /symbolic link/, "the symlink guard applies to ..-prefixed names too");
+});
+
+test("--pinned replaces a different installed Graphify instead of keeping it", async () => {
+  const root = await tempDir("root");
+  const home = await tempDir("home");
+  const bin = await binDirWith("graphify", "uv");
+  const inspection = await inspect(root, home, { bin, run: fakeRun({ graphify: "0.9.70" }).run });
+  const normal = await buildPlan({ inspection, root, home, scope: "project", agents: ["claude"], graphify: "user", tools: { uv: "/x/uv" } });
+  assert.equal(normal.actions.find((a) => a.type === "graphify-cli").state, "keep", "any copy at or above the floor is accepted by default");
+  const pinned = await buildPlan({ inspection, root, home, scope: "project", agents: ["claude"], graphify: "user", tools: { uv: "/x/uv" }, pinned: true });
+  const cli = pinned.actions.find((a) => a.type === "graphify-cli");
+  assert.equal(cli.state, "install");
+  assert.deepEqual(cli.commands, [["/x/uv", ["tool", "install", "--upgrade", "graphifyy==0.9.93"]]]);
+  assert.match(cli.detail, /installed 0\.9\.70, --pinned wants 0\.9\.93/);
+
+  const exact = await inspect(root, home, { bin, run: fakeRun({ graphify: "0.9.93" }).run });
+  const same = await buildPlan({ inspection: exact, root, home, scope: "project", agents: ["claude"], graphify: "user", pinned: true });
+  assert.equal(same.actions.find((a) => a.type === "graphify-cli").state, "keep");
+});
+
+test("a recorded project environment whose graphify program is gone no longer counts as installed", async () => {
+  const root = await tempDir("root");
+  const home = await tempDir("home");
+  const registry = await loadCompanionRegistry();
+  const status = async () => (await inspectCompanions({ root, home, registry, run: fakeRun().run, env: { PATH: "" } })).find((item) => item.companion.kind === "tool");
+  await write(path.join(root, ".mgd/graphify-venv/bin/graphify"), "#!/bin/sh\n", 0o755);
+  await recordProjectVenv({ root, home, version: "0.9.93" });
+  assert.equal((await status()).installed, true);
+  await fs.rm(path.join(root, ".mgd/graphify-venv/bin/graphify"));
+  assert.equal((await status()).installed, false, "deleted program");
+  await fs.mkdir(path.join(root, ".mgd/graphify-venv/bin/graphify"));
+  assert.equal((await status()).installed, false, "a folder is not a program");
 });

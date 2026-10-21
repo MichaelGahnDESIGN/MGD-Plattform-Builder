@@ -43,6 +43,11 @@ async function exists(target) {
   return fs.access(target).then(() => true).catch(() => false);
 }
 
+/** True when a `path.relative()` result points outside its base. A folder called `..bin` is inside; only `..` itself or `../x` is outside. */
+export function isOutside(relative) {
+  return relative === ".." || relative.startsWith(".." + path.sep) || path.isAbsolute(relative);
+}
+
 /** A value from an untrusted file, safe to print: control characters (terminal escapes, newlines) become "?". */
 export function printable(value) {
   return String(value).replace(/[^\x20-\x7e\u00a0-\uffff]/g, "?").slice(0, 200);
@@ -66,7 +71,7 @@ export function resolveInside(root, relative) {
   }
   const resolved = path.resolve(root, ...segments);
   const inside = path.relative(root, resolved);
-  if (inside === "" || inside.startsWith("..") || path.isAbsolute(inside)) {
+  if (inside === "" || isOutside(inside)) {
     throw new Error("Companion path leaves the project directory: " + printable(relative));
   }
   return resolved;
@@ -88,7 +93,7 @@ export function parseVersion(text) {
 /** Refuses to write through a symbolic link anywhere between the project root and the target. */
 export async function assertNoSymlink(root, target) {
   const relative = path.relative(root, target);
-  if (relative.startsWith("..") || path.isAbsolute(relative)) return; // outside the project (user scope): not checked
+  if (isOutside(relative)) return; // outside the project (user scope): not checked
   let current = root;
   for (const segment of relative.split(path.sep)) {
     current = path.join(current, segment);
@@ -154,7 +159,7 @@ export async function isInsideProject(root, folder) {
   if (!root) return false;
   const [realRoot, realFolder] = await Promise.all([fs.realpath(root).catch(() => path.resolve(root)), fs.realpath(folder).catch(() => path.resolve(folder))]);
   const relative = path.relative(canonical(realRoot), canonical(realFolder));
-  return !relative.startsWith("..") && !path.isAbsolute(relative);
+  return !isOutside(relative);
 }
 
 /** PATH entries a child process may use: absolute, existing, and not inside the project. */
@@ -274,6 +279,9 @@ export async function inspectProjectVenv(root, pkg, home) {
   if (!tokenStat || !tokenStat.isFile() || tokenStat.size > 128) return null;
   const token = await fs.readFile(file, "utf8").catch(() => "");
   if (sha256(token) !== record.token_sha256) return null;
+  const scripts = path.join(venv, process.platform === "win32" ? "Scripts" : "bin");
+  const programs = await Promise.all([pkg.command, pkg.command + ".exe"].map((name) => fs.lstat(path.join(scripts, name)).then((stat) => stat.isFile()).catch(() => false)));
+  if (!programs.some(Boolean)) return null; // deleted or replaced by something else: it is no longer an installation
   return { version: record.version, versionOk: compareVersions(record.version, pkg.min_version) >= 0 };
 }
 
