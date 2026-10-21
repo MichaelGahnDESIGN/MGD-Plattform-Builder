@@ -304,15 +304,27 @@ async function listDocuments(directory) {
   return entries.filter((entry) => entry.isFile() && DOCUMENT_EXTENSIONS.has(path.extname(entry.name).toLowerCase()));
 }
 
-/** The project artifact (docs folder, TODO.html, graphify-out) that proves the companion is in use. */
+const isRegularFile = (target) => fs.lstat(target).then((stat) => stat.isFile()).catch(() => false);
+
+/**
+ * The project artifact (docs folder, TODO.html, graphify-out) that proves the companion is in use. It must
+ * really live inside the project: a symbolic link on the way, a marker file that is a link, or the wrong
+ * file type does not count, so a link to a folder elsewhere cannot make `release-check` pass.
+ */
 export async function inspectProjectArtifact(companion, settings, root) {
   const relative = settings.path;
   const target = resolveInside(root, relative);
-  const isFile = path.extname(relative) !== "";
-  if (isFile) return { path: relative, present: await exists(target) };
+  try {
+    await assertNoSymlink(root, target);
+  } catch {
+    return { path: relative, present: false, error: relative + " is or passes through a symbolic link; the artifact must live inside the project" };
+  }
+  if (path.extname(relative) !== "") return { path: relative, present: await isRegularFile(target) };
 
+  const folder = await fs.lstat(target).catch(() => null);
+  if (!folder || !folder.isDirectory()) return { path: relative, present: false };
   const marker = companion.project.marker;
-  if (await exists(path.join(target, marker))) return { path: relative, present: true };
+  if (await isRegularFile(path.join(target, marker))) return { path: relative, present: true };
   const documentsAllowed = path.extname(marker).toLowerCase() === ".md";
   return { path: relative, present: documentsAllowed && (await listDocuments(target)).length > 0 };
 }

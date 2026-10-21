@@ -130,6 +130,8 @@ agent that was told to run `companions status` first. Therefore:
 
 ## Not covered
 
+- An existing skill folder is kept as it is: its release is not checked against the floor or against `--pinned`. Remove the
+  folder to reinstall. This is deliberate (a skill you updated locally must win) and is shown in the plan.
 - Semantic extraction (`/graphify --update`) needs a model and stays optional.
 - The install cannot verify that agents follow the work cycle; the rules live in `AGENTS.md` and
   `CLAUDE.md`, and `release-check` only proves the artifacts exist.

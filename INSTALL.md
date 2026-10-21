@@ -108,7 +108,7 @@ Shortcut for a new project: `mgd-platform init --target ../my-project --companio
 
 **Updates happen in one place.** Release a new Todo, Living Documentation or Graphify version in its own repository and every new project
 installed afterwards uses it; the registry here only holds the floor and the `--pinned` pin and rarely changes. Existing installs are never
-overwritten, so a skill you updated locally (for example `~/.claude/skills/mgd-todo`) is what new projects use.
+overwritten and their release is not checked (the plan says "remove the folder to reinstall"; this also applies to `--pinned`), so a skill you updated locally (for example `~/.claude/skills/mgd-todo`) is what new projects use.
 
 The companions are reported by `mgd-platform doctor` (a hint, not a failure), `mgd-platform validate` rejects `enabled: false` in the profile, and
 `mgd-platform release-check` is blocked while one is missing. `release-check` also counts skills installed for the user (`~/.claude/skills`), so a

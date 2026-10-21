@@ -41,7 +41,7 @@ function venvBin(root, command) {
 }
 
 /** The shell-free command lines that install (or upgrade) the Graphify CLI for the chosen method. */
-export function graphifyInstallCommands({ method, companion, root, hasUv, hasPipx, python, pinned = false }) {
+export function graphifyInstallCommands({ method, companion, root, uv, pipx, hasUv, hasPipx, python, pinned = false }) {
   const spec = graphifySpec(companion, pinned);
   if (method === "project") {
     if (!python) return [];
@@ -51,8 +51,11 @@ export function graphifyInstallCommands({ method, companion, root, hasUv, hasPip
       [venvBin(root, "python"), ["-I", "-m", "pip", "install", "--upgrade", spec]]
     ];
   }
-  if (method === "user" && hasUv) return [["uv", ["tool", "install", "--upgrade", spec]]];
-  if (method === "user" && hasPipx) return [["pipx", ["install", "--force", spec]]];
+  // The absolute path that was found (uv/pipx may live in ~/.local/bin, which is not necessarily on PATH).
+  const uvCommand = uv || (hasUv ? "uv" : null);
+  const pipxCommand = pipx || (hasPipx ? "pipx" : null);
+  if (method === "user" && uvCommand) return [[uvCommand, ["tool", "install", "--upgrade", spec]]];
+  if (method === "user" && pipxCommand) return [[pipxCommand, ["install", "--force", spec]]];
   return [];
 }
 
@@ -77,7 +80,7 @@ function skillActions(item, { agents, base, scope }) {
         dest,
         required: skill.required,
         state: present.length > 0 ? "keep" : "install",
-        detail: present.length > 0 ? "already installed (" + present[0].scope + ")" : null
+        detail: present.length > 0 ? "already installed (" + present[0].scope + "), release not checked – remove the folder to reinstall" : null
       });
     }
   }

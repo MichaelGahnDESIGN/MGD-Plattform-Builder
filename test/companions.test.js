@@ -317,6 +317,8 @@ test("Graphify install commands take the newest release (floor) or the tested pi
   const companion = { package: { name: "graphifyy", min_version: "0.9.65", install_version: "0.9.93" } };
   const root = path.resolve("/tmp/example-project");
   assert.deepEqual(graphifyInstallCommands({ method: "user", companion, root, hasUv: true }), [["uv", ["tool", "install", "--upgrade", "graphifyy>=0.9.65"]]]);
+  assert.deepEqual(graphifyInstallCommands({ method: "user", companion, root, uv: "/home/me/.local/bin/uv", pipx: "/opt/pipx" }), [["/home/me/.local/bin/uv", ["tool", "install", "--upgrade", "graphifyy>=0.9.65"]]], "the discovered absolute path is used");
+  assert.deepEqual(graphifyInstallCommands({ method: "user", companion, root, pipx: "/opt/pipx" }), [["/opt/pipx", ["install", "--force", "graphifyy>=0.9.65"]]]);
   assert.deepEqual(graphifyInstallCommands({ method: "user", companion, root, hasUv: true, pinned: true }), [["uv", ["tool", "install", "--upgrade", "graphifyy==0.9.93"]]]);
   assert.deepEqual(graphifyInstallCommands({ method: "user", companion, root, hasPipx: true }), [["pipx", ["install", "--force", "graphifyy>=0.9.65"]]]);
   assert.deepEqual(graphifyInstallCommands({ method: "user", companion, root }), []);
@@ -834,4 +836,59 @@ test("values from untrusted files are made printable and cannot inject terminal 
   assert.equal(printable("a\u001b[2Jb\nc"), "a?[2Jb?c");
   assert.equal(printable("x".repeat(500)).length, 200);
   assert.throws(() => resolveInside("/tmp/p", "a/\u001b[31mred"), (error) => !/\u001b/.test(error.message));
+});
+
+test("uv found outside PATH (for example in ~/.local/bin) is started by its absolute path", async () => {
+  const root = await tempDir("root");
+  const home = await tempDir("home");
+  await write(path.join(home, ".local/bin/uv"), "#!/bin/sh\n", 0o755);
+  const { fetch } = await fixtureSources();
+  const { run, calls } = fakeRun();
+  const uv = await findCommand("uv", { root, home, env: { PATH: "" } });
+  assert.equal(uv, path.join(home, ".local/bin/uv"));
+  await install({ root, home, fetch, run, env: { PATH: "" }, agents: ["claude"], tools: { uv } });
+  assert.equal(calls.find((call) => call.name === "uv").command, uv, "not the bare name, which would not resolve on the sanitised PATH");
+});
+
+test("an existing skill is kept without checking its release, and the plan says how to reinstall", async () => {
+  const root = await tempDir("root");
+  const home = await tempDir("home");
+  await write(path.join(root, ".claude/skills/todo/SKILL.md"), "---\nname: todo\n---\nolder release\n");
+  const plan = await buildPlan({ inspection: await inspect(root, home), root, home, scope: "project", agents: ["claude"], graphify: "skip" });
+  const todo = plan.actions.find((a) => a.type === "skill" && a.skill === "todo");
+  assert.equal(todo.state, "keep");
+  assert.match(todo.detail, /release not checked.*remove the folder to reinstall/);
+});
+
+test("a companion artifact that is a symbolic link or the wrong file type does not count as present", async () => {
+  const root = await tempDir("root");
+  const home = await tempDir("home");
+  const outside = await tempDir("outside");
+  await write(path.join(outside, "README.md"), "external docs");
+  await write(path.join(outside, "TODO.html"), "external todo");
+  const registry = await loadCompanionRegistry();
+  const item = async (id) => (await inspectCompanions({ root, home, registry, run: fakeRun().run, env: { PATH: "" } })).find((entry) => entry.companion.id === id);
+
+  await fs.symlink(outside, path.join(root, "DOKUMENTATION"));
+  const docs = await item("living-documentation");
+  assert.equal(docs.project.present, false);
+  assert.match(docs.project.error, /symbolic link/);
+  await fs.rm(path.join(root, "DOKUMENTATION"));
+
+  await fs.mkdir(path.join(root, "DOKUMENTATION"));
+  await fs.symlink(path.join(outside, "README.md"), path.join(root, "DOKUMENTATION/README.md"));
+  assert.equal((await item("living-documentation")).project.present, false, "a marker file that is a link does not count");
+  await fs.rm(path.join(root, "DOKUMENTATION/README.md"));
+  await write(path.join(root, "DOKUMENTATION/README.md"), "real docs");
+  assert.equal((await item("living-documentation")).project.present, true);
+
+  await fs.mkdir(path.join(root, "TODO"));
+  await fs.symlink(path.join(outside, "TODO.html"), path.join(root, "TODO/TODO.html"));
+  assert.equal((await item("todo")).project.present, false);
+  await fs.rm(path.join(root, "TODO/TODO.html"));
+  await fs.mkdir(path.join(root, "TODO/TODO.html"));
+  assert.equal((await item("todo")).project.present, false, "a folder is not a file");
+  await fs.rmdir(path.join(root, "TODO/TODO.html"));
+  await write(path.join(root, "TODO/TODO.html"), "real todo");
+  assert.equal((await item("todo")).project.present, true);
 });

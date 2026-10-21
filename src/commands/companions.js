@@ -106,8 +106,8 @@ async function install(root, options) {
     for (const item of invalid) console.error("✗ " + item.companion.name + ": " + printable(item.project.error) + " (check companions." + item.companion.project.profile_key + ".path in MGD_PLATFORM.yml)");
     return 1;
   }
-  const hasUv = Boolean(await findCommand("uv", { root, home, env: options.env }));
-  const hasPipx = Boolean(await findCommand("pipx", { root, home, env: options.env }));
+  const uv = await findCommand("uv", { root, home, env: options.env });
+  const pipx = await findCommand("pipx", { root, home, env: options.env });
   const graphifyCompanion = registry.companions.find((entry) => entry.kind === "tool");
   const python = await findPython(graphifyCompanion.package.requires_python, { root, home, env: options.env, run: options.run });
 
@@ -125,7 +125,7 @@ async function install(root, options) {
     scope: options.scope || DEFAULT_SCOPE,
     agents: options.agents,
     graphify: options.graphify || DEFAULT_GRAPHIFY,
-    tools: { hasUv, hasPipx, python },
+    tools: { uv, pipx, python },
     hooks: options.hooks,
     pinned: options.pinned
   });

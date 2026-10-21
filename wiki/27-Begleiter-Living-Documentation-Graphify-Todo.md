@@ -33,7 +33,7 @@ Einordnung nach den Rollen der Dokumentationsgovernance:
 
 ## Updates an einer Stelle
 
-Du pflegst die Versionen dort, wo sie entstehen: Ein neues Release von Todo, Living Documentation oder Graphify im jeweiligen Repo genügt. Jedes danach angelegte Projekt installiert automatisch das neueste Release; im Builder musst du nichts anpassen (die Registry hält nur den getesteten Mindeststand). Vorhandene Installationen werden nie überschrieben: Hast du einen Skill lokal aktualisiert (zum Beispiel `~/.claude/skills/mgd-todo`), nutzt Claude Code in neuen Projekten genau diesen.
+Du pflegst die Versionen dort, wo sie entstehen: Ein neues Release von Todo, Living Documentation oder Graphify im jeweiligen Repo genügt. Jedes danach angelegte Projekt installiert automatisch das neueste Release; im Builder musst du nichts anpassen (die Registry hält nur den getesteten Mindeststand). Vorhandene Installationen werden nie überschrieben und ihr Release wird nicht geprüft (auch nicht mit `--pinned`; zum Neuinstallieren den Skill-Ordner entfernen): Hast du einen Skill lokal aktualisiert (zum Beispiel `~/.claude/skills/mgd-todo`), nutzt Claude Code in neuen Projekten genau diesen.
 
 ## Installation
 
