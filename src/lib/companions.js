@@ -1,4 +1,5 @@
 import { execFile } from "node:child_process";
+import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -231,9 +232,13 @@ export const PROJECT_VENV = path.join(".mgd", "graphify-venv");
 
 /**
  * Environments this CLI created are remembered in the user's own cache, never inside the project, because
- * anything inside a cloned repository can be forged. A record is only trusted if the folder is still the same
- * one (same device and inode) and not a symbolic link.
+ * anything inside a cloned repository can be forged. When the environment is created, a random token is
+ * written into it and only the token's hash goes into the cache. A record is trusted only if the folder still
+ * holds that token (a replaced or forged folder cannot know it) and is not a symbolic link. Inode numbers are
+ * not used: Linux reuses them immediately.
  */
+const TOKEN_FILE = ".mgd-venv-token";
+const sha256 = (text) => crypto.createHash("sha256").update(text).digest("hex");
 export function venvRecordFile(home) {
   return path.join(home, ".cache", "mgd-platform", "venvs.json");
 }
@@ -248,9 +253,10 @@ async function readVenvRecords(home) {
 
 export async function recordProjectVenv({ root, home, version }) {
   const venv = path.join(root, PROJECT_VENV);
-  const stat = await fs.lstat(venv);
+  const token = crypto.randomBytes(24).toString("hex");
+  await fs.writeFile(path.join(venv, TOKEN_FILE), token, { flag: "wx", mode: 0o600 });
   const records = await readVenvRecords(home);
-  records[await fs.realpath(root)] = { dev: stat.dev, ino: stat.ino, version, recorded_at: new Date().toISOString() };
+  records[await fs.realpath(root)] = { token_sha256: sha256(token), version, recorded_at: new Date().toISOString() };
   await fs.mkdir(path.dirname(venvRecordFile(home)), { recursive: true });
   await fs.writeFile(venvRecordFile(home), JSON.stringify(records, null, 2) + "\n", "utf8");
 }
@@ -259,9 +265,15 @@ export async function recordProjectVenv({ root, home, version }) {
 export async function inspectProjectVenv(root, pkg, home) {
   if (!home) return null;
   const record = (await readVenvRecords(home))[await fs.realpath(root).catch(() => "")];
-  if (!record || !record.version) return null;
-  const stat = await fs.lstat(path.join(root, PROJECT_VENV)).catch(() => null);
-  if (!stat || stat.isSymbolicLink() || !stat.isDirectory() || stat.dev !== record.dev || stat.ino !== record.ino) return null;
+  if (!record || !record.version || !record.token_sha256) return null;
+  const venv = path.join(root, PROJECT_VENV);
+  const folder = await fs.lstat(venv).catch(() => null);
+  if (!folder || folder.isSymbolicLink() || !folder.isDirectory()) return null;
+  const file = path.join(venv, TOKEN_FILE);
+  const tokenStat = await fs.lstat(file).catch(() => null);
+  if (!tokenStat || !tokenStat.isFile() || tokenStat.size > 128) return null;
+  const token = await fs.readFile(file, "utf8").catch(() => "");
+  if (sha256(token) !== record.token_sha256) return null;
   return { version: record.version, versionOk: compareVersions(record.version, pkg.min_version) >= 0 };
 }
 

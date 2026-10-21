@@ -101,8 +101,9 @@ agent that was told to run `companions status` first. Therefore:
   Windows `NoDefaultCurrentDirectoryInExePath` is set for this process and for the children.
 - A project-local Graphify environment (`.mgd/graphify-venv`) is created fresh (an existing one is refused, a
   symbolic link anywhere on the way is refused) and is the only program inside the project that the CLI runs, in
-  that same run. The CLI then records the environment (real project path, device and inode of the folder, version)
-  in `~/.cache/mgd-platform/venvs.json`, outside the project. Later runs trust only a matching record, report the
+  that same run. The CLI then writes a random token into it and records the environment (real project path, hash of
+  the token, version) in `~/.cache/mgd-platform/venvs.json`, outside the project. A later run trusts the record only if
+  the folder still holds that token; a replaced or forged folder cannot know it (inode numbers are not used, Linux reuses them). Later runs trust only a matching record, report the
   recorded version, and never read the environment's own metadata or execute it: a repository can forge anything
   inside the project, but it cannot write to your cache.
 - `git clone` and `git checkout` run with hooks, fsmonitor and submodules switched off and without inherited

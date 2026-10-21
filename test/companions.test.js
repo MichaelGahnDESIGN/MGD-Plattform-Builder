@@ -604,10 +604,16 @@ test("a project-local Graphify environment counts as installed only if this CLI 
   assert.ok(await exists(path.join(home, ".cache/mgd-platform/venvs.json")));
   assert.equal(await exists(path.join(root, ".cache")), false);
 
-  // a replaced folder (different inode) is no longer the environment that was created
+  // a replaced folder is no longer the environment that was created (it cannot hold the secret token, and inode reuse cannot fool this)
+  const token = await fs.readFile(path.join(root, ".mgd/graphify-venv/.mgd-venv-token"), "utf8");
   await fs.rm(path.join(root, ".mgd/graphify-venv"), { recursive: true });
   await fs.mkdir(path.join(root, ".mgd/graphify-venv"));
   assert.equal((await status()).installed, false);
+  await fs.writeFile(path.join(root, ".mgd/graphify-venv/.mgd-venv-token"), "guessed-token");
+  assert.equal((await status()).installed, false, "a wrong token proves nothing");
+  await fs.writeFile(path.join(root, ".mgd/graphify-venv/.mgd-venv-token"), token);
+  assert.equal((await status()).installed, true, "the original token does");
+  assert.ok(!(await fs.readFile(path.join(home, ".cache/mgd-platform/venvs.json"), "utf8")).includes(token), "the cache holds only the hash");
 
   // a symlink is ignored even with a matching record
   await fs.rm(path.join(root, ".mgd/graphify-venv"), { recursive: true });
