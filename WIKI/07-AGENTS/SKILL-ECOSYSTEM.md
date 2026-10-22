@@ -19,6 +19,7 @@ every project (`mgd-platform companions install`) and maintained with every chan
 | Skill | Purpose |
 |---|---|
 | [zugang](../Zugaenge-einrichten.md) | local credential import, verified file protection and minimal authentication tests; Codex and Claude Code |
+| [code-kommentare](../Code-Kommentare.md) | optional concise German comment style, preserving safety notes and correct syntax |
 | MGD DEV | state, tests, release/readiness |
 | MGD Backup | backup/restore |
 | MGD Autopilot | controlled autonomous iteration |

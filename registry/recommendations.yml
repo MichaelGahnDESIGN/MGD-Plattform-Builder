@@ -9,6 +9,15 @@
 version: 1
 owner: "https://github.com/MichaelGahnDESIGN"
 recommendations:
+  - id: "mgd-code-kommentare"
+    name: "MGD Code-Kommentare"
+    kind: "skill"
+    url: "https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/blob/main/WIKI/Code-Kommentare.md"
+    license: "MIT"
+    summary: "Kurze praktische deutsche Code-Kommentare in Michaels Stil."
+    reason: "Wenn dieser Kommentarstil ausdrücklich gewünscht ist; keine Änderung der Programmlogik."
+    when:
+      keywords: ["code-kommentare", "kommentarstil", "michaels stil"]
   - id: "mgd-devos"
     name: "MGD-DevOS"
     kind: "tool"

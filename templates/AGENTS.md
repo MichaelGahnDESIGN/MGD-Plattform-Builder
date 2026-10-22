@@ -87,3 +87,11 @@ white-label license instead (signed key under Settings › License, no code chan
 
 Reference:
 https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder
+
+## Optional comment style
+
+When the user requests Michael's German comment style, use `/code-kommentare`
+(Codex: `$code-kommentare`) if installed. Its portable source lives in
+`platform/skills/code-kommentare/` in the foundation; installation and examples
+are documented in `WIKI/Code-Kommentare.md`. Keep safety explanations and valid
+syntax. The style does not change runtime behavior or authorize live changes.
