@@ -463,6 +463,21 @@ python3 scripts/install-zugang.py --agent both
 Invoke `/zugang private/access.md` in Claude Code or `$zugang private/access.md` in Codex.
 See [installation](INSTALL.md) and [the access guide](WIKI/Zugaenge-einrichten.md).
 
+## Code comments in Michael's style
+
+The optional `code-kommentare` skill writes concise, practical German comments,
+keeping necessary safety notes and the language's comment syntax. Small natural
+comment typos are allowed, never forced; code, paths, UI and documentation stay correct.
+
+```sh
+python3 scripts/install-code-kommentare.py --agent codex
+```
+
+Claude Code: `/code-kommentare [file or area]`; Codex:
+`$code-kommentare [file or area]`. Use `--agent claude` or `--agent both` as needed.
+Existing destinations are preserved. See the [installation and style guide](WIKI/Code-Kommentare.md)
+and [skill](platform/skills/code-kommentare/SKILL.md).
+
 ## MGD skill ecosystem
 
 | Project | Purpose |

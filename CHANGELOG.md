@@ -6,6 +6,12 @@ The format follows the spirit of Keep a Changelog and semantic versioning.
 
 ## [Unreleased]
 
+### Added
+
+- Optionaler Skill `/code-kommentare` für kurze deutsche Kommentare in Michaels Stil,
+  mit Codex-/Claude-Installer, Schutz vor Überschreiben und Symlinks sowie Beispielen
+  und Hinweisen zur getrennten Divi-CSS-/JavaScript-/Plugin-Ablage.
+
 ### Planned
 
 - Node/PostgreSQL reference implementation

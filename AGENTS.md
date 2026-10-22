@@ -88,3 +88,11 @@ See `WIKI/07-AGENTS/SKILL-ECOSYSTEM.md`.
 ## Public repository rule
 
 Everything committed here must be safe for a public repository.
+
+## Optional comment style
+
+When the user requests Michael's German comment style, use `/code-kommentare`
+(Codex: `$code-kommentare`) if installed. Its portable source lives in
+`platform/skills/code-kommentare/` in the foundation; installation and examples
+are documented in `WIKI/Code-Kommentare.md`. Keep safety explanations and valid
+syntax. The style does not change runtime behavior or authorize live changes.

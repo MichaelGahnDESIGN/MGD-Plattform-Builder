@@ -434,6 +434,23 @@ python3 scripts/install-zugang.py --agent both
 - [Installation und Ablauf](WIKI/Zugaenge-einrichten.md) · [Skill](platform/skills/zugang/SKILL.md)
 - Die separate [Zugang-UI](tools/zugang-ui/README.md) bleibt für den bisherigen SSH-Key-Workflow verfügbar.
 
+## Code-Kommentare in Michaels Stil
+
+Der optionale Skill `/code-kommentare` schreibt kurze, praktische deutsche Kommentare
+wie „Glass-Effekt Header“ oder „Warenkorb Button“. Nötige Sicherheits- und
+Funktionshinweise bleiben erhalten. Kleine Tippfehler sind nur in freien Kommentaren
+zulässig; Code, Pfade, UI-Texte und Dokumentation bleiben korrekt.
+
+```sh
+python3 scripts/install-code-kommentare.py --agent codex
+```
+
+Claude Code: `/code-kommentare [Datei oder Bereich]`; Codex:
+`$code-kommentare [Datei oder Bereich]`. Für Claude `--agent claude`, für beide
+`--agent both`; bestehende Installationen werden nicht überschrieben.
+[Installation, Beispiele und Divi-Ablageorte](WIKI/Code-Kommentare.md) ·
+[Skill](platform/skills/code-kommentare/SKILL.md)
+
 ## Projektprofil: `MGD_PLATFORM.yml`
 
 Die Datei beschreibt die Eigenschaften eines konkreten Projekts, ohne die Foundation selbst projektspezifisch zu machen.

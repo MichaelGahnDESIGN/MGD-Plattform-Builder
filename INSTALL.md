@@ -220,6 +220,18 @@ changing application data or security settings. It does not create SSH keys or d
 The older standalone SSH access UI remains separate and does not inherit these protections.
 See [the access guide](WIKI/Zugaenge-einrichten.md) for details and migration notes.
 
+## Optional comment style: code-kommentare
+
+```sh
+python3 scripts/install-code-kommentare.py --agent codex
+```
+
+Use `--agent claude`, `--agent both`, `--agent codex-legacy` or
+`--project /path/to/existing-project` as appropriate. The installer preserves existing
+files and copies only the public skill bundle. It does not change global agent rules.
+Invoke `/code-kommentare` in Claude Code or `$code-kommentare` in Codex.
+See [style, examples and installation details](WIKI/Code-Kommentare.md).
+
 ## Release evidence
 
 Projects using release gates store machine-readable evidence under:
