@@ -601,3 +601,24 @@ test("Ausgabeverweis erzeugt auch keine neuen Unterordner außerhalb des Ziels",
     );
     assert.deepEqual(await fs.readdir(outside), []);
   }));
+
+test("Beobachtungsbeispiele in Unterordnern gelten nicht als Projektumgebung", () =>
+  temporary(async (root) => {
+    await fs.mkdir(path.join(root, "examples"));
+    await fs.writeFile(
+      path.join(root, "examples/resources.observations.json"),
+      JSON.stringify({
+        observedAt: new Date().toISOString(),
+        components: [
+          {
+            name: "mariadb",
+            version: "11.4.0",
+            kind: "database",
+            environment: "staging",
+          },
+        ],
+      }),
+    );
+    const r = await inspect({ root, name: "example" });
+    assert.equal(r.components.length, 0);
+  }));

@@ -143,6 +143,8 @@ export async function inspect(project) {
     unsupported = [];
   for (const file of files) {
     const base = path.basename(file);
+    // Beispiel- und Testdateien bestätigen keine Laufzeit des überwachten Projekts.
+    if (base === "resources.observations.json" && file !== base) continue;
     const lock =
       LOCKS.has(base) ||
       base.endsWith(".cdx.json") ||

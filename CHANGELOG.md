@@ -20,6 +20,12 @@ The format follows the spirit of Keep a Changelog and semantic versioning.
 - compliance automation
 - richer agent integration
 
+## [0.8.1 Pre-Alpha] - 2026-10-24
+
+### Behoben
+
+- Beobachtungsdateien aus Beispiel- und Testunterordnern bestätigen keine tatsächliche Projektumgebung. Nur die ausdrücklich in der Projektwurzel hinterlegte Datei wird ausgewertet; Regressionstest ergänzt.
+
 ## [0.8.0 Pre-Alpha] - 2026-10-24
 
 ### Hinzugefügt
