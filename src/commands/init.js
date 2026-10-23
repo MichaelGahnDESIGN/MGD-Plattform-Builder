@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { foundationRoot, resolveProjectPath } from "../lib/paths.js";
+import { resourcesCommand } from "./resources.js";
 import { assertNoSymlink } from "../lib/companions.js";
 import { companionsCommand } from "./companions.js";
 
@@ -59,6 +60,7 @@ export async function initCommand(args = []) {
 
   await assertNoSymlink(target, path.join(target, ".mgd", "evidence"));
   await fs.mkdir(path.join(target, ".mgd", "evidence"), { recursive: true });
+  await resourcesCommand(["init", target]);
 
   console.log("\nMGD Platform initialized with preset: " + preset);
   for (const operation of operations) {

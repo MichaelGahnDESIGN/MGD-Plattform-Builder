@@ -2,6 +2,17 @@
   "$schema": "./schema/release-notes.schema.json",
   "entries": [
     {
+      "version": "0.8.0",
+      "status": "pre-alpha",
+      "date": "2026-10-23",
+      "audience": [
+        "backoffice"
+      ],
+      "type": "feature",
+      "title": "System- und Abhängigkeitsmanager: private Inventare, aktuelle Sicherheitsquellen und kontrollierte Updatevorbereitung",
+      "items": []
+    },
+    {
       "version": "0.7.0",
       "status": "pre-alpha",
       "date": "2026-10-22",

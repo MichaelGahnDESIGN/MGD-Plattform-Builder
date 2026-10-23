@@ -135,3 +135,13 @@ Criteria:
 - arbitrary executable plugin marketplace
 - automatic legal certification
 - hosted SaaS control plane
+
+## 0.8 System- und Abhängigkeitsmanager — umgesetzt
+
+- rein lesende, begrenzte Inventare über mehrere Paketökosysteme und Systembereiche
+- aktuelle OSV-/GitHub- und Supportprüfungen, datensparsame private Registrierung
+- lokaler HTML-/JSON-Bericht, Änderungsvergleich und agentengestützte Folgeprüfungen
+- Dependabot-Setup über prüfbare Konfigurations-PRs, keine automatischen produktiven Änderungen
+- wiederverwendbare Skills für neue Projekte und MGD-Plugin-Pakete
+
+Offener Ausbau: ausdrücklich autorisierte Serveradapter mit aktuellen, signierten Inventaren; weitere Scannerformate; vollständig getestete Staging-/Rollback-Ausführung. Die aktuelle CLI beobachtet diese Systeme nicht automatisch.

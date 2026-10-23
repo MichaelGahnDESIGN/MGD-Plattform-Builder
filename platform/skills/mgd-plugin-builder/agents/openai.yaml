@@ -1,0 +1,4 @@
+interface:
+  display_name: "MGD Plugin Builder"
+  short_description: "MGD-Plugins mit Bildern, Doku und sicheren Updates"
+  default_prompt: "Nutze $mgd-plugin-builder für dieses MGD-Plugin und prüfe den passenden Katalog, die Bildmotive und den Releaseweg."
