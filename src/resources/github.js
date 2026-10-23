@@ -125,11 +125,14 @@ export async function githubAudit(project, { api = gh, owners = [] } = {}) {
           0,
           500,
         ),
-        severity: ["critical", "high", "medium", "low"].includes(
-          a.security_advisory?.severity,
-        )
-          ? a.security_advisory.severity
-          : "unknown",
+        severity:
+          a.security_advisory?.severity === "moderate"
+            ? "medium"
+            : ["critical", "high", "medium", "low"].includes(
+                  a.security_advisory?.severity,
+                )
+              ? a.security_advisory.severity
+              : "unknown",
         name: String(a.dependency?.package?.name || "Unbekannt"),
         ecosystem: String(a.dependency?.package?.ecosystem || ""),
         file: String(a.dependency?.manifest_path || ""),

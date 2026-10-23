@@ -622,3 +622,26 @@ test("Beobachtungsbeispiele in Unterordnern gelten nicht als Projektumgebung", (
     const r = await inspect({ root, name: "example" });
     assert.equal(r.components.length, 0);
   }));
+
+test("Bekannte moderate Meldungen werden aus OSV und GitHub als mittel eingeordnet", async () => {
+  const c = comp();
+  const issues = await osvAudit([c], {
+    request: async (url) =>
+      url.includes("/vulns/")
+        ? { database_specific: { severity: "MODERATE" } }
+        : { results: [{ vulns: [{ id: "GHSA-test-moderate" }] }] },
+  });
+  assert.equal(issues[0].severity, "medium");
+  assert.equal(c.checks.vulnerability.status, "findings");
+  const r = await githubAudit(
+    { repository: "example/repo" },
+    {
+      owners: ["example"],
+      api: async (url) =>
+        url.includes("/alerts")
+          ? [{ number: 1, security_advisory: { severity: "moderate" } }]
+          : { private: false, default_branch: "main" },
+    },
+  );
+  assert.equal(r.alerts[0].severity, "medium");
+});
