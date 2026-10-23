@@ -20,6 +20,13 @@ The format follows the spirit of Keep a Changelog and semantic versioning.
 - compliance automation
 - richer agent integration
 
+## [0.8.2 Pre-Alpha] - 2026-10-24
+
+### Sicherheit
+
+- Indirekte Abhängigkeit fast-uri von 3.1.8 auf den korrigierten Stand 3.1.9 aktualisiert. Der erste Ressourcenlauf hatte vier aktuelle OSV-Meldungen für diese Bibliothek erkannt; der Sicherheitspatch bleibt innerhalb derselben Versionslinie.
+- Die Quellenbezeichnung „moderate“ wird als mittlere Schwere („medium“) eingeordnet, statt eine vorhandene Einstufung als unbekannt auszugeben.
+
 ## [0.8.1 Pre-Alpha] - 2026-10-24
 
 ### Behoben

@@ -91,9 +91,10 @@ export async function osvAudit(components, { request = requestJson } = {}) {
         typeof detail?.summary === "string"
           ? detail.summary.slice(0, 500)
           : issue.id;
-      const severity = String(
+      const rawSeverity = String(
         detail?.database_specific?.severity || "",
       ).toLowerCase();
+      const severity = rawSeverity === "moderate" ? "medium" : rawSeverity;
       if (["critical", "high", "medium", "low"].includes(severity))
         issue.severity = severity;
       for (const affected of detail?.affected || [])
