@@ -9,6 +9,25 @@
 version: 1
 owner: "https://github.com/MichaelGahnDESIGN"
 recommendations:
+  - id: "mgd-system-resources"
+    name: "MGD System- und Abhängigkeitsmanager"
+    kind: "tool"
+    url: "https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/blob/main/WIKI/06-OPERATIONS/RESOURCE-MANAGER.md"
+    license: "MIT"
+    summary: "Lokale Inventare, aktuelle Sicherheitsquellen, Supportstände und sichere Updatevorbereitung."
+    reason: "Hält Prüflücken sichtbar und trennt Update-Vorschläge von produktiven Änderungen."
+    when:
+      experience: ["updater"]
+      keywords: ["ressourcen", "sicherheitsupdates", "abhängigkeiten", "software-stack", "dependabot"]
+  - id: "mgd-plugin-builder"
+    name: "MGD Plugin Builder"
+    kind: "skill"
+    url: "https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/blob/main/platform/skills/mgd-plugin-builder/SKILL.md"
+    license: "MIT"
+    summary: "Einheitliche MGD-Plugins mit Motiven, Icons, Katalog, Dokumentation und Updatepaketen."
+    reason: "Pflegt Sammlung und Ressourcenprüfung ohne wiederholte Erinnerungen."
+    when:
+      keywords: ["wordpress-plugin", "shopware-plugin", "jtl-plugin", "shopify-plugin", "mgd-plugin"]
   - id: "mgd-code-kommentare"
     name: "MGD Code-Kommentare"
     kind: "skill"

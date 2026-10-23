@@ -6,7 +6,7 @@
 
 Privacy, security, compliance, modular backends, administration, moderation, Docker workflows, documentation and AI-agent collaboration in one project-neutral blueprint.
 
-[![Version](https://img.shields.io/badge/version-0.7.0%20Pre--Alpha-orange?style=flat-square)](version.json)
+[![Version](https://img.shields.io/badge/version-0.8.0%20Pre--Alpha-orange?style=flat-square)](version.json)
 [![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-compatible-6B5CE7?style=flat-square)](AGENTS.md)
 [![ChatGPT Codex](https://img.shields.io/badge/ChatGPT%20Codex-compatible-10A37F?style=flat-square)](AGENTS.md)
@@ -14,6 +14,12 @@ Privacy, security, compliance, modular backends, administration, moderation, Doc
 [Deutsch](README.md) · **English** · [Installation](INSTALL.md) · [GitHub Wiki](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/wiki) · [CLI documentation](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/wiki/18-CLI-Validator-und-Automatisierung) · [Roadmap](ROADMAP.md) · [Contributing](CONTRIBUTING.md)
 
 </div>
+
+## New in 0.8.0: system and dependency inventory
+
+`mgd-platform resources` inventories supported lockfiles, CMS/plugin/theme metadata, container and CI declarations, and explicit system/service observations. Current OSV/GitHub checks and support data feed a private local HTML/JSON dashboard. Unknown coverage stays visible; private package names are not sent to OSV. `register` includes new projects in an existing local monitoring setup, and `--track` lets scheduled callers stay quiet unless findings or coverage change. Dependabot setup uses reviewable configuration PRs and never deploys or merges updates automatically.
+
+[Usage, supported formats and security boundaries (German)](WIKI/06-OPERATIONS/RESOURCE-MANAGER.md)
 
 ---
 

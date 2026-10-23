@@ -20,6 +20,21 @@ The format follows the spirit of Keep a Changelog and semantic versioning.
 - compliance automation
 - richer agent integration
 
+## [0.8.0 Pre-Alpha] - 2026-10-24
+
+### Hinzugefügt
+
+- System- und Abhängigkeitsmanager mit begrenzter, rein lesender Erfassung mehrerer Paketökosysteme, CMS/Erweiterungen, Container, CI sowie ausdrücklich hinterlegter System- und Dienstversionen.
+- Aktuelle OSV-/GitHub-Abfragen mit vollständiger Pagination, Drittanbieter-Supportdaten, privaten JSON-/HTML-Berichten, Suche, Filtern und Hell/Dunkel. Fehlende Quellen, nicht erreichbare Ordner und ungeprüfte Bereiche bleiben sichtbar.
+- Private Projektregistrierung, Änderungsvergleich für stille Folgeprüfungen und sichere Dependabot-Konfigurations-PRs mit Aktivierungsnachweis. Kein automatischer Merge, Serverupdate oder Neustart.
+- Wiederverwendbare Skills `mgd-system-resources` und `mgd-plugin-builder` einschließlich Plugin-Paketprüfung, Kartenbildern, Icons und getrenntem WordPress.org-Vertrieb.
+- Sicherheitstests für Parser, Netzwerk- und Dateigrenzen, private Quellen, bestehende Konfigurationen und Update-Policy; Browserprüfung des lokalen Dashboards.
+
+### Geändert
+
+- `mgd-platform init` legt eine lokale Ressourcen-Konfiguration an; neue Projekte können ohne Überschreiben registriert werden.
+- Foundation-CI verwendet die neue npm-Lockdatei und `npm ci --ignore-scripts`.
+
 ## [0.7.0 Pre-Alpha] - 2026-10-22
 
 ### Added

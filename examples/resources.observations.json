@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-10-24T00:00:00Z",
+  "components": [
+    {"name": "php", "version": "8.3.36", "kind": "runtime", "environment": "staging"},
+    {"name": "postgresql", "version": "17.6", "kind": "database", "environment": "staging"},
+    {"name": "external-api", "version": "2026-10", "kind": "external", "environment": "staging"}
+  ]
+}
