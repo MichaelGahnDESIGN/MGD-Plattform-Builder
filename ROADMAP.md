@@ -152,4 +152,4 @@ Offener Ausbau: ausdrücklich autorisierte Serveradapter mit aktuellen, signiert
 - [x] Strukturierte Prüfnachweise und Composer-Herkunft.
 - [x] Private Offline-Prüfung mit gepinnter Laufzeit und Datenbankpflege.
 - [x] Zusätzliche Action-Zuordnung und sichere Grenzen für Betriebs-/Importnachweise.
-- [ ] Abnahme der integrierten Serveransicht im verwaltenden MichaTheme-Projekt.
+- [x] Abnahme der integrierten Serveransicht im verwaltenden MichaTheme-Projekt (24.10.2026).

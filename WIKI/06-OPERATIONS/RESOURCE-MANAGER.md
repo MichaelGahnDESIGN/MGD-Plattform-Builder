@@ -98,3 +98,12 @@ Datenbanken liegen für diese Version unter `databaseDirectory/osv-scalibr/<Öko
 Frische Fremdberichte mit gültigem Artefakt-Digest erscheinen als `reported`, nicht als eigener Scan. Veraltete/future-datierte oder nicht identifizierte Importe werden nicht für aktuelle Befunde verwendet. Die vorhandene Dateisuche und ihre Grenzen bleiben bestehen; zusätzliche Pfade sind nicht pauschal für Secrets-/Vendor-/Kundenverzeichnisse geöffnet.
 
 OSV-Scanner ist ein eigenständiges Apache-2.0-Werkzeug aus https://github.com/google/osv-scanner. Es liegt außerhalb öffentlicher Webpfade und wird unabhängig von den überwachten Projekten gepflegt. Keine installierten Serverpakete werden aktualisiert, keine Container gestartet und keine Updates automatisch zusammengeführt.
+
+
+### Betriebsabnahme 0.9.0
+
+Die integrierte Serveransicht wurde am 24.10.2026 mit echten öffentlichen und privaten Repository-Prüfungen abgenommen. Private Berichte und Komponentenlisten bleiben ausschließlich im geschützten Projekt. Synthetische Linux-/macOS-Offline-Proben erkennen bekannte Testlücken; fehlende Datenbanken bestätigen keinen positiven Status. Die getrennte Datenbankpflege wurde mit echtem Download und anschließendem ETag-Abgleich ohne erneuten Download geprüft.
+
+Bei einer reduzierten Serverauslieferung gehört die vollständige Importkette zum Laufzeitpaket: neben `src/resources/` insbesondere `src/lib/companions.js`, `src/lib/paths.js` und die festgelegten Lockfile-Abhängigkeiten. Vor dem Umschalten alle vier Einstiegsmodule inventory, project-audit, github und host mit der tatsächlichen Server-Node-Version importieren. Ein isolierter Offline-Test allein bestätigt diese Importkette nicht. Der vollständige Quell-/CLI-Release enthält diese Dateien bereits.
+
+Die Abnahme umfasst Hell/Dunkel, schmale Ansicht, Tastaturbedienung, datierte Komponentenstatus, anonyme Zugriffssperren sowie die Erhaltung des täglichen Termins und der verschlüsselten Zugangskonfiguration. Eigene Codeprüfungen, unbekannte Paketquellen, Hersteller-Backports und Container ohne Artefaktnachweise bleiben offen bezeichnet.
