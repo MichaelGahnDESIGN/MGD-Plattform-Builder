@@ -143,3 +143,57 @@ test("the install asks for the newest release, passes the owner, and reports whi
     await fs.rm(home, { recursive: true, force: true });
   }
 });
+
+test("parseConfigParameters reads both GIT_CONFIG_PARAMETERS formats, escaped quotes, and rejects garbage", async () => {
+  const { parseConfigParameters } = await import("../src/lib/companion-source.js");
+  assert.deepEqual(parseConfigParameters("'http.proxyAuthMethod=basic'"), [["http.proxyAuthMethod", "basic"]]);
+  assert.deepEqual(parseConfigParameters("'http.proxyauthmethod'='basic' 'safe.directory'='/a b'"), [["http.proxyauthmethod", "basic"], ["safe.directory", "/a b"]]);
+  assert.deepEqual(parseConfigParameters("'x.y=it'\\''s' 'a.b'"), [["x.y", "it's"], ["a.b", ""]]);
+  assert.equal(parseConfigParameters("http.proxy=x"), null, "unquoted text is not a valid entry");
+  assert.equal(parseConfigParameters("'unterminated"), null);
+});
+
+test("git keeps the network-only settings a sandbox hands over and drops everything else", async () => {
+  const { gitEnvironment } = await import("../src/lib/companion-source.js");
+  const settingsOf = (env) => Object.fromEntries(Array.from({ length: Number(env.GIT_CONFIG_COUNT) }, (_, index) => [env["GIT_CONFIG_KEY_" + index], env["GIT_CONFIG_VALUE_" + index]]));
+
+  // what a proxying sandbox sets: without it git says "Proxy CONNECT aborted"
+  const sandbox = gitEnvironment({ PATH: "/usr/bin", GIT_CONFIG_PARAMETERS: "'http.proxyAuthMethod=basic'", GIT_CONFIG_COUNT: "2", GIT_CONFIG_KEY_0: "safe.directory", GIT_CONFIG_VALUE_0: "/a", GIT_CONFIG_KEY_1: "safe.directory", GIT_CONFIG_VALUE_1: "/b" });
+  assert.equal(sandbox.GIT_CONFIG_PARAMETERS, "'http.proxyAuthMethod=basic'");
+  assert.deepEqual(Object.values(settingsOf(sandbox)), ["/b", "/dev/null", "false", "false"], "inherited safe.directory entries stay (same key: last wins), ours are appended");
+  assert.equal(sandbox.GIT_CONFIG_COUNT, "5");
+  assert.equal(sandbox.GIT_CONFIG_KEY_2, "core.hooksPath");
+  assert.equal(sandbox.GIT_CONFIG_VALUE_2, "/dev/null");
+
+  // the real sandbox adds an empty credential-helper reset for its local proxy: harmless, so it must not cost the proxy settings
+  const real = gitEnvironment({ GIT_CONFIG_PARAMETERS: "'http.proxyAuthMethod=basic' 'credential.http://localhost:59011.helper='" });
+  assert.equal(real.GIT_CONFIG_PARAMETERS, "'http.proxyAuthMethod=basic' 'credential.http://localhost:59011.helper='");
+  assert.equal(gitEnvironment({ GIT_CONFIG_PARAMETERS: "'credential.helper='" }).GIT_CONFIG_PARAMETERS, "'credential.helper='");
+  // ... but a helper WITH content would run a program
+  assert.equal(gitEnvironment({ GIT_CONFIG_PARAMETERS: "'http.proxyAuthMethod=basic' 'credential.helper=!evil'" }).GIT_CONFIG_PARAMETERS, undefined);
+  assert.equal(gitEnvironment({ GIT_CONFIG_PARAMETERS: "'credential.http://localhost:1.helper=store'" }).GIT_CONFIG_PARAMETERS, undefined);
+
+  // one risky key makes the whole variable go away
+  const hostile = gitEnvironment({ GIT_CONFIG_PARAMETERS: "'http.proxy=http://p' 'core.sshCommand=evil'", GIT_CONFIG_COUNT: "2", GIT_CONFIG_KEY_0: "http.proxy", GIT_CONFIG_VALUE_0: "http://p", GIT_CONFIG_KEY_1: "url.x.insteadOf", GIT_CONFIG_VALUE_1: "y" });
+  assert.equal(hostile.GIT_CONFIG_PARAMETERS, undefined);
+  assert.deepEqual(settingsOf(hostile), { "core.hooksPath": "/dev/null", "core.fsmonitor": "false", "submodule.recurse": "false" });
+
+  // unparseable, oversized or incomplete input is dropped too
+  assert.equal(gitEnvironment({ GIT_CONFIG_PARAMETERS: "garbage" }).GIT_CONFIG_PARAMETERS, undefined);
+  assert.equal(gitEnvironment({ GIT_CONFIG_COUNT: "5000", GIT_CONFIG_KEY_0: "safe.directory", GIT_CONFIG_VALUE_0: "x" }).GIT_CONFIG_COUNT, "3");
+  assert.equal(gitEnvironment({ GIT_CONFIG_COUNT: "2", GIT_CONFIG_KEY_0: "safe.directory", GIT_CONFIG_VALUE_0: "x" }).GIT_CONFIG_COUNT, "3", "a missing KEY_1/VALUE_1 drops the inherited entries");
+  // repository overrides and config files never pass
+  const overrides = gitEnvironment({ GIT_DIR: "/x", GIT_WORK_TREE: "/y", GIT_INDEX_FILE: "/z", GIT_CONFIG_GLOBAL: "/g", GIT_CONFIG_SYSTEM: "/s", GIT_CONFIG_NOSYSTEM: "1" });
+  for (const name of ["GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE", "GIT_CONFIG_GLOBAL", "GIT_CONFIG_SYSTEM", "GIT_CONFIG_NOSYSTEM"]) assert.equal(overrides[name], undefined, name);
+});
+
+test("a real git accepts the merged settings (inherited, ours, and the parameter format) without network", async () => {
+  const { execFile } = await import("node:child_process");
+  const { gitEnvironment } = await import("../src/lib/companion-source.js");
+  const git = (env, args) => new Promise((resolve) => execFile("git", args, { env, cwd: os.tmpdir() }, (error, stdout) => resolve(error ? "ERROR " + error.message : stdout.trim())));
+  const env = gitEnvironment({ PATH: process.env.PATH, HOME: os.tmpdir(), GIT_CONFIG_PARAMETERS: "'http.proxyAuthMethod=basic'", GIT_CONFIG_COUNT: "1", GIT_CONFIG_KEY_0: "safe.directory", GIT_CONFIG_VALUE_0: "/inherited" });
+  assert.equal(await git(env, ["config", "--get", "http.proxyauthmethod"]), "basic");
+  assert.equal(await git(env, ["config", "--get", "safe.directory"]), "/inherited");
+  assert.equal(await git(env, ["config", "--get", "core.hooksPath"]), "/dev/null");
+  assert.equal(await git(env, ["config", "--get", "core.fsmonitor"]), "false");
+});

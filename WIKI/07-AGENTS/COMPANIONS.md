@@ -111,6 +111,10 @@ agent that was told to run `companions status` first. Therefore:
 - `git clone` and `git checkout` run with hooks, fsmonitor and submodules switched off and without inherited
   `GIT_*` repository overrides, so neither your global Git configuration nor the cloned repository can make them
   run anything.
+  Inherited settings that are only about reaching the network (`http.proxy`, `http.proxyAuthMethod`, `http.sslCAInfo`,
+  `http.sslCAPath`, `safe.directory`, passed through `GIT_CONFIG_PARAMETERS` or `GIT_CONFIG_COUNT/KEY/VALUE`) are kept,
+  because sandboxes and company networks hand their proxy settings to git this way and git cannot connect without
+  them. A variable that carries any other key is dropped as a whole.
 - The profile is untrusted input. Companion paths are validated at runtime, not only by the schema: every segment
   must be a plain name (letters, digits, `_`, `-`, and `.` inside a name), so no `..`, no dot folders such as `.git`
   or `.claude`, no empty segments, no control characters and no `node_modules`. Values from untrusted files are

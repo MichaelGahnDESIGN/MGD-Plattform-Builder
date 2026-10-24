@@ -14,6 +14,7 @@ The format follows the spirit of Keep a Changelog and semantic versioning.
 
 ### Fixed
 
+- `companions install` und die Release-Abfrage funktionieren wieder hinter einem Proxy (zum Beispiel in einer abgesicherten Agenten-Umgebung). Die Härtung hatte alle `GIT_CONFIG*`-Variablen gelöscht; darüber reichen solche Umgebungen ihre Proxy-Einstellung (`http.proxyAuthMethod`) an `git` weiter, und die Abfrage scheiterte mit „Proxy CONNECT aborted“. Jetzt bleiben reine Netzwerk-Einstellungen (`http.proxy`, `http.proxyAuthMethod`, `http.sslCAInfo`, `http.sslCAPath`, `safe.directory`) erhalten; enthält eine Variable irgendeinen anderen Schlüssel, wird sie als Ganzes verworfen. Hooks, fsmonitor und Submodule bleiben abgeschaltet.
 - `companions install` hält jetzt auch die datierten Sicherungsordner von `graphify update` (`graphify-out/JJJJ-MM-TT/`) per `.gitignore` aus Git. Die Dokumentation nennt alle `.gitignore`-Zeilen der Graphify-Konfiguration vollständig.
 
 ### Planned
