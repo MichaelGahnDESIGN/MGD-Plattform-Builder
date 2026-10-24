@@ -15,8 +15,15 @@ const GRAPHIFY_IGNORE_BASE = [".claude/", ".agents/", ".codex/", ".mgd/graphify-
 /**
  * The extraction cache is reproducible; graph.json and GRAPH_REPORT.md are versioned with the project.
  * The two helper files hold absolute local paths (user and folder names) and must not be committed.
+ * `graphify update` can also keep a dated backup of the previous graph (graphify-out/YYYY-MM-DD/): local noise, not project knowledge.
  */
-export const GRAPHIFY_GIT_IGNORE = ["graphify-out/cache/", "graphify-out/.graphify_python", "graphify-out/.graphify_root", ".mgd/graphify-venv/"];
+export const GRAPHIFY_GIT_IGNORE = [
+  "graphify-out/cache/",
+  "graphify-out/.graphify_python",
+  "graphify-out/.graphify_root",
+  "graphify-out/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/",
+  ".mgd/graphify-venv/"
+];
 
 async function exists(target) {
   return fs.access(target).then(() => true).catch(() => false);

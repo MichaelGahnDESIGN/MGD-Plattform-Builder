@@ -12,6 +12,10 @@ The format follows the spirit of Keep a Changelog and semantic versioning.
   mit Codex-/Claude-Installer, Schutz vor Überschreiben und Symlinks sowie Beispielen
   und Hinweisen zur getrennten Divi-CSS-/JavaScript-/Plugin-Ablage.
 
+### Fixed
+
+- `companions install` hält jetzt auch die datierten Sicherungsordner von `graphify update` (`graphify-out/JJJJ-MM-TT/`) per `.gitignore` aus Git. Die Dokumentation nennt alle `.gitignore`-Zeilen der Graphify-Konfiguration vollständig.
+
 ### Planned
 
 - Node/PostgreSQL reference implementation
