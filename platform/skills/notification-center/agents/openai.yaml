@@ -1,0 +1,6 @@
+interface:
+  display_name: Notification Center
+  short_description: Baut sichere öffentliche und persönliche Benachrichtigungen.
+  default_prompt: Erstelle ein Notification Center mit getrennten öffentlichen und persönlichen Meldungen.
+policy:
+  allow_implicit_invocation: true
