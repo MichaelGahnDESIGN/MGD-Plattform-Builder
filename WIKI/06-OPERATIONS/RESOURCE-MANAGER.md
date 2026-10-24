@@ -76,3 +76,25 @@ Die Konfiguration geht über eine eigene PR. Ein vorhandener passender Setup-PR 
 - [Supportdaten von endoflife.date](https://endoflife.date/docs/api)
 
 Supportdaten sind ein gepflegtes Drittanbieter-Aggregat, kein Herstellernachweis für einen konkreten Provider-Backport. Sie ersetzen keinen Schwachstellenscan. Alle Quellen können ausfallen; das Ergebnis ist dann unvollständig.
+
+
+## Ausbau 0.9: Prüfabdeckung und Offline-Betrieb
+
+Beauftragt: (1) nachvollziehbare Komponentenstatus und Composer-Ursprung, (2) private Offline-Prüfung mit geprüfter Scanner-Laufzeit und frischer Datenbank, (3) Action-Commit-Zuordnung und datierte Betriebs-/Importnachweise, (4) geschütztes Dashboard und zielgerichtetes Server-Deployment. Keine Paketinstallationen in überwachten Projekten und keine automatischen Update-Merges. Private Inventare bleiben außerhalb öffentlicher Artefakte.
+
+Rückfall: alter Core-Pin und gesicherte App-/Konfigurationsdateien; neue Scanner-Laufzeit liegt separat. Phasen werden durch Parser-/Netzwerk-/Offline-Fehlertests, synthetische UI-Prüfung und reale Serverberichte belegt. Fehlende Datenbank, unbestätigte Paketidentität oder unvollständige Scannerantwort dürfen keinen erfolgreichen Komponentenstatus erzeugen.
+
+
+### Bedienung seit 0.9.0
+
+Der Ursprung von Composer-Lockpaketen wird nur bei öffentlichen Projekten über die feste Packagist-p2-Quelle ergänzt. Paketname, Version und Source-/Dist-Commit müssen übereinstimmen. Private Projekte nutzen ausschließlich bereits bestätigte öffentliche Metadaten aus dem lokalen Cache; sie lösen keine Registry-Anfragen nach ihren Paketnamen aus. Die Cache-Dateien enthalten nur bereinigte öffentliche URLs und haben dieselben Dateischutzregeln wie Berichte.
+
+`coverageCounts` trennt checked, gaps, declared, notApplicable, development und codeReview. Ein eigener Plugin-Header ist kein Paket-Sicherheitsnachweis. `notApplicable` bedeutet eine andere nötige Prüfart, keine Sicherheitsfreiheit. Anforderungen werden nicht in installierte Versionen umgedeutet. Action-SHAs bleiben erhalten; nur ein exakter öffentlicher Release-/Commit-Nachweis ermöglicht den zusätzlichen OSV-Abgleich. Unbekannte und nicht zugeordnete Commits bleiben Prüflücken.
+
+Offline-Scanner: `scripts/install-resource-offline.py --directory <privater-laufzeitordner> --platform linux-amd64` (beziehungsweise darwin-arm64). Nur Herstellerdateien von Version 2.7.0 mit fest hinterlegten SHA-256-Werten sind zugelassen. Die private Registrierung kann unter `offline` die Felder `binary` und `databaseDirectory` enthalten. Der Abgleich erzeugt eine minimale SBOM in einem privaten temporären Ordner und führt ausschließlich den SBOM-Extraktor aus: vollständiges `--offline`, keine Resolver, Call-Analysis, Plugins oder Projekt-Builds, eigene leere Scannerkonfiguration, bereinigte Prozessumgebung, Ausgabe- und Zeitlimit. Scanner-Datei und Datenbanken werden vor der Ausführung anhand ihrer Prüfsummen geprüft. Eine Ausgabe muss jeden angefragten Paketstand bestätigen; Exitcode 1 mit vollständigen Funden ist ein Ergebnis, sonstige Prozessfehler bleiben unbekannt.
+
+Datenbanken liegen für diese Version unter `databaseDirectory/osv-scalibr/<Ökosystem>/all.zip` und werden über `manifest.json` mit Abrufdatum und SHA-256 gebunden. Der dokumentierte ältere Ordnername osv-scanner passt nicht zum getesteten 2.7.0-Laufzeitstand. Ein lokaler Online-Scan aktualisiert bei Bedarf die öffentlichen Datenbanken zuerst; dabei werden keine Paketnamen übertragen. Der Server nutzt dafür getrennte begrenzte Wartungsschritte im vorhandenen Zeitplan. Nach 72 Stunden ohne erfolgreichen Quellenabgleich bleibt die betroffene Offline-Abdeckung ungeprüft. Pakete ohne öffentlichen Identitätsnachweis bleiben ebenfalls offen. Ein Ausfall löst keinen Online-Ersatz für private Paketlisten aus.
+
+Frische Fremdberichte mit gültigem Artefakt-Digest erscheinen als `reported`, nicht als eigener Scan. Veraltete/future-datierte oder nicht identifizierte Importe werden nicht für aktuelle Befunde verwendet. Die vorhandene Dateisuche und ihre Grenzen bleiben bestehen; zusätzliche Pfade sind nicht pauschal für Secrets-/Vendor-/Kundenverzeichnisse geöffnet.
+
+OSV-Scanner ist ein eigenständiges Apache-2.0-Werkzeug aus https://github.com/google/osv-scanner. Es liegt außerhalb öffentlicher Webpfade und wird unabhängig von den überwachten Projekten gepflegt. Keine installierten Serverpakete werden aktualisiert, keine Container gestartet und keine Updates automatisch zusammengeführt.

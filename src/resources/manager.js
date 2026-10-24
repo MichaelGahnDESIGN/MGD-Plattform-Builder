@@ -3,8 +3,12 @@ import path from "node:path";
 import crypto from "node:crypto";
 import { discover, inspect } from "./inventory.js";
 import { readSafe, writePrivate } from "./files.js";
-import { githubAudit } from "./github.js";
-import { osvAudit, supportAudit } from "./audit.js";
+import { githubAudit, gh } from "./github.js";
+import { auditProject } from "./project-audit.js";
+import { coverageCounts } from "./coverage.js";
+import { requestJson } from "./network.js";
+import { evidenceState } from './evidence.js';
+import { refreshOfflineCache } from './offline-cache.js';
 import { renderReport } from "./report.js";
 import { inspectHost } from "./host.js";
 
@@ -29,6 +33,7 @@ export async function loadConfig(file) {
 
 export function summaryFor(projects, issues) {
   const components = projects.flatMap((p) => p.components);
+  const coverage = coverageCounts(components);
   const unchecked = components.filter(
     (c) => c.checks.vulnerability.status === "unchecked",
   ).length;
@@ -48,10 +53,11 @@ export function summaryFor(projects, issues) {
       (c) => c.checks.support.status === "unsupported",
     ).length,
     unchecked,
+    ...coverage,
     projectsIncomplete,
     status: issues.length
       ? "findings"
-      : unchecked || !projects.length || projectsIncomplete
+      : unchecked || coverage.codeReview || coverage.declared || !projects.length || projectsIncomplete
         ? "incomplete"
         : "no-known-findings",
   };
@@ -66,6 +72,12 @@ export async function scan({
   request,
   api,
 } = {}) {
+  if (online && config.offline?.databaseDirectory && config.offline.refresh !== false) {
+    for(let i=0;i<3;i++) {
+      try { if((await refreshOfflineCache(config.offline.databaseDirectory)).status==='current')break; }
+      catch { break; } // Ein Ausfall bleibt über die Datums-/Prüfstatus sichtbar.
+    }
+  }
   const discovery = await discover(config.roots);
   const projects = [];
   for (const p of discovery.projects) projects.push(await inspect(p));
@@ -109,7 +121,7 @@ export async function scan({
         repository: project.repository,
       });
     for (const c of project.components)
-      for (const issue of c.importedFindings || [])
+      for (const issue of (evidenceState(c)?.status==='reported' ? c.importedFindings : []) || [])
         issues.push({
           ...issue,
           name: c.name,
@@ -119,46 +131,16 @@ export async function scan({
           importedAt: c.scannerTimestamp,
         });
     if (online) {
-      const eligible =
-        project.visibility === "public"
-          ? project.components.filter(
-              (c) =>
-                c.kind === "package" &&
-                c.exact &&
-                c.publicSource &&
-                c.scope !== "lock-history",
-            )
-          : [];
-      if (eligible.length)
-        for (const issue of await osvAudit(
-          eligible,
-          request ? { request } : {},
-        ))
-          issues.push({
-            ...issue,
-            name: issue.component.name,
-            version: issue.component.version,
-            project: project.name,
-            repository: project.repository,
-          });
-      await supportAudit(project.components, request ? { request } : {});
+      const checked = await auditProject(project, {
+        request: request || requestJson,
+        cacheDirectory: output ? path.join(output, 'provenance') : null,
+        offline: config.offline ? { ...config.offline, workdir: output } : null,
+        api: github ? (api || ((endpoint) => gh(endpoint,{root:project.root || process.cwd()}))) : null,
+      });
+      issues.push(...checked.map(i => ({...i, project: project.name, repository: project.repository})));
     }
-    for (const c of project.components)
-      if (c.checks.support.status === "unsupported")
-        issues.push({
-          id: "EOL-" + c.name + "-" + c.version,
-          name: c.name,
-          version: c.version,
-          title: "Herstellerunterstützung laut Supportquelle beendet",
-          severity: "high",
-          source: "Supportstatus",
-          project: project.name,
-          repository: project.repository,
-          url: c.checks.support.sourceUrl,
-          fixed: c.checks.support.latest ? [c.checks.support.latest] : [],
-          observed: c.observed === true,
-        });
   }
+
   const report = {
     schemaVersion: 1,
     generatedAt: new Date().toISOString(),

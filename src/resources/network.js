@@ -1,4 +1,4 @@
-const ALLOWED = new Set(["api.osv.dev", "endoflife.date"]);
+const ALLOWED = new Set(["api.osv.dev", "endoflife.date", "repo.packagist.org"]);
 export async function requestJson(
   url,
   { body, fetcher = fetch, timeout = 12000, maxBytes = 8 * 1024 * 1024 } = {},
@@ -12,6 +12,8 @@ export async function requestJson(
     target.port
   )
     throw new Error("Quelle nicht zugelassen");
+  if (target.hostname === 'repo.packagist.org' && (body || !/^\/p2\/[a-z0-9_.-]+\/[a-z0-9_.-]+\.json$/.test(target.pathname) || target.search || target.hash))
+    throw new Error('Registry-Pfad nicht zugelassen');
   const response = await fetcher(target, {
     method: body ? "POST" : "GET",
     body: body ? JSON.stringify(body) : undefined,

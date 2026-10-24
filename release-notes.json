@@ -2,6 +2,17 @@
   "$schema": "./schema/release-notes.schema.json",
   "entries": [
     {
+      "version": "0.9.0",
+      "status": "pre-alpha",
+      "date": "2026-10-24",
+      "audience": [
+        "backoffice"
+      ],
+      "type": "feature",
+      "title": "Ressourcenprüfung: Herkunft, private Offline-Prüfung, Action-Commits und getrennte Nachweise.",
+      "items": []
+    },
+    {
       "version": "0.8.2",
       "status": "pre-alpha",
       "date": "2026-10-23",

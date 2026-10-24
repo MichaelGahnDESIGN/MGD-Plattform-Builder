@@ -7,6 +7,15 @@ const exact = (v) =>
   !/https?:|@|\//.test(v);
 const validName = (n) =>
   typeof n === "string" && n.length < 250 && /^[A-Za-z0-9@_.+:/-]+$/.test(n);
+function safeComposerOrigin(value) {
+  try {
+    const u = new URL(value?.url);
+    if (u.protocol !== 'https:' || u.username || u.password || u.port || u.search || u.hash ||
+      !['github.com','api.github.com','codeload.github.com','gitlab.com','bitbucket.org'].includes(u.hostname) ||
+      !/^[a-f0-9]{40}$/i.test(value?.reference || '')) return undefined;
+    return { url: u.href, reference: value.reference };
+  } catch { return undefined; }
+}
 export const component = (
   name,
   version,
@@ -94,8 +103,10 @@ export function parsePackages(file, text) {
     }
   } else if (base === "composer.lock") {
     const data = JSON.parse(text);
-    for (const p of [...(data.packages || []), ...(data["packages-dev"] || [])])
-      add(p.name, p.version, "Packagist", { publicSource: false });
+    for (const [key, dependencyGroup] of [['packages','runtime'],['packages-dev','development']])
+      for (const p of data[key] || [])
+        add(p.name, p.version, "Packagist", { publicSource: false, dependencyGroup,
+          origin: { source: safeComposerOrigin(p.source), dist: safeComposerOrigin(p.dist) } });
   } else if (base === "Pipfile.lock") {
     const d = JSON.parse(text);
     for (const group of ["default", "develop"])
@@ -141,6 +152,7 @@ export function parsePackages(file, text) {
       add(n, p.version, "Pub", {
         publicSource:
           p.source === "hosted" && p.description?.url === "https://pub.dev",
+        ...(p.source === 'sdk' ? { scope: 'sdk' } : p.source === 'path' ? { scope: 'local-path' } : {}),
       });
   } else if (base === "packages.lock.json") {
     const data = JSON.parse(text);
@@ -192,6 +204,7 @@ export function parsePackages(file, text) {
           importedFindings: findings,
           scannerTimestamp:
             typeof d.CreatedAt === "string" ? d.CreatedAt : null,
+          scannerSubject: typeof d.Metadata?.ImageID === 'string' && /^(?:sha256:)?[a-f0-9]{64}$/i.test(d.Metadata.ImageID) ? d.Metadata.ImageID : null,
           scannerResult: Array.isArray(r.Vulnerabilities)
             ? "provided"
             : "unchecked",
