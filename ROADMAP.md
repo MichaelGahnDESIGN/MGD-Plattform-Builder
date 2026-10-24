@@ -145,3 +145,11 @@ Criteria:
 - wiederverwendbare Skills für neue Projekte und MGD-Plugin-Pakete
 
 Offener Ausbau: ausdrücklich autorisierte Serveradapter mit aktuellen, signierten Inventaren; weitere Scannerformate; vollständig getestete Staging-/Rollback-Ausführung. Die aktuelle CLI beobachtet diese Systeme nicht automatisch.
+
+
+## Ressourcenmanager 0.9
+
+- [x] Strukturierte Prüfnachweise und Composer-Herkunft.
+- [x] Private Offline-Prüfung mit gepinnter Laufzeit und Datenbankpflege.
+- [x] Zusätzliche Action-Zuordnung und sichere Grenzen für Betriebs-/Importnachweise.
+- [ ] Abnahme der integrierten Serveransicht im verwaltenden MichaTheme-Projekt.

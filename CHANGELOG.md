@@ -6,6 +6,15 @@ The format follows the spirit of Keep a Changelog and semantic versioning.
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-10-24
+
+### Added
+
+- Composer-Herkunftsprüfung mit Versions-/Commit-Abgleich und privatem Metadatencache; Entwicklungsabhängigkeiten separat.
+- Private Offline-Prüfung über OSV-Scanner 2.7.0 mit geprüfter Binärdatei, isolierter SBOM, vollständigem Offline-Modus und datierten Datenbanken.
+- Begrenzte tägliche Datenbankpflege, explizite Prüflückengründe, Action-Commit-/Release-Zuordnung und getrennte Code-/Betriebsnachweise.
+- Scannerimporte benötigen einen aktuellen Zeitstempel und Artefakt-Digest; keine pauschalen positiven Sicherheitsbefunde aus Fremdberichten.
+
 ### Added
 
 - Optionaler Skill `/code-kommentare` für kurze deutsche Kommentare in Michaels Stil,

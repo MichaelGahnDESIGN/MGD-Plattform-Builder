@@ -16,7 +16,7 @@ Neue, beauftragte MGD-Projekte mit `register <Projektordner>` aufnehmen. Unter e
 ## Auswertung
 
 - Deklarationen, Lockdateien, Scannerimporte und beobachtete Laufzeiten unterscheiden. Keine produktive Installation aus einem Docker-Tag oder einer Composer-Anforderung ableiten.
-- OSV prüft nur bestätigte öffentliche Repositories und Pakete mit öffentlichem Herkunftsnachweis. Private Pakete und unbestätigte Quellen bleiben ungeprüft. GitHub-Sicherheitsmeldungen beziehen sich auf den Default-Branch, nicht automatisch auf jede lokale Kopie.
+- OSV prüft nur bestätigte öffentliche Repositories und Pakete mit öffentlichem Herkunftsnachweis. Private Inventare werden bei eingerichteter, per SHA-256 festgelegter OSV-Laufzeit ausschließlich offline gegen separat aktualisierte öffentliche Datenbanken geprüft. Bei Composer muss die Herkunft zuvor aus öffentlichen Metadaten bestätigt sein; unbekannte Quellen bleiben ungeprüft. Niemals private Paketnamen zur Herkunftsklärung extern abfragen. Datenbanken nach 24 Stunden prüfen; über 72 Stunden alte oder unvollständige Stände bestätigen keinen aktuellen Befund. GitHub-Sicherheitsmeldungen beziehen sich auf den Default-Branch, nicht automatisch auf jede lokale Kopie.
 - Supportdaten von endoflife.date sind ein Drittanbieter-Aggregat. Eine neuere Referenzversion beweist keine offene Lücke in einem Provider-Backport. Fehlende, abgelaufene oder nicht passende Beobachtungen offen nennen.
 - Zusätzliche Ökosysteme und Infrastruktur über CycloneDX-SBOM, Trivy-Berichte und datensparsame `resources.observations.json` integrieren. Keine `.env`, Tokens, Kundendaten oder Container-Umgebungsvariablen einsammeln. Scanimporte sind Nachweise aus einer anderen Quelle, keine selbst ausgeführten Scans.
 

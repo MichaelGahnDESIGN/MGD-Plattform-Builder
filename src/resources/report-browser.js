@@ -36,7 +36,10 @@
     [summary.components, "Komponenten"],
     [summary.findings, "Sicherheits-/Supportfunde"],
     [summary.unsupported, "Ohne Support"],
-    [summary.unchecked, "Sicherheit nicht geprüft"],
+    [summary.checked || 0, "Komponenten geprüft"],
+    [summary.unchecked, "Echte Prüflücken"],
+    [summary.declared || 0, "Versionsanforderungen"],
+    [summary.codeReview || 0, "Codeprüfung offen"],
   ]) {
     const e = text("div", "", "stat");
     e.append(text("strong", value), text("span", label));
@@ -154,13 +157,15 @@
               ? "Keine bekannten OSV-Funde"
               : row.checks.vulnerability.status === "findings"
                 ? "Sicherheitsfunde"
-                : "Sicherheit nicht geprüft"
+                : ({declared:"Versionsanforderung", "not-applicable":"Andere Prüfart nötig"}[row.checks.vulnerability.status] || "Sicherheit nicht geprüft")
             : row.status;
       item.append(
         copy,
         text("span", state, "badge " + (mode === "issues" ? "error" : "warn")),
       );
       if (mode === "components") {
+        if (row.checks.vulnerability.reason) item.append(text("p",row.checks.vulnerability.reason,"detail"));
+        if (row.dependencyGroup === "development") item.append(text("p","Entwicklungs-/Testabhängigkeit","detail"));
         item.append(
           text(
             "p",
@@ -169,6 +174,8 @@
                 supported: "Supportzyklus geprüft",
                 unsupported: "Unterstützung beendet",
                 unchecked: "Nicht geprüft",
+                declared: "Versionsanforderung",
+                "not-applicable": "Kein allgemeiner Supportzyklus",
               }[row.checks.support.status] || "Nicht geprüft") +
               (row.checks.support.latest
                 ? " · letzter Stand des Zyklus: " + row.checks.support.latest
