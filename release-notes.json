@@ -2,6 +2,61 @@
   "$schema": "./schema/release-notes.schema.json",
   "entries": [
     {
+      "version": "0.10.0",
+      "status": "pre-alpha",
+      "date": "2026-10-25",
+      "audience": [
+        "backoffice"
+      ],
+      "type": "feature",
+      "title": "Öffentliche Herkunftskataloge, annotierte Action-Pins und begrenzte Image-Nachweise mit Herstellerhinweisen.",
+      "items": []
+    },
+    {
+      "version": "0.9.0",
+      "status": "pre-alpha",
+      "date": "2026-10-24",
+      "audience": [
+        "backoffice"
+      ],
+      "type": "feature",
+      "title": "Ressourcenprüfung: Herkunft, private Offline-Prüfung, Action-Commits und getrennte Nachweise.",
+      "items": []
+    },
+    {
+      "version": "0.8.2",
+      "status": "pre-alpha",
+      "date": "2026-10-23",
+      "audience": [
+        "backoffice"
+      ],
+      "type": "security",
+      "title": "Erkannten fast-uri-Sicherheitspatch übernehmen und moderate Meldungen korrekt einstufen",
+      "items": []
+    },
+    {
+      "version": "0.8.1",
+      "status": "pre-alpha",
+      "date": "2026-10-23",
+      "audience": [
+        "backoffice"
+      ],
+      "type": "fix",
+      "title": "Beobachtungsbeispiele nicht als echte Projektumgebung auswerten",
+      "items": []
+    },
+    {
+      "version": "0.8.0",
+      "status": "pre-alpha",
+      "date": "2026-10-23",
+      "audience": [
+        "backoffice"
+      ],
+      "type": "feature",
+      "title": "System- und Abhängigkeitsmanager: private Inventare, aktuelle Sicherheitsquellen und kontrollierte Updatevorbereitung",
+      "items": []
+    },
+    {
       "version": "0.7.0",
       "status": "pre-alpha",
       "date": "2026-10-22",

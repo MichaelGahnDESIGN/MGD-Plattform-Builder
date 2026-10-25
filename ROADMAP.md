@@ -135,3 +135,21 @@ Criteria:
 - arbitrary executable plugin marketplace
 - automatic legal certification
 - hosted SaaS control plane
+
+## 0.8 System- und Abhängigkeitsmanager — umgesetzt
+
+- rein lesende, begrenzte Inventare über mehrere Paketökosysteme und Systembereiche
+- aktuelle OSV-/GitHub- und Supportprüfungen, datensparsame private Registrierung
+- lokaler HTML-/JSON-Bericht, Änderungsvergleich und agentengestützte Folgeprüfungen
+- Dependabot-Setup über prüfbare Konfigurations-PRs, keine automatischen produktiven Änderungen
+- wiederverwendbare Skills für neue Projekte und MGD-Plugin-Pakete
+
+Offener Ausbau: ausdrücklich autorisierte Serveradapter mit aktuellen, signierten Inventaren; weitere Scannerformate; vollständig getestete Staging-/Rollback-Ausführung. Die aktuelle CLI beobachtet diese Systeme nicht automatisch.
+
+
+## Ressourcenmanager 0.9
+
+- [x] Strukturierte Prüfnachweise und Composer-Herkunft.
+- [x] Private Offline-Prüfung mit gepinnter Laufzeit und Datenbankpflege.
+- [x] Zusätzliche Action-Zuordnung und sichere Grenzen für Betriebs-/Importnachweise.
+- [x] Abnahme der integrierten Serveransicht im verwaltenden MichaTheme-Projekt (24.10.2026).

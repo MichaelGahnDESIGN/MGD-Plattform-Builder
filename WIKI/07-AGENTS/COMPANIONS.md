@@ -74,7 +74,9 @@ failed; a dry run returns `0`.
 
 - `graphify-config` appends to `.graphifyignore` (`.claude/`, `.agents/`, `.codex/`,
   `.mgd/graphify-venv/`, `graphify-out/`, `TODO/`) and to `.gitignore` (`graphify-out/cache/`,
-  `.mgd/graphify-venv/`). Existing lines and their order stay untouched.
+  `graphify-out/.graphify_python`, `graphify-out/.graphify_root`, the dated backup folders
+  `graphify-out/YYYY-MM-DD/` that `graphify update` can create, `.mgd/graphify-venv/`). Existing lines and
+  their order stay untouched.
 - `graphify-refresh` runs `graphify update .`: local AST analysis plus Markdown structure, no LLM, no
   network. Graphify refuses to write a smaller graph; agents must investigate instead of forcing it.
 - `graphify-hook` (opt-in with `--hooks`) runs `graphify hook install`: post-commit and post-checkout hooks, plus

@@ -1,6 +1,6 @@
 {
   "name": "@michaelgahndesign/mgd-platform",
-  "version": "0.7.0",
+  "version": "0.10.0",
   "description": "CLI and validation tooling for the MGD-Plattform-Builder",
   "type": "module",
   "bin": {

@@ -6,7 +6,7 @@
 
 Privacy, security, compliance, modular backends, administration, moderation, Docker workflows, documentation and AI-agent collaboration in one project-neutral blueprint.
 
-[![Version](https://img.shields.io/badge/version-0.7.0%20Pre--Alpha-orange?style=flat-square)](version.json)
+[![Version](https://img.shields.io/badge/version-0.10.0%20Pre--Alpha-orange?style=flat-square)](version.json)
 [![License](https://img.shields.io/badge/license-MIT%20%2B%20MGD-blue?style=flat-square)](LICENSING.md)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-compatible-6B5CE7?style=flat-square)](AGENTS.md)
 [![ChatGPT Codex](https://img.shields.io/badge/ChatGPT%20Codex-compatible-10A37F?style=flat-square)](AGENTS.md)
@@ -18,7 +18,28 @@ Privacy, security, compliance, modular backends, administration, moderation, Doc
 
 ---
 
-## Neu in 0.7.0 Pre-Alpha: Pflicht-Begleiter – Living Documentation, Graphify und Todo
+## Neu in 0.9.0: Herkunft, Offline-Abgleich und klare Prüfnachweise
+
+Der Ressourcenmanager bestätigt Composer-Paketursprünge, unterscheidet Anforderungen von Installationen und kann private Pakete über eine separate geprüfte OSV-Scanner-Laufzeit vollständig offline abgleichen. Action-Commits benötigen eine exakte Release-Zuordnung; fehlende Quellen und veraltete Datenbanken bleiben sichtbar. [Offline-Einrichtung und Sicherheitsgrenzen](WIKI/06-OPERATIONS/RESOURCE-MANAGER.md).
+
+## System- und Abhängigkeitsmanager
+
+Der Builder erfasst jetzt die technische Basis Deiner Projekte: Paketabhängigkeiten, CMS/Plugins/Themes, Laufzeiten, Container, Build-Werkzeuge sowie ausdrücklich hinterlegte Betriebssystem-, Datenbank-, Webserver- und API-Versionen. Aktuelle OSV-/GitHub-Meldungen und Supportdaten kommen in einen lokalen Bericht mit Suche, Filtern und sichtbaren Prüflücken.
+
+```bash
+mgd-platform resources register ./mein-projekt --owner example
+mgd-platform resources scan --config ~/.config/mgd/resources.json --output ./private-reports --online --github --host --track
+```
+
+Neue Projekte unter registrierten Sammelordnern werden automatisch entdeckt. `mgd-platform init` legt die Projektkonfiguration an. Die Skills `mgd-system-resources` und `mgd-plugin-builder` verbinden neue Projekte mit der vorhandenen Prüfung und berücksichtigen Plugin-Icons, Hintergrundbilder, Dokumentation, Paketprüfung und plattformgerechte Updates. WordPress.org-Pakete bleiben vom externen GitHub-Katalog getrennt.
+
+Die Prüfung führt keine Projektskripte aus und liest keine `.env`-Dateien. Private Paketdaten werden nicht an OSV übertragen. Die Updatevorbereitung erstellt Dependabot-Konfigurations-PRs und kann GitHub-Sicherheits-PRs einschalten; sie installiert keine Serverpakete und richtet keine automatischen Merges ein. Eine geplante Ausführung meldet über den Änderungsstatus nur relevante Änderungen. Fehlende Quellen bleiben als unbekannt sichtbar.
+
+[Bedienung, unterstützte Formate und Sicherheitsgrenzen](WIKI/06-OPERATIONS/RESOURCE-MANAGER.md) · [Wiki](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/wiki/28-System-und-Abhaengigkeitsmanager)
+
+---
+
+## Seit 0.7.0 Pre-Alpha: Pflicht-Begleiter – Living Documentation, Graphify und Todo
 
 Jedes Projekt, das mit dem Builder entsteht oder betreut wird, bringt jetzt **drei Begleiter** mit. Sie werden mit dem Projekt installiert und danach bei **jeder Änderung** gepflegt – von Menschen und von KI-Agenten.
 

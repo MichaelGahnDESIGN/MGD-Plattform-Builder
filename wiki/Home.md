@@ -4,7 +4,9 @@ Willkommen im öffentlichen Wiki des **MGD-Plattform-Builders**.
 
 Diese Dokumentation erklärt die Foundation so, dass Entwickler, Projektverantwortliche, Agenten und externe Dritte verstehen können, **was das System ist, wie es eingesetzt wird, welche Sicherheits- und Datenschutzprinzipien gelten und wie ein Projekt damit betrieben und weiterentwickelt wird**.
 
-> **Neu in 0.7.0 Pre-Alpha:** **Living Documentation, Graphify und Todo** sind Pflicht-Begleiter jedes Projekts: Sie werden mit `mgd-platform companions install` zusammen mit dem Projekt installiert und bei jeder Änderung gepflegt. → [[27-Begleiter-Living-Documentation-Graphify-Todo]]
+> **Neu in 0.8.0 Pre-Alpha:** Der System- und Abhängigkeitsmanager inventarisiert den Software-Stack, prüft aktuelle Sicherheits- und Supportquellen und bereitet kontrollierte Update-PRs vor. → [[28-System-und-Abhaengigkeitsmanager]]
+
+> **Seit 0.7.0 Pre-Alpha:** **Living Documentation, Graphify und Todo** sind Pflicht-Begleiter jedes Projekts: Sie werden mit `mgd-platform companions install` zusammen mit dem Projekt installiert und bei jeder Änderung gepflegt. → [[27-Begleiter-Living-Documentation-Graphify-Todo]]
 
 > **Seit 0.5.1 Pre-Alpha:** Die Foundation wird zum **AI-Agenten-gesteuerten CMS** – mit Pflichtfunktionen (Versionierung, Release Notes, Credits, editierbare Rechtstexte, durchsuchbare Einstellungen, Design, Light/Dark), Agenten-Briefing, Empfehlungen für MGD-DevOS und MGD Skills sowie einem FTP-fähigen PHP/MySQL-Starter. → [[23-AI-CMS-Pflichtfunktionen]] · [[24-Briefing-Templates-und-Empfehlungen]]
 

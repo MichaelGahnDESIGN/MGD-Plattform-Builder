@@ -69,7 +69,7 @@ Der optionale `/graphify`-Agent-Skill wird **nicht** installiert: `graphify inst
 
 ### Was nicht in den Graphen gehört
 
-Die installierten Agenten-Skills (`.claude/`, `.agents/`, `.codex/`) und `TODO/` stehen in `.graphifyignore`. Ohne diesen Eintrag bestanden in einem Test **256 von 283 Knoten** aus Skill-Dateien und nicht aus dem Projekt. `graphify-out/cache/` steht in `.gitignore` (reproduzierbar); `graph.json` und `GRAPH_REPORT.md` werden mit dem Projekt versioniert.
+Die installierten Agenten-Skills (`.claude/`, `.agents/`, `.codex/`) und `TODO/` stehen in `.graphifyignore`. Ohne diesen Eintrag bestanden in einem Test **256 von 283 Knoten** aus Skill-Dateien und nicht aus dem Projekt. In `.gitignore` stehen `graphify-out/cache/` (reproduzierbar), die zwei Hilfsdateien `.graphify_python` und `.graphify_root` (sie enthalten Pfade von deinem Rechner), die Sicherungsordner mit Datum in `graphify-out/` und die projektlokale Umgebung `.mgd/graphify-venv/`. `graph.json` und `GRAPH_REPORT.md` werden mit dem Projekt versioniert.
 
 ## Arbeitszyklus
 

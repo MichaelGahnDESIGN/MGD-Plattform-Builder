@@ -371,7 +371,7 @@ test("installing fills skills, documentation skeleton and TODO.html, and never o
   const ignore = (await fs.readFile(path.join(root, ".graphifyignore"), "utf8")).split("\n");
   for (const entry of [".claude/", ".agents/", "TODO/", "graphify-out/"]) assert.ok(ignore.includes(entry), entry + " stays out of the graph");
   const gitignore = (await fs.readFile(path.join(root, ".gitignore"), "utf8")).split("\n");
-  for (const entry of ["graphify-out/cache/", "graphify-out/.graphify_python", "graphify-out/.graphify_root"]) assert.ok(gitignore.includes(entry), entry + " stays out of Git");
+  for (const entry of ["graphify-out/cache/", "graphify-out/.graphify_python", "graphify-out/.graphify_root", "graphify-out/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/"]) assert.ok(gitignore.includes(entry), entry + " stays out of Git");
   assert.ok(plan.actions.findIndex((a) => a.type === "graphify-config") < plan.actions.findIndex((a) => a.type === "graphify-refresh"), "config comes before the first graph build");
 
   await fs.writeFile(path.join(root, "TODO/TODO.html"), "my own todos");

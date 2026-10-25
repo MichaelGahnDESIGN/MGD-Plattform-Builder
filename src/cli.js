@@ -10,6 +10,7 @@ import { briefingCommand } from "./commands/briefing.js";
 import { recommendCommand } from "./commands/recommend.js";
 import { templateCommand } from "./commands/template.js";
 import { companionsCommand } from "./commands/companions.js";
+import { resourcesCommand } from "./commands/resources.js";
 
 function help() {
   console.log([
@@ -24,6 +25,7 @@ function help() {
     "  mgd-platform release-check [PATH]",
     "  mgd-platform module create <name> [--target DIR]",
     "  mgd-platform update [PATH]",
+    "  mgd-platform resources scan|init|github|help [PATH] [--config FILE] [--output DIR]",
     "  mgd-platform version [PATH] [--bump major|minor|patch] [--status STATUS] [--sync] [--check]",
     "                       [--note TEXT --audience frontend,backoffice --type feature|patch|fix|security]",
     "  mgd-platform briefing [PATH] [--write]",
@@ -67,6 +69,7 @@ export async function runCli(args) {
   if (command === "recommend") return recommendCommand(rest[0] || ".");
   if (command === "template") return templateCommand(rest);
   if (command === "companions") return companionsCommand(rest);
+  if (command === "resources") return resourcesCommand(rest);
 
   console.error("Unknown command: " + command);
   help();

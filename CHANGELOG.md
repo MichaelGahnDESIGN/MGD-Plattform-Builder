@@ -4,13 +4,34 @@ All notable changes to this project will be documented in this file.
 
 The format follows the spirit of Keep a Changelog and semantic versioning.
 
+## [0.10.0] - 2026-10-25
+
+- Öffentlicher Top-500-Referenzkatalog unabhängig von privaten Paketlisten; geprüfte Repository-Umzüge.
+- Annotierte Tag-Objekt-SHAs korrekt zum Action-Commit auflösen.
+- Begrenzte, getrennte Trivy-/OCI-Image-Nachweise ohne Containerstart; vollständige Befunde nach Digest gruppiert.
+- Herstellerhinweise von nachgewiesenen Provider-Backports unterscheiden. Keine Paket- oder Serverupdates.
+- Gezielte Negativtests, Installer mit Hersteller-Prüfsummen und dokumentierter Rückfallweg.
+
 ## [Unreleased]
+
+## [0.9.0] - 2026-10-24
+
+### Added
+
+- Composer-Herkunftsprüfung mit Versions-/Commit-Abgleich und privatem Metadatencache; Entwicklungsabhängigkeiten separat.
+- Private Offline-Prüfung über OSV-Scanner 2.7.0 mit geprüfter Binärdatei, isolierter SBOM, vollständigem Offline-Modus und datierten Datenbanken.
+- Begrenzte tägliche Datenbankpflege, explizite Prüflückengründe, Action-Commit-/Release-Zuordnung und getrennte Code-/Betriebsnachweise.
+- Scannerimporte benötigen einen aktuellen Zeitstempel und Artefakt-Digest; keine pauschalen positiven Sicherheitsbefunde aus Fremdberichten.
 
 ### Added
 
 - Optionaler Skill `/code-kommentare` für kurze deutsche Kommentare in Michaels Stil,
   mit Codex-/Claude-Installer, Schutz vor Überschreiben und Symlinks sowie Beispielen
   und Hinweisen zur getrennten Divi-CSS-/JavaScript-/Plugin-Ablage.
+
+### Fixed
+
+- `companions install` hält jetzt auch die datierten Sicherungsordner von `graphify update` (`graphify-out/JJJJ-MM-TT/`) per `.gitignore` aus Git. Die Dokumentation nennt alle `.gitignore`-Zeilen der Graphify-Konfiguration vollständig.
 
 ### Planned
 
@@ -19,6 +40,34 @@ The format follows the spirit of Keep a Changelog and semantic versioning.
 - translation CSV workflows and review queues
 - compliance automation
 - richer agent integration
+
+## [0.8.2 Pre-Alpha] - 2026-10-24
+
+### Sicherheit
+
+- Indirekte Abhängigkeit fast-uri von 3.1.8 auf den korrigierten Stand 3.1.9 aktualisiert. Der erste Ressourcenlauf hatte vier aktuelle OSV-Meldungen für diese Bibliothek erkannt; der Sicherheitspatch bleibt innerhalb derselben Versionslinie.
+- Die Quellenbezeichnung „moderate“ wird als mittlere Schwere („medium“) eingeordnet, statt eine vorhandene Einstufung als unbekannt auszugeben.
+
+## [0.8.1 Pre-Alpha] - 2026-10-24
+
+### Behoben
+
+- Beobachtungsdateien aus Beispiel- und Testunterordnern bestätigen keine tatsächliche Projektumgebung. Nur die ausdrücklich in der Projektwurzel hinterlegte Datei wird ausgewertet; Regressionstest ergänzt.
+
+## [0.8.0 Pre-Alpha] - 2026-10-24
+
+### Hinzugefügt
+
+- System- und Abhängigkeitsmanager mit begrenzter, rein lesender Erfassung mehrerer Paketökosysteme, CMS/Erweiterungen, Container, CI sowie ausdrücklich hinterlegter System- und Dienstversionen.
+- Aktuelle OSV-/GitHub-Abfragen mit vollständiger Pagination, Drittanbieter-Supportdaten, privaten JSON-/HTML-Berichten, Suche, Filtern und Hell/Dunkel. Fehlende Quellen, nicht erreichbare Ordner und ungeprüfte Bereiche bleiben sichtbar.
+- Private Projektregistrierung, Änderungsvergleich für stille Folgeprüfungen und sichere Dependabot-Konfigurations-PRs mit Aktivierungsnachweis. Kein automatischer Merge, Serverupdate oder Neustart.
+- Wiederverwendbare Skills `mgd-system-resources` und `mgd-plugin-builder` einschließlich Plugin-Paketprüfung, Kartenbildern, Icons und getrenntem WordPress.org-Vertrieb.
+- Sicherheitstests für Parser, Netzwerk- und Dateigrenzen, private Quellen, bestehende Konfigurationen und Update-Policy; Browserprüfung des lokalen Dashboards.
+
+### Geändert
+
+- `mgd-platform init` legt eine lokale Ressourcen-Konfiguration an; neue Projekte können ohne Überschreiben registriert werden.
+- Foundation-CI verwendet die neue npm-Lockdatei und `npm ci --ignore-scripts`.
 
 ## [0.7.0 Pre-Alpha] - 2026-10-22
 
