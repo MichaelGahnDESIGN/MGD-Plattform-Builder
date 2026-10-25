@@ -45,6 +45,8 @@ export async function imageAudit(c,config) {
   const matches=item.reference===c.name||(pinned&&normalized(item.reference).split('@')[0]===normalized(c.name).split('@')[0]&&item.digest===pinned);
   if(!matches||item.scanner!==TRIVY_VERSION||!/^sha256:[a-f0-9]{64}$/.test(item.digest)||!fresh(item.checkedAt,now,72*3600000)||!fresh(item.databaseAt,now,72*3600000)||!(item.packageCount>0)||!Array.isArray(item.issues))throw new Error('Imagebericht fehlt');
   if(pinned&&item.digest!==pinned)throw new Error('Anderes Image');
+  let attempts={};try{attempts=JSON.parse(await readSafe(config.directory,'attempts.json'));}catch{}
+  if(attempts[c.name]?.status==='failed'&&Date.parse(attempts[c.name].at)>=Date.parse(item.checkedAt))throw new Error('Neuere Imageprüfung unvollständig');
   c.imageEvidence={digest:item.digest,checkedAt:item.checkedAt,databaseAt:item.databaseAt,platform:item.platform,packageCount:item.packageCount,installed:false};
   c.checks.vulnerability={status:item.issues.length?'findings':'no-known-findings',source:'Trivy / OCI',checkedAt:item.checkedAt,databaseAt:{'Trivy':item.databaseAt},reason:'Referenziertes Basis-Image geprüft; keine Aussage über tatsächlich laufende Container.'};
   const rank={critical:4,high:3,medium:2,low:1,unknown:0};
