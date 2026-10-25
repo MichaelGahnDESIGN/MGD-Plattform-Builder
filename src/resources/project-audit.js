@@ -3,9 +3,11 @@ import { offlineAudit, offlineState } from './offline.js';
 import { describeCoverage, coverageCounts } from './coverage.js';
 import { osvAudit, supportAudit, supportProduct } from './audit.js';
 import { actionChecks } from './actions.js';
+import { vendorEvidence } from './vendor.js';
+import { imageAudit } from './images.js';
 import { evidenceState } from './evidence.js';
 
-export async function auditProject(project, { request, cacheDirectory, offline, api } = {}) {
+export async function auditProject(project, { request, cacheDirectory, offline, images, api } = {}) {
   const issues = [];
   await composerProvenance(project,{request,cacheDirectory});
   const eligible = project.components.filter(c=>c.kind==='package' && c.exact && c.publicSource && c.scope!=='lock-history');
@@ -19,9 +21,11 @@ export async function auditProject(project, { request, cacheDirectory, offline, 
   if (request) await supportAudit(project.components,{request});
   issues.push(...await actionChecks(project,{request,api,cacheDirectory}));
   for (const c of project.components) {
+    issues.push(...await imageAudit(c,images));
     const evidence=evidenceState(c);
     if(evidence)c.checks.evidence=evidence;
     describeCoverage(c);
+    issues.push(...await vendorEvidence(c));
     if (c.checks.support.status==='unchecked' && !c.checks.support.reason) {
       c.checks.support = { status: c.checks.vulnerability.status==='declared' ? 'declared' : 'not-applicable',
         reason: supportProduct(c) ? 'Kein eindeutiger Supportnachweis verfügbar.' : 'Für diesen Eintrag ist kein allgemeiner Hersteller-Supportzyklus zugeordnet.' };

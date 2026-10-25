@@ -26,10 +26,16 @@ export async function actionChecks(project, { api, request, cacheDirectory, budg
         const base='repos/'+first.name;
         const meta=await api(base);
         if(meta.private!==false)return;
-        const commit=sha(first.version) ? first.version : (await api(base+'/commits/'+encodeURIComponent(first.version))).sha;
+        let commit=sha(first.version) ? first.version : (await api(base+'/commits/'+encodeURIComponent(first.version))).sha;
         if(!sha(commit))return;
         const tags=await api(base+'/git/matching-refs/tags/');
         if(!Array.isArray(tags) || tags.length>10000)return;
+        // Ein unveränderlicher SHA kann ein annotiertes Tag-Objekt bezeichnen.
+        if(sha(first.version)&&tags.some(t=>t.object?.type==='tag'&&t.object.sha===first.version)){
+          const tag=await api(base+'/git/tags/'+first.version);
+          if(tag.object?.type!=='commit'||!sha(tag.object.sha))return;
+          commit=tag.object.sha;
+        }
         let exact=tags.find(t=>t.object?.type==='commit' && t.object.sha===commit && version(t.ref?.replace(/^refs\/tags\//,'')));
         if(!exact) {
           const annotated=tags.filter(t=>t.object?.type==='tag'&&sha(t.object.sha)&&version(t.ref?.replace(/^refs\/tags\//,''))).sort((a,b)=>b.ref.localeCompare(a.ref,undefined,{numeric:true})).slice(0,40);

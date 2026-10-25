@@ -33,8 +33,15 @@ export function sameComposerIdentity(c, p) {
   return ['source','dist'].some(k => {
     const a = c.origin[k], b = p[k];
     return a && b && ref(a.reference) && ref(a.reference) === ref(b.reference)
-      && publicUrl(a.url) && publicUrl(a.url) === publicUrl(b.url);
+      && publicUrl(a.url) && (publicUrl(a.url) === publicUrl(b.url) || (Array.isArray(b.aliases) && b.aliases.map(publicUrl).includes(publicUrl(a.url))));
   });
+}
+
+export function composerRecord(data, name, checkedAt = new Date().toISOString()) {
+  const clean = value => publicUrl(value?.url) && ref(value?.reference) ? { url: publicUrl(value.url), reference: ref(value.reference) } : undefined;
+  const versions = expandComposerVersions(data, name).filter(p => p.name === name).map(p => ({ version: p.version, source: clean(p.source), dist: clean(p.dist) }));
+  if (versions.length > 12000 || !versions.length) throw new Error('Öffentliche Metadaten unvollständig');
+  return { name, checkedAt, versions };
 }
 
 export async function composerProvenance(project, { request, cacheDirectory, budgetMs = 12000 } = {}) {
@@ -53,10 +60,7 @@ export async function composerProvenance(project, { request, cacheDirectory, bud
     if (!fresh && project.visibility === 'public' && request && Date.now() < deadline) {
       try {
         const data = await request('https://repo.packagist.org/p2/' + name + '.json');
-        const clean = value => publicUrl(value?.url) && ref(value?.reference) ? { url: publicUrl(value.url), reference: ref(value.reference) } : undefined;
-        const versions = expandComposerVersions(data, name).filter(p => p.name === name).map(p => ({ version: p.version, source: clean(p.source), dist: clean(p.dist) }));
-        if (versions.length > 12000) return;
-        record = { name, checkedAt: new Date().toISOString(), versions };
+        record = composerRecord(data, name);
         if (cacheDirectory) await writePrivate(path.join(cacheDirectory, key), JSON.stringify(record));
       } catch { return; }
     } else if (!fresh) return;

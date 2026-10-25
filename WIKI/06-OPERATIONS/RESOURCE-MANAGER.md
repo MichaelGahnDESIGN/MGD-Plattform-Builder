@@ -107,3 +107,18 @@ Die integrierte Serveransicht wurde am 24.10.2026 mit echten öffentlichen und p
 Bei einer reduzierten Serverauslieferung gehört die vollständige Importkette zum Laufzeitpaket: neben `src/resources/` insbesondere `src/lib/companions.js`, `src/lib/paths.js` und die festgelegten Lockfile-Abhängigkeiten. Vor dem Umschalten alle vier Einstiegsmodule inventory, project-audit, github und host mit der tatsächlichen Server-Node-Version importieren. Ein isolierter Offline-Test allein bestätigt diese Importkette nicht. Der vollständige Quell-/CLI-Release enthält diese Dateien bereits.
 
 Die Abnahme umfasst Hell/Dunkel, schmale Ansicht, Tastaturbedienung, datierte Komponentenstatus, anonyme Zugriffssperren sowie die Erhaltung des täglichen Termins und der verschlüsselten Zugangskonfiguration. Eigene Codeprüfungen, unbekannte Paketquellen, Hersteller-Backports und Container ohne Artefaktnachweise bleiben offen bezeichnet.
+
+### Weitere Nachweise (beauftragt 25.10.2026)
+
+Öffentliche Herkunftsmetadaten werden getrennt anhand der vollständigen öffentlichen Top-500-Liste von Packagist gepflegt, ohne Eingabe privater Paketnamen. Private Abgleiche lesen diesen Cache lokal. Annotierte Action-Objekt-SHAs benötigen ihre eigene Auflösung zum Commit. Containerberichte müssen Image-Digest, Datenbank- und Prüfdatum sowie vollständige Paketerkennung bestätigen. Herstellerhinweise ersetzen keinen Backport-Nachweis. Umsetzung: gezielte Tests und Scannerprobe, bestehende Rückfalllaufzeit erhalten, versionierter PR-Weg und gesicherte Umstellung im verwaltenden Projekt.
+
+
+### Betrieb seit 0.10.0
+
+`cache-cli.js` akzeptiert intern zusätzlich `mode=public-provenance` mit einem privaten Cache-Verzeichnis. Es verarbeitet immer dieselbe öffentliche Packagist-Top-500-Liste und erhält niemals ein privates Inventar. Metadaten werden begrenzt, mit vier parallelen Abrufen, fünf Tagen Vorlauf und Fehlerabstand gepflegt. Ein belegter Repository-Umzug wird nur bei gleicher öffentlicher GitHub-Repository-ID akzeptiert. Private Herkunftsprüfungen lesen weiterhin ausschließlich den lokalen Cache.
+
+`mode=images` pflegt ein öffentliches Basis-Image je Aufruf. Zulässig sind ausschließlich die offiziellen Docker-Hub-Basisfamilien php, wordpress, mariadb und nginx. `scripts/install-resource-images.py` installiert Trivy 0.76.1 aus Herstellerarchiven mit festgelegten Archiv- und Binär-SHA-256-Werten in einem eigenen Verzeichnis. Kein Systempaket und kein Docker-Daemon nötig. Die Laufzeitkonfiguration unter `images` enthält binary, directory und cacheDirectory; sie bleibt privat.
+
+Zuerst wird die Image-Identität erfasst. Anschließend erfolgt ein vollständiger, ungefilterter Schwachstellenabgleich gegen genau denselben Digest; die Ausgabevorlage entfernt nur große Beschreibungs-/Konfigurationsfelder, keine Schweregrade oder unfixed-Befunde. Telemetrie, Resolver, Projektkonfiguration und Secretsuche sind abgeschaltet. Größen-, Speicher-, Zeit-, Ausgabe- und Datenbankaltergrenzen gelten. Kein Image wird gestartet. Cache-Nachweise gelten höchstens 72 Stunden, eine erneute Prüfung wird nach 24 Stunden vorbereitet. Fehlgeschlagene Versuche erhalten einen Abstand von einer Stunde.
+
+Image-Funde werden pro Referenz gruppiert, mit Gesamtzahl und konkreten Beispielen. Sie belegen keine laufende Installation. Frische Containerbefunde können daher echte Risiken einer Entwicklungs-/Deployment-Deklaration zeigen, während die produktive Serverumgebung gesondert beurteilt wird. MariaDB-Herstellerkorrekturen nach einer beobachteten Upstream-Version werden als möglicher Befund ausgewiesen; ohne Provider-Nachweis ist eine Rückportierung weder bestätigt noch ausgeschlossen.

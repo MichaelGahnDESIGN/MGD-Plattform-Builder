@@ -84,3 +84,10 @@ test('Doppelte Offline-Paketantworten gelten als unvollständig',()=>{
  const c=pkg(),entry={packages:[{package:{name:c.name,version:'1.2.3',ecosystem:'Packagist'}}]};
  assert.throws(()=>applyOfflineResult([c],{results:[entry,entry]}));assert.equal(c.checks.vulnerability.status,'unchecked');
 });
+
+test('Action-SHA eines annotierten Tag-Objekts wird zum tatsächlichen Commit aufgelöst',async()=>{
+ const pin='b'.repeat(40),commit='c'.repeat(40),c={...pkg(),name:'vendor/action',kind:'ci',version:pin};
+ const api=async p=>p.endsWith('/git/matching-refs/tags/')?[{ref:'refs/tags/v2',object:{type:'tag',sha:pin}},{ref:'refs/tags/2.40.0',object:{type:'commit',sha:commit}}]:p.endsWith('/git/tags/'+pin)?{object:{type:'commit',sha:commit}}:{private:false};
+ await actionChecks({components:[c]},{api,request:async()=>({results:[{}]})});
+ assert.equal(c.version,pin);assert.equal(c.actionResolution.commit,commit);assert.equal(c.actionResolution.version,'2.40.0');
+});
