@@ -50,7 +50,7 @@ test('Offline-Funde werden nicht als erfolgreich leere Prüfung ausgegeben',()=>
 });
 test('Fehlende Scanner-/Datenbankkonfiguration bleibt unbekannt, kein Ersatz-Netzaufruf',async()=>{
  const c={...pkg(),publicSource:true};let called=false;await offlineAudit([c],null,{run:async()=>{called=true;}});
- assert.equal(called,false);assert.equal(c.checks.vulnerability.reasonCode,'offline-incomplete');assert.equal((await offlineState(null)).status,'missing');
+ assert.equal(called,false);assert.equal(c.checks.vulnerability.reasonCode,'offline-not-configured');assert.equal((await offlineState(null)).status,'missing');
 });
 test('Action-Pin muss einem exakten öffentlichen Release entsprechen',()=>temp(async root=>{
  const c={...pkg(),name:'vendor/action',version:sha,kind:'ci'},urls=[];

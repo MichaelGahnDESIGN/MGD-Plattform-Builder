@@ -2,6 +2,17 @@
   "$schema": "./schema/release-notes.schema.json",
   "entries": [
     {
+      "version": "0.10.1",
+      "status": "pre-alpha",
+      "date": "2026-10-25",
+      "audience": [
+        "backoffice"
+      ],
+      "type": "patch",
+      "title": "Private Offline-Prüfung mit passendem Speicherziel und eindeutigen sicheren Fehlergründen.",
+      "items": []
+    },
+    {
       "version": "0.10.0",
       "status": "pre-alpha",
       "date": "2026-10-25",
