@@ -134,6 +134,7 @@ export async function scan({
       const checked = await auditProject(project, {
         request: request || requestJson,
         cacheDirectory: output ? path.join(output, 'provenance') : null,
+        images: config.images,
         offline: config.offline ? { ...config.offline, workdir: output } : null,
         api: github ? (api || ((endpoint) => gh(endpoint,{root:project.root || process.cwd()}))) : null,
       });

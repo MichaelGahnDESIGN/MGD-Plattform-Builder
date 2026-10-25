@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format follows the spirit of Keep a Changelog and semantic versioning.
 
+## [0.10.0] - 2026-10-25
+
+- Öffentlicher Top-500-Referenzkatalog unabhängig von privaten Paketlisten; geprüfte Repository-Umzüge.
+- Annotierte Tag-Objekt-SHAs korrekt zum Action-Commit auflösen.
+- Begrenzte, getrennte Trivy-/OCI-Image-Nachweise ohne Containerstart; vollständige Befunde nach Digest gruppiert.
+- Herstellerhinweise von nachgewiesenen Provider-Backports unterscheiden. Keine Paket- oder Serverupdates.
+- Gezielte Negativtests, Installer mit Hersteller-Prüfsummen und dokumentierter Rückfallweg.
+
 ## [Unreleased]
 
 ## [0.9.0] - 2026-10-24

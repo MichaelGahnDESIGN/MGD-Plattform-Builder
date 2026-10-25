@@ -2,6 +2,17 @@
   "$schema": "./schema/release-notes.schema.json",
   "entries": [
     {
+      "version": "0.10.0",
+      "status": "pre-alpha",
+      "date": "2026-10-25",
+      "audience": [
+        "backoffice"
+      ],
+      "type": "feature",
+      "title": "Öffentliche Herkunftskataloge, annotierte Action-Pins und begrenzte Image-Nachweise mit Herstellerhinweisen.",
+      "items": []
+    },
+    {
       "version": "0.9.0",
       "status": "pre-alpha",
       "date": "2026-10-24",
