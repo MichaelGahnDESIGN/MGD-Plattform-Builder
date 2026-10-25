@@ -2,8 +2,7 @@ import fs from 'node:fs/promises';
 import { createReadStream } from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
-import { execFile } from 'node:child_process';
-import { promisify } from 'node:util';
+import { scanOfflineInventory, OfflineScannerFailure } from './offline-scanner.js';
 import { readSafe } from './files.js';
 
 export const SCANNER_VERSION = '2.7.0';
@@ -12,7 +11,6 @@ export const SCANNER_HASHES = new Set([
   '160c6253e2922e9e0a6a9771c5c4c40a4b3c6090b34a3cdd5e80c96cc2e4218b',
 ]);
 const PURL = { npm: 'npm', Packagist: 'composer', Pub: 'pub' };
-const exec = promisify(execFile);
 const identity = p => [p.ecosystem,p.name,String(p.version).replace(/^v/,'')].join('|');
 export async function sha256(file) {
   const hash = crypto.createHash('sha256');
@@ -65,26 +63,54 @@ export function applyOfflineResult(components, data, { checkedAt, databaseAt } =
   return issues;
 }
 
+const FAILURE_REASONS = {
+  'offline-not-configured': 'Offline-Prüfung noch nicht vollständig eingerichtet.',
+  'offline-scanner-unavailable': 'Der festgelegte Offline-Scanner ist nicht verfügbar.',
+  'offline-scanner-integrity': 'Die Prüfsumme des Offline-Scanners stimmt nicht überein.',
+  'offline-database-unavailable': 'Die benötigte Offline-Datenbank ist nicht vollständig verfügbar.',
+  'offline-database-stale': 'Die benötigte Offline-Datenbank fehlt oder ist älter als 72 Stunden.',
+  'offline-database-integrity': 'Die Prüfsumme der Offline-Datenbank stimmt nicht überein.',
+  'offline-workdir-unavailable': 'Der private Arbeitsordner ist nicht verfügbar.',
+  'offline-timeout': 'Der Offline-Abgleich hat das feste Zeitlimit erreicht. Die Pakete bleiben ungeprüft.',
+  'offline-output-limit': 'Die Scanner-Ausgabe überschreitet das feste Größenlimit.',
+  'offline-process-failed': 'Der Offline-Scanner konnte den Abgleich nicht abschließen.',
+  'offline-response-incomplete': 'Der Scanner hat nicht alle angefragten Pakete vollständig bestätigt.',
+  'offline-incomplete': 'Die Offline-Prüfung war unvollständig.',
+};
+
+// Nur feste Meldungen ausgeben, niemals externe Fehlertexte oder private Dateipfade.
+export function offlineFailure(code) {
+  const reasonCode = Object.hasOwn(FAILURE_REASONS,code) ? code : 'offline-incomplete';
+  return { status:'unchecked',source:'OSV-Offline',reasonCode,reason:FAILURE_REASONS[reasonCode] };
+}
+
 /** Nur eine bereinigte SBOM; keine Projektdateien, Plugins, Resolver oder Build-Skripte. */
-export async function offlineAudit(components, config, { run = exec } = {}) {
+export async function offlineAudit(components, config, { run } = {}) {
   const eligible = components.filter(c=>c.kind==='package' && c.exact && c.publicSource && PURL[c.ecosystem] && c.scope!=='lock-history');
   if (!eligible.length) return [];
-  let dir;
+  let dir, failure = 'offline-not-configured';
   try {
     if (!config?.binary || !config?.databaseDirectory || !config?.workdir) throw new Error('Offline-Prüfung fehlt');
+    failure = 'offline-scanner-unavailable';
     await regular(config.binary, 80*1024*1024);
+    failure = 'offline-scanner-integrity';
     if (!SCANNER_HASHES.has(await sha256(config.binary))) throw new Error('Scanner-Prüfsumme unbekannt');
+    failure = 'offline-database-unavailable';
     const manifest = JSON.parse(await readSafe(config.databaseDirectory,'manifest.json'));
     const ecosystems = [...new Set(eligible.map(c=>c.ecosystem))];
     const databaseAt = {};
     for (const eco of ecosystems) {
       const item = manifest[eco], age = Date.now() - Date.parse(item?.downloadedAt);
+      failure = 'offline-database-stale';
       if (!item || !(age >= 0 && age < 72*3600000) || !/^[a-f0-9]{64}$/.test(item.sha256 || '')) throw new Error('Datenbank fehlt oder veraltet');
       const file = path.join(config.databaseDirectory,'osv-scalibr',eco,'all.zip');
+      failure = 'offline-database-unavailable';
       await regular(file,320*1024*1024);
+      failure = 'offline-database-integrity';
       if ((await sha256(file)) !== item.sha256) throw new Error('Datenbank-Prüfsumme falsch');
       databaseAt[eco] = item.downloadedAt;
     }
+    failure = 'offline-workdir-unavailable';
     if ((await fs.lstat(config.workdir)).isSymbolicLink()) throw new Error('Ungültiger Arbeitsordner');
     dir = await fs.mkdtemp(path.join(config.workdir,'offline-'));
     await fs.chmod(dir,0o700);
@@ -93,14 +119,12 @@ export async function offlineAudit(components, config, { run = exec } = {}) {
       purl:'pkg:'+PURL[c.ecosystem]+'/'+c.name.split('/').map(encodeURIComponent).join('/')+'@'+encodeURIComponent(c.version) })) };
     await fs.writeFile(path.join(dir,'inventory.cdx.json'),JSON.stringify(bom),{mode:0o600});
     await fs.writeFile(path.join(dir,'osv-scanner.toml'),'',{mode:0o600});
-    const args = ['scan','source','--offline','--config='+path.join(dir,'osv-scanner.toml'),'--local-db-path='+config.databaseDirectory,'--no-resolve','--no-ignore','--no-call-analysis=go','--no-call-analysis=rust','--all-packages','--format=json','--verbosity=error','--x-no-default-plugins','--x-plugins=sbom',dir];
-    let stdout;
-    try { ({ stdout } = await run(config.binary,args,{cwd:dir,env:{PATH:'/usr/bin:/bin',HOME:dir,GOMEMLIMIT:'256MiB'},timeout:32000,maxBuffer:16*1024*1024,encoding:'utf8'})); }
-    catch(e) { if (e.code === 1 && typeof e.stdout === 'string') stdout=e.stdout; else throw e; }
-    const data = JSON.parse(stdout);
+    const data = await scanOfflineInventory(config.binary,dir,config.databaseDirectory,{run});
+    failure = 'offline-response-incomplete';
     return applyOfflineResult(eligible,data,{checkedAt:new Date().toISOString(),databaseAt});
-  } catch {
-    for (const c of eligible) c.checks.vulnerability = { status:'unchecked',source:'OSV-Offline',reasonCode:'offline-incomplete',reason:'Offline-Datenbank fehlt, ist veraltet oder die Prüfung war unvollständig.' };
+  } catch (error) {
+    const code = error instanceof OfflineScannerFailure ? error.reasonCode : failure;
+    for (const c of eligible) c.checks.vulnerability = offlineFailure(code);
     return [];
   } finally { if (dir) await fs.rm(dir,{recursive:true,force:true}); }
 }
