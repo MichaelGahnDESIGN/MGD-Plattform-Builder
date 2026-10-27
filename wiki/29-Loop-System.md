@@ -5,6 +5,7 @@ Der Loop wiederholt Arbeit in **kleinen, zustandslosen Runden**. Der Zustand lie
 
 - Regeln und Ablauf: [`platform/LOOP.md`](../platform/LOOP.md)
 - Startvorlage: `platform/loop/STATE.example.md`, Runner: `platform/loop/run-loop.sh`
+- Durchgespieltes Beispiel (Prüfskript, drei Runden, Stopp-Fälle): [`platform/loop/EXAMPLE.md`](../platform/loop/EXAMPLE.md)
 - Funktioniert in Claude Code und ChatGPT Codex (nur Markdown + Shell)
 - Harte Stopps: Prüfskript ok, Rundenlimit, Zeitlimit, kein Fortschritt, Scope/Verbote
 - Nie für rechtliche, datenschutzrelevante, kostenrelevante oder produktive Entscheidungen

@@ -18,6 +18,8 @@ start with a fresh, small context.
 Do **not** loop for design decisions, legal/privacy/cost choices, or anything touching production.
 Those always stop and ask (see `platform/SKILL.md`, "Ask, don't assume").
 
+A worked example with check script and three iterations: [`platform/loop/EXAMPLE.md`](loop/EXAMPLE.md).
+
 ## State file `.loop/STATE.md`
 
 Copy `platform/loop/STATE.example.md`. Keep it under ~60 lines; condense old "Done" entries.
