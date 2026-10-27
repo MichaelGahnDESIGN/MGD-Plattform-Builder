@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format follows the spirit of Keep a Changelog and semantic versioning.
 
+## [0.13.1] - 2026-10-27
+
+- Loop-Protokoll: durchgespieltes Beispiel `platform/loop/EXAMPLE.md` (Prüfskript, Startzustand, drei Runden, Stopp-Fälle), verlinkt in `platform/LOOP.md` und im Wiki. Dazu ein Test, der Beispiel und Zustandsvorlage synchron hält.
+
 ## [0.13.0] - 2026-10-27
 
 - Neues Loop-Protokoll (`platform/LOOP.md`, `platform/loop/`) und Modus `/platform loop`: Arbeit in kleinen, zustandslosen Runden mit Zustandsdatei, festem Prüfskript, harten Stoppregeln und einem Runner für Claude Code und ChatGPT Codex. Das spart Tokens.
