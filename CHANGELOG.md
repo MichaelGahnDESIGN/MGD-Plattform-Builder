@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format follows the spirit of Keep a Changelog and semantic versioning.
 
+## [0.13.0] - 2026-10-27
+
+- Neues Loop-Protokoll (`platform/LOOP.md`, `platform/loop/`) und Modus `/platform loop`: Arbeit in kleinen, zustandslosen Runden mit Zustandsdatei, festem Prüfskript, harten Stoppregeln und einem Runner für Claude Code und ChatGPT Codex. Das spart Tokens.
+- Wiki-Seite `29-Loop-System` (Deutsch) und `WIKI/07-AGENTS/LOOP-PROTOCOL.md` (Englisch). Nie für rechtliche, datenschutzrelevante, kostenrelevante oder produktive Entscheidungen.
+
 ## [0.12.0] - 2026-10-27
 
 - Neuer allgemeiner, profilbasierter Installer-Prompt für ChatGPT-Codex-Entwicklungsrechner (`tools/CODEX-WORKSTATION-INSTALLER.md`): erst Inventur und Sicherheitsprüfung, dann nur die zum gewählten Profil passenden Skills, Tools und MCPs.

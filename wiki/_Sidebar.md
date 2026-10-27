@@ -16,6 +16,7 @@
 * [[18-CLI-Validator-und-Automatisierung]]
 * [[26-Zugaenge-einrichten]]
 * [[28-System-und-Abhaengigkeitsmanager]]
+* [[29-Loop-System]]
 * [[19-Referenzimplementierungen-und-Demos]]
 * [[20-PHP-MariaDB-Referenzplattform]]
 * [[21-Migrationen-I18n-Agenten-und-Jobs]]

@@ -136,6 +136,12 @@ Check or install the mandatory companions (`mgd-platform companions status|insta
 installed (per agent and scope), which project artifacts exist, and what the install plan would change.
 Skills are fetched from the newest release of each companion's repository (`--pinned` for the tested release); existing installs are never overwritten.
 
+### /platform loop
+
+Run repeatable work as small, stateless iterations to save tokens. Follow `platform/LOOP.md`:
+state in `.loop/STATE.md`, one small step per iteration, deterministic check, hard stop rules.
+Never loop over legal, privacy, cost or production decisions.
+
 ### /platform update
 
 Compare the project's declared foundation version with the repository version and produce a migration plan before changing files.
@@ -150,7 +156,7 @@ Prefer, when installed:
 
 - /dev for release/readiness
 - /backup before risky changes
-- /autopilot only with explicit safe goals
+- /autopilot only with explicit safe goals (same limits as the loop protocol)
 - /thread for handoff
 - /projectclean after completion
 
