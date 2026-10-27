@@ -15,12 +15,19 @@ few lines, so the agent never has to read long logs.
 #!/usr/bin/env bash
 # exit 0 only when no apiV1( is left and the tests pass
 set -u
-left=$(grep -rF 'apiV1(' src/ | wc -l | tr -d ' ')
+hits=$(grep -rF 'apiV1(' src/)
+code=$?
+# grep: 0 = found, 1 = nothing found, 2 or more = error (missing folder, unreadable file)
+[ "$code" -le 1 ] || { echo "search failed (grep exit $code)"; exit 2; }
+left=$(printf '%s\n' "$hits" | sed '/^$/d' | wc -l | tr -d ' ')
 echo "apiV1( left: $left"
 [ "$left" -eq 0 ] || exit 1
 npm test --silent 2>&1 | tail -n 15
 exit "${PIPESTATUS[0]}"
 ```
+
+A failed search must never look like "zero left". That is why the script tells "nothing found"
+(grep exit 1) apart from "could not search" (grep exit 2 or more).
 
 ## 2. The start state
 
