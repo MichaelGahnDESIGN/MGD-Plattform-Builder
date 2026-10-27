@@ -77,7 +77,7 @@ Git/GitHub, allgemeine Agenten- und Sicherheitsgrundlagen.
 UI-UX:
 ui-ux-pro-max ausdrücklich prüfen.
 frontend-design ausdrücklich prüfen.
-Graphiphy ausdrücklich prüfen.
+Graphify ausdrücklich prüfen.
 Weitere bereits konfigurierte UI/UX-, Design-System- und Frontend-Skills inventarisieren.
 
 FLUTTER:
@@ -176,7 +176,7 @@ Validiere zusätzlich alle aktivierten Presets einzeln.
 Für ui-ux beispielsweise explizit:
 ui-ux-pro-max: Status
 frontend-design: Status
-Graphiphy: Status
+Graphify: Status
 
 Für flutter:
 Liste aller gefundenen/installierten Flutter-, Dart-, Flame- und verwandten Skills.
@@ -214,17 +214,17 @@ sources:
     - MichaelGahnDESIGN
 
   foundations:
-    - MichaelGahnDESIGN/Projekt-Plattform-System
+    - MichaelGahnDESIGN/MGD-Plattform-Builder
 
 external_required:
   - ui-ux-pro-max
-  - Graphiphy
+  - Graphify
   - frontend-design
 ```
 
 Für dieses Preset soll der GitHub Account dynamisch nach allen MGD Skills, Tools, MCPs und Foundations inventarisiert werden. Eine statische Liste ist nur Mindestbestand.
 
-Bekannte MGD Komponenten umfassen unter anderem MGD_DEV_SKILL, MGD_Todo_SKILL, MGD_Backup_SKILL, MGD_Autopilot_SKILL, MGD_ProjectClean_SKILL, MGD_AI-PlayTest_SKILL, MGD_AI-Thread und MGD_Platform-Builder_TOOL. Weitere aktuelle Repositories müssen automatisch erkannt werden.
+Bekannte MGD Komponenten umfassen unter anderem MGD_DEV_SKILL, MGD_Todo_SKILL, MGD_Living-Documentation, MGD_Backup_SKILL, MGD_Autopilot_SKILL, MGD_ProjectClean_SKILL, MGD_AI-PlayTest_SKILL, MGD_AI-Thread und MGD-Plattform-Builder. Weitere aktuelle Repositories müssen automatisch erkannt werden.
 
 ## Prinzip für Dritte
 

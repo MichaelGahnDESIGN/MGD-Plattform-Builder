@@ -20,11 +20,11 @@ sources:
   github_accounts:
     - MichaelGahnDESIGN
   foundations:
-    - MichaelGahnDESIGN/Projekt-Plattform-System
+    - MichaelGahnDESIGN/MGD-Plattform-Builder
 
 external_required:
   - ui-ux-pro-max
-  - Graphiphy
+  - Graphify
   - frontend-design
 
 discovery:

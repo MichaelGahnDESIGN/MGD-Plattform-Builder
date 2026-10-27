@@ -754,7 +754,7 @@ Mitgeliefert werden:
 - [generisches Profil-Beispiel](templates/workstation/workstation.example.yml)
 - [optionales MGD Workstation Preset](templates/workstation/mgd-workstation.yml)
 
-Das MGD Preset berücksichtigt ausdrücklich ui-ux-pro-max, Graphiphy, frontend-design sowie Flutter/Dart- und Godot-Toolchains und inventarisiert zusätzlich alle passenden MGD Skills dynamisch über GitHub.
+Das MGD Preset berücksichtigt ausdrücklich ui-ux-pro-max, Graphify, frontend-design sowie Flutter/Dart- und Godot-Toolchains und inventarisiert zusätzlich alle passenden MGD Skills dynamisch über GitHub.
 
 ---
 

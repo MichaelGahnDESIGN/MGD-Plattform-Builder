@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format follows the spirit of Keep a Changelog and semantic versioning.
 
+## [0.12.0] - 2026-10-27
+
+- Neuer allgemeiner, profilbasierter Installer-Prompt für ChatGPT-Codex-Entwicklungsrechner (`tools/CODEX-WORKSTATION-INSTALLER.md`): erst Inventur und Sicherheitsprüfung, dann nur die zum gewählten Profil passenden Skills, Tools und MCPs.
+- Dazu ein neutrales Profil-Beispiel und ein optionales MGD-Preset unter `templates/workstation/`; in der README verlinkt.
+- Bei der Übernahme korrigiert: Tippfehler „Graphiphy“ zu „Graphify“, alter Repository-Name `Projekt-Plattform-System` zu `MGD-Plattform-Builder`, Komponentenliste um `MGD_Living-Documentation` ergänzt.
+
 ## [0.11.0] - 2026-10-27
 
 - Neuer optionaler Skill `notification-center`: Glocke und Posteingang mit strikt getrennten öffentlichen und persönlichen Meldungen, serverseitigen Rechten, Datensparsamkeit und Hinweisen für WordPress/WooCommerce, JTL-Shop, Shopware und Shopify.
