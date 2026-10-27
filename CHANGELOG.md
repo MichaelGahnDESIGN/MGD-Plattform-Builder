@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format follows the spirit of Keep a Changelog and semantic versioning.
 
+## [0.10.2] - 2026-10-27
+
+- `companions install` und die Release-Abfrage funktionieren wieder hinter einem Proxy (zum Beispiel in einer abgesicherten Agenten-Umgebung). Die Härtung hatte alle `GIT_CONFIG*`-Variablen gelöscht; darüber reichen solche Umgebungen ihre Proxy-Einstellung (`http.proxyAuthMethod`) an `git` weiter, und die Abfrage scheiterte mit „Proxy CONNECT aborted“.
+- Jetzt bleiben reine Netzwerk-Einstellungen (`http.proxy`, `http.proxyAuthMethod`, `http.sslCAInfo`, `http.sslCAPath`, `safe.directory`) erhalten; enthält eine Variable irgendeinen anderen Schlüssel, wird sie als Ganzes verworfen. Hooks, fsmonitor und Submodule bleiben abgeschaltet.
+
+## [0.10.1] - 2026-10-25
+
+- Speicherziel des privaten Offline-Scanners auf 384 MiB abgestimmt; das 32-Sekunden-Zeitlimit und die 16-MiB-Ausgabegrenze bleiben erhalten.
+- Fester SIGKILL-Abbruch und unterscheidbare, bereinigte Gründe für Zeitlimit, Integrität, Ausgabegrenze und unvollständige Antworten.
+- Private npm-Abgleiche, echte synthetische Testfunde und Negativfälle auf Linux geprüft; kein Online-Ersatz und keine Paket-/Containerupdates.
+
 ## [0.10.0] - 2026-10-25
 
 - Öffentlicher Top-500-Referenzkatalog unabhängig von privaten Paketlisten; geprüfte Repository-Umzüge.
