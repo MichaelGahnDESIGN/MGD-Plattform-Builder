@@ -55,7 +55,7 @@ Das Projektprofil soll Projekttyp, Zielmärkte, Sprachen, relevante Features, Da
 
 Keine Passwörter, API-Keys, Tokens, personenbezogenen Produktionsdaten, private Serverzugänge oder vertrauliche Kundeninformationen.
 
-## Pflichtabschnitte ab 0.5.1
+## Pflichtabschnitte ab 0.5.1 (`companions` ab 0.7.0)
 
 | Abschnitt | Inhalt |
 |---|---|
@@ -69,8 +69,9 @@ Keine Passwörter, API-Keys, Tokens, personenbezogenen Produktionsdaten, private
 | `experience` | Updater, Ladebildschirm, SEO, Cookie-Box, Wartungsmodus, ... |
 | `template` | Starter-Template, Varianten, Datenbanken, Auslieferung |
 | `briefing` | Briefing-Status und angenommene Empfehlungen |
+| `companions` | Pflicht-Begleiter (ab 0.7.0): `living_documentation`, `graphify`, `todo` mit je `enabled` und `path`; `enabled: false` ist ein Fehler |
 
-Siehe [[23-AI-CMS-Pflichtfunktionen]].
+Siehe [[23-AI-CMS-Pflichtfunktionen]] und [[27-Begleiter-Living-Documentation-Graphify-Todo]].
 
 ## Schema
 

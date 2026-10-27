@@ -4,11 +4,61 @@ All notable changes to this project will be documented in this file.
 
 The format follows the spirit of Keep a Changelog and semantic versioning.
 
+## [0.13.0] - 2026-10-27
+
+- Neues Loop-Protokoll (`platform/LOOP.md`, `platform/loop/`) und Modus `/platform loop`: Arbeit in kleinen, zustandslosen Runden mit Zustandsdatei, festem Prüfskript, harten Stoppregeln und einem Runner für Claude Code und ChatGPT Codex. Das spart Tokens.
+- Wiki-Seite `29-Loop-System` (Deutsch) und `WIKI/07-AGENTS/LOOP-PROTOCOL.md` (Englisch). Nie für rechtliche, datenschutzrelevante, kostenrelevante oder produktive Entscheidungen.
+
+## [0.12.0] - 2026-10-27
+
+- Neuer allgemeiner, profilbasierter Installer-Prompt für ChatGPT-Codex-Entwicklungsrechner (`tools/CODEX-WORKSTATION-INSTALLER.md`): erst Inventur und Sicherheitsprüfung, dann nur die zum gewählten Profil passenden Skills, Tools und MCPs.
+- Dazu ein neutrales Profil-Beispiel und ein optionales MGD-Preset unter `templates/workstation/`; in der README verlinkt.
+- Bei der Übernahme korrigiert: Tippfehler „Graphiphy“ zu „Graphify“, alter Repository-Name `Projekt-Plattform-System` zu `MGD-Plattform-Builder`, Komponentenliste um `MGD_Living-Documentation` ergänzt.
+
+## [0.11.0] - 2026-10-27
+
+- Neuer optionaler Skill `notification-center`: Glocke und Posteingang mit strikt getrennten öffentlichen und persönlichen Meldungen, serverseitigen Rechten, Datensparsamkeit und Hinweisen für WordPress/WooCommerce, JTL-Shop, Shopware und Shopify.
+- Mit Codex-Konfiguration (`agents/openai.yaml`) und einem Test für die Pflichtabschnitte; in README, README.en und das Skill-Ökosystem aufgenommen.
+
+## [0.10.2] - 2026-10-27
+
+- `companions install` und die Release-Abfrage funktionieren wieder hinter einem Proxy (zum Beispiel in einer abgesicherten Agenten-Umgebung). Die Härtung hatte alle `GIT_CONFIG*`-Variablen gelöscht; darüber reichen solche Umgebungen ihre Proxy-Einstellung (`http.proxyAuthMethod`) an `git` weiter, und die Abfrage scheiterte mit „Proxy CONNECT aborted“.
+- Jetzt bleiben reine Netzwerk-Einstellungen (`http.proxy`, `http.proxyAuthMethod`, `http.sslCAInfo`, `http.sslCAPath`, `safe.directory`) erhalten; enthält eine Variable irgendeinen anderen Schlüssel, wird sie als Ganzes verworfen. Hooks, fsmonitor und Submodule bleiben abgeschaltet.
+
+## [0.10.1] - 2026-10-25
+
+- Speicherziel des privaten Offline-Scanners auf 384 MiB abgestimmt; das 32-Sekunden-Zeitlimit und die 16-MiB-Ausgabegrenze bleiben erhalten.
+- Fester SIGKILL-Abbruch und unterscheidbare, bereinigte Gründe für Zeitlimit, Integrität, Ausgabegrenze und unvollständige Antworten.
+- Private npm-Abgleiche, echte synthetische Testfunde und Negativfälle auf Linux geprüft; kein Online-Ersatz und keine Paket-/Containerupdates.
+
+## [0.10.0] - 2026-10-25
+
+- Öffentlicher Top-500-Referenzkatalog unabhängig von privaten Paketlisten; geprüfte Repository-Umzüge.
+- Annotierte Tag-Objekt-SHAs korrekt zum Action-Commit auflösen.
+- Begrenzte, getrennte Trivy-/OCI-Image-Nachweise ohne Containerstart; vollständige Befunde nach Digest gruppiert.
+- Herstellerhinweise von nachgewiesenen Provider-Backports unterscheiden. Keine Paket- oder Serverupdates.
+- Gezielte Negativtests, Installer mit Hersteller-Prüfsummen und dokumentierter Rückfallweg.
+
 ## [Unreleased]
+
+## [0.9.0] - 2026-10-24
 
 ### Added
 
-- agent-neutral **Loop Protocol** (`platform/LOOP.md`, `platform/loop/`) and `/platform loop` mode: stateless iterations with a state file, deterministic check, hard stop rules and a headless runner for Claude Code and ChatGPT Codex
+- Composer-Herkunftsprüfung mit Versions-/Commit-Abgleich und privatem Metadatencache; Entwicklungsabhängigkeiten separat.
+- Private Offline-Prüfung über OSV-Scanner 2.7.0 mit geprüfter Binärdatei, isolierter SBOM, vollständigem Offline-Modus und datierten Datenbanken.
+- Begrenzte tägliche Datenbankpflege, explizite Prüflückengründe, Action-Commit-/Release-Zuordnung und getrennte Code-/Betriebsnachweise.
+- Scannerimporte benötigen einen aktuellen Zeitstempel und Artefakt-Digest; keine pauschalen positiven Sicherheitsbefunde aus Fremdberichten.
+
+### Added
+
+- Optionaler Skill `/code-kommentare` für kurze deutsche Kommentare in Michaels Stil,
+  mit Codex-/Claude-Installer, Schutz vor Überschreiben und Symlinks sowie Beispielen
+  und Hinweisen zur getrennten Divi-CSS-/JavaScript-/Plugin-Ablage.
+
+### Fixed
+
+- `companions install` hält jetzt auch die datierten Sicherungsordner von `graphify update` (`graphify-out/JJJJ-MM-TT/`) per `.gitignore` aus Git. Die Dokumentation nennt alle `.gitignore`-Zeilen der Graphify-Konfiguration vollständig.
 
 ### Planned
 
@@ -17,6 +67,61 @@ The format follows the spirit of Keep a Changelog and semantic versioning.
 - translation CSV workflows and review queues
 - compliance automation
 - richer agent integration
+
+## [0.8.2 Pre-Alpha] - 2026-10-24
+
+### Sicherheit
+
+- Indirekte Abhängigkeit fast-uri von 3.1.8 auf den korrigierten Stand 3.1.9 aktualisiert. Der erste Ressourcenlauf hatte vier aktuelle OSV-Meldungen für diese Bibliothek erkannt; der Sicherheitspatch bleibt innerhalb derselben Versionslinie.
+- Die Quellenbezeichnung „moderate“ wird als mittlere Schwere („medium“) eingeordnet, statt eine vorhandene Einstufung als unbekannt auszugeben.
+
+## [0.8.1 Pre-Alpha] - 2026-10-24
+
+### Behoben
+
+- Beobachtungsdateien aus Beispiel- und Testunterordnern bestätigen keine tatsächliche Projektumgebung. Nur die ausdrücklich in der Projektwurzel hinterlegte Datei wird ausgewertet; Regressionstest ergänzt.
+
+## [0.8.0 Pre-Alpha] - 2026-10-24
+
+### Hinzugefügt
+
+- System- und Abhängigkeitsmanager mit begrenzter, rein lesender Erfassung mehrerer Paketökosysteme, CMS/Erweiterungen, Container, CI sowie ausdrücklich hinterlegter System- und Dienstversionen.
+- Aktuelle OSV-/GitHub-Abfragen mit vollständiger Pagination, Drittanbieter-Supportdaten, privaten JSON-/HTML-Berichten, Suche, Filtern und Hell/Dunkel. Fehlende Quellen, nicht erreichbare Ordner und ungeprüfte Bereiche bleiben sichtbar.
+- Private Projektregistrierung, Änderungsvergleich für stille Folgeprüfungen und sichere Dependabot-Konfigurations-PRs mit Aktivierungsnachweis. Kein automatischer Merge, Serverupdate oder Neustart.
+- Wiederverwendbare Skills `mgd-system-resources` und `mgd-plugin-builder` einschließlich Plugin-Paketprüfung, Kartenbildern, Icons und getrenntem WordPress.org-Vertrieb.
+- Sicherheitstests für Parser, Netzwerk- und Dateigrenzen, private Quellen, bestehende Konfigurationen und Update-Policy; Browserprüfung des lokalen Dashboards.
+
+### Geändert
+
+- `mgd-platform init` legt eine lokale Ressourcen-Konfiguration an; neue Projekte können ohne Überschreiben registriert werden.
+- Foundation-CI verwendet die neue npm-Lockdatei und `npm ci --ignore-scripts`.
+
+## [0.7.0 Pre-Alpha] - 2026-10-22
+
+### Added
+
+- **Mandatory companions**: living documentation (`living-documentation` skill, `DOKUMENTATION/`), Graphify (`graphify-out/`) and the Todo skill (`TODO/TODO.html`) are part of every project. Graphify is the machine-generated map of the living documentation.
+- `mgd-platform companions status|install`: installs the skills from the **newest release** of each companion's own repository (resolved with `git ls-remote` at install time, never below the tested floor, verified against the looked-up commit; `--pinned` installs the tested release instead), only regular files, never overwrites existing installs (also recognises the alias `mgd-todo`), creates `DOKUMENTATION/README.md` and `TODO/TODO.html`, installs the newest Graphify (`graphifyy>=0.9.65`) via `uv`/`pipx` or a project-local venv and builds the first graph. Without `--yes` it only prints the plan and every command; `--scope` and `--graphify` must be chosen explicitly. Graphify's git hooks are opt-in (`--hooks`).
+- Hardened install (found by an independent security review): read-only commands never execute a program from inside the project, no write follows a symbolic link in the project, `git`/`uv`/`pipx`/`python`/`pip` run in a neutral directory, the clone is verified against the looked-up commit before checkout (LFS and `GIT_*` overrides off), a project-local Graphify environment is created fresh and never reused or executed by later runs, skill folders appear atomically, companion paths from the profile are validated at runtime (plain names only), every child process starts with a PATH free of relative and in-project entries, the clone runs with hooks, fsmonitor, submodules and LFS off, `init` no longer writes through symlinks, and a project-local Graphify environment is trusted only if this CLI recorded it in the user's cache (forged metadata inside a repository proves nothing). The dry run shows which release would be installed.
+- `mgd-platform init --companions --scope project|user` sets up a project and its companions in one run; like `companions install` it needs an explicit scope.
+- **Updates in one place:** a new Todo, Living Documentation or Graphify release is used by every project installed afterwards, without any change in this repository. `registry/companions.yml` only holds the tested floor and the `--pinned` pin.
+- `registry/companions.yml` and `schema/companion-registry.schema.json`; `npm run check:schemas` validates the registry.
+- `companions` section in `MGD_PLATFORM.yml` (schema, examples, template): `validate` rejects `enabled: false` and warns when the section is missing, so older profiles stay valid.
+- `doctor` reports the companions; `release-check` is **blocked** while one is missing.
+- Work cycle in the project templates (`templates/AGENTS.md`, `templates/CLAUDE.md`, starter `AGENTS.md`/`CLAUDE.md`): ask the graph first, then update todo list, living documentation and `graphify update .` after every finished sub-goal.
+- `templates/living-docs/README.md`: documentation skeleton with state, map (Graphify), decisions, open points, risks and verification.
+- `.graphifyignore` and `.gitignore` entries so installed agent skills and `TODO/` stay out of the graph and the extraction cache stays out of Git.
+- Installer `scripts/install-zugang.py` with a fixed list of public files, protection of existing installs and isolated tests; the MIT license and references travel with the skill. Documented limits for NAS, Windows, Linux, macOS, MFA, API locks and local versus cloud installs. The separate access UI stays unchanged.
+- `tools/zugang-ui/`: local zero-dependency web UI to set up server access safely (gitignore, local env, project SSH key, test, permission rules).
+- Skill `platform/skills/zugang`: secure access setup workflow (server, shop, WordPress, database) with local env and project SSH key.
+- Wiki: [27 – Begleiter: Living Documentation, Graphify und Todo](wiki/27-Begleiter-Living-Documentation-Graphify-Todo.md) and `WIKI/07-AGENTS/COMPANIONS.md`.
+
+### Changed
+
+- `zugang` is now a standalone, project-neutral skill for Codex and Claude Code: import Markdown credentials, verify Git/upload exclusions and file protection, and test existing access minimally. No mandatory question catalogue, no automatic SSH key creation or server-log analysis any more. Existing dotenv files are preserved; earlier `.env.access.local` installations need no migration.
+- `registry/recommendations.yml`: Todo and Living Documentation are marked `mandatory`, Graphify is added; `mgd-platform recommend` labels them as mandatory.
+- `platform/SKILL.md`, `platform/BRIEFING.md` and the `/platform` command files: new mode `companions`; init, template and update check and install the companions after asking for scope.
+- Example profiles and `templates/MGD_PLATFORM.example.yml` declare the companions and `foundation_version: "0.7.0"`.
 
 ## [0.6.0 Pre-Alpha] - 2026-09-25
 

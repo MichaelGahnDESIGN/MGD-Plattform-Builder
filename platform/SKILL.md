@@ -17,6 +17,23 @@ timeline, credits (people + components), editable legal/CMS pages with revisions
 export/import, searchable and filterable settings, light **and** dark variants, editable design
 tokens. Never ask whether to build them – only how to configure them.
 
+## Mandatory companions (every project)
+
+Living documentation (`living-documentation` skill, folder `DOKUMENTATION/`), Graphify (`graphify`,
+folder `graphify-out/`) and the Todo skill (`todo`, file `TODO/TODO.html`) are installed with every
+project and maintained with every change. Graphify is the machine-generated map of the living
+documentation. Never ask whether to use them – only where to install them.
+
+- **Install** (every `/platform init`, `/platform template` and `/platform update`): run
+  `mgd-platform companions status`. If anything is missing, ask the user two questions – install the
+  skills for this project only or for all projects (`--scope project|user`), and install the Graphify
+  CLI for the user or in a project-local venv (`--graphify user|project|skip`) – then run
+  `mgd-platform companions install <path> --scope ... --graphify ... --yes`. Never install silently.
+- **Use**: follow the work cycle in the project's `AGENTS.md` – ask the graph first, update todo list,
+  living documentation and graph (`graphify update .`) after every finished sub-goal.
+- **Verify**: `mgd-platform doctor` reports them, `validate` rejects disabling them, and
+  `release-check` is blocked while one is missing.
+
 ## Modes
 
 ### /platform briefing
@@ -113,6 +130,12 @@ Never claim automatic legal compliance.
 
 Run a project-level security gap review using the foundation's threat and control model.
 
+### /platform companions
+
+Check or install the mandatory companions (`mgd-platform companions status|install`). Report which are
+installed (per agent and scope), which project artifacts exist, and what the install plan would change.
+Skills are fetched from the newest release of each companion's repository (`--pinned` for the tested release); existing installs are never overwritten.
+
 ### /platform loop
 
 Run repeatable work as small, stateless iterations to save tokens. Follow `platform/LOOP.md`:
@@ -122,12 +145,15 @@ Never loop over legal, privacy, cost or production decisions.
 ### /platform update
 
 Compare the project's declared foundation version with the repository version and produce a migration plan before changing files.
+Also run `mgd-platform companions status`; projects created before 0.7.0 need the `companions` section in `MGD_PLATFORM.yml`.
 
 ## Interaction with other skills
 
+Mandatory (see above): /todo for task tracking, /living-documentation for the canonical documentation,
+/graphify (CLI `graphify update .`) for the project map.
+
 Prefer, when installed:
 
-- /todo for task tracking
 - /dev for release/readiness
 - /backup before risky changes
 - /autopilot only with explicit safe goals (same limits as the loop protocol)
@@ -137,3 +163,11 @@ Prefer, when installed:
 ## Public safety
 
 Never place secrets, personal data, private server information or production dumps in this repository or generated public documentation.
+
+## Optional comment style
+
+When the user requests Michael's German comment style, use `/code-kommentare`
+(Codex: `$code-kommentare`) if installed. Its portable source lives in
+`platform/skills/code-kommentare/` in the foundation; installation and examples
+are documented in `WIKI/Code-Kommentare.md`. Keep safety explanations and valid
+syntax. The style does not change runtime behavior or authorize live changes.

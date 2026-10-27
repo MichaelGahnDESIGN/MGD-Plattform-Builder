@@ -21,6 +21,7 @@ rules.
 | 11 | Briefing questions: updater, loading screen, SEO, cookie box, maintenance, ... | `experience`, `briefing` | [Briefing and Recommendations](BRIEFING-RECOMMENDATIONS.md) |
 | 12 | Recommend MGD-DevOS where it makes sense | `briefing.accepted_recommendations` | [Briefing and Recommendations](BRIEFING-RECOMMENDATIONS.md) |
 | 13 | Recommend matching public MGD skills and plugins | `registry/recommendations.yml` | [Briefing and Recommendations](BRIEFING-RECOMMENDATIONS.md) |
+| 14 | Living documentation, Graphify and Todo as mandatory companions (since 0.7.0) | `companions` | [Mandatory Companions](../07-AGENTS/COMPANIONS.md) |
 
 ## How the validator treats them
 

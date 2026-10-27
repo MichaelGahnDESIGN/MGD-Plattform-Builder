@@ -22,6 +22,7 @@ function completeProfile() {
     credits: { enabled: true, people: true, components: true, local_assets_only: true },
     settings: { searchable: true, filterable: true },
     appearance: { modes: ["light", "dark"], toggle: { enabled: true, locations: ["header"] } },
+    companions: { living_documentation: { enabled: true }, graphify: { enabled: true }, todo: { enabled: true } },
     briefing: { completed: true }
   };
 }
@@ -34,7 +35,7 @@ test("a complete profile has no mandatory findings", () => {
 test("missing mandatory sections only warn so older profiles stay valid", () => {
   const result = validateMandatoryFeatures({ project: { type: "general" } });
   assert.equal(result.errors.length, 0);
-  for (const topic of ["versioning", "credits", "cms", "settings", "appearance", "briefing"]) {
+  for (const topic of ["versioning", "credits", "cms", "settings", "appearance", "companions", "briefing"]) {
     assert.ok(result.warnings.some((item) => item.includes(topic)), "expected warning for " + topic);
   }
 });
@@ -101,4 +102,21 @@ test("version display should include login and settings", () => {
   profile.versioning.display.locations = ["public_footer"];
   const result = validateMandatoryFeatures(profile);
   assert.ok(result.warnings.some((item) => item.includes("login and settings")));
+});
+
+test("living documentation, Graphify and Todo cannot be disabled", () => {
+  const profile = completeProfile();
+  profile.companions.living_documentation.enabled = false;
+  profile.companions.graphify.enabled = false;
+  profile.companions.todo.enabled = false;
+  const result = validateMandatoryFeatures(profile);
+  assert.equal(result.errors.filter((item) => item.includes("mandatory companion")).length, 3);
+});
+
+test("a profile that does not declare one companion gets a warning, not an error", () => {
+  const profile = completeProfile();
+  delete profile.companions.graphify;
+  const result = validateMandatoryFeatures(profile);
+  assert.equal(result.errors.length, 0);
+  assert.ok(result.warnings.some((item) => item.includes("companions.graphify")));
 });

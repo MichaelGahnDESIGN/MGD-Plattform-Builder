@@ -64,6 +64,7 @@ on failure; it must exit 0 immediately when `stop_hook_active` is true.
 
 **Headless, both agents:** `platform/loop/run-loop.sh` runs one fresh agent call per iteration and
 enforces the limits outside the model (iteration counter, wall-clock timeout).
+Each call is cut off by `timeout` (macOS: `gtimeout` from coreutils) when the remaining time runs out; without it, a single iteration is not time-limited.
 
 **Codex:** `AGENTS.md` only points here (32 KiB limit); run via `codex exec` in `run-loop.sh`.
 `/goal` exists in recent Codex versions with an advisory token budget only. Verify flags with

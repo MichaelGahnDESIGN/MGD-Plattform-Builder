@@ -1,6 +1,7 @@
 /**
  * Rules for features every MGD project must provide: versioning, release notes,
- * credits, editable legal pages, searchable settings and light/dark mode.
+ * credits, editable legal pages, searchable settings, light/dark mode and the mandatory
+ * companions (living documentation, Graphify, Todo).
  * Missing sections produce warnings (older profiles stay valid); sections that
  * explicitly disable a mandatory feature produce errors.
  */
@@ -113,6 +114,25 @@ function checkCodeEditors(profile, result) {
   }
 }
 
+const COMPANION_KEYS = [
+  ["living_documentation", "Living documentation"],
+  ["graphify", "Graphify"],
+  ["todo", "Todo"]
+];
+
+function checkCompanions(profile, result) {
+  const companions = profile.companions;
+  if (!companions) {
+    result.warnings.push("companions (living documentation, Graphify, Todo) are mandatory but not declared; run `mgd-platform companions status`");
+    return;
+  }
+  for (const [key, label] of COMPANION_KEYS) {
+    const entry = companions[key];
+    if (entry && entry.enabled === false) result.errors.push(label + " is a mandatory companion and must not be disabled");
+    else if (!entry) result.warnings.push("companions." + key + " is not declared");
+  }
+}
+
 function checkBriefing(profile, result) {
   const briefing = profile.briefing;
   if (!briefing || briefing.completed !== true) {
@@ -131,6 +151,7 @@ export function validateMandatoryFeatures(profile) {
   checkSettings(profile, result);
   checkAppearance(profile, result);
   checkCodeEditors(profile, result);
+  checkCompanions(profile, result);
   checkBriefing(profile, result);
   return result;
 }

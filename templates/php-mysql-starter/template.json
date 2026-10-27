@@ -1,7 +1,7 @@
 {
   "id": "php-mysql-starter",
   "name": "MGD PHP/MySQL Starter",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "status": "pre-alpha",
   "requirements": {
     "php": ">=8.2",

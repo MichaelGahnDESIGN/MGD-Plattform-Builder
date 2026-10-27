@@ -9,6 +9,8 @@ import { versionCommand } from "./commands/version.js";
 import { briefingCommand } from "./commands/briefing.js";
 import { recommendCommand } from "./commands/recommend.js";
 import { templateCommand } from "./commands/template.js";
+import { companionsCommand } from "./commands/companions.js";
+import { resourcesCommand } from "./commands/resources.js";
 
 function help() {
   console.log([
@@ -16,22 +18,26 @@ function help() {
     "MGD Project Platform CLI",
     "",
     "Usage:",
-    "  mgd-platform init [--preset general|game|community|creator|ecommerce] [--target DIR]",
+    "  mgd-platform init [--preset general|game|community|creator|ecommerce] [--target DIR] [--companions]",
     "  mgd-platform validate [PATH]",
     "  mgd-platform doctor [PATH]",
     "  mgd-platform audit [PATH] [--write]",
     "  mgd-platform release-check [PATH]",
     "  mgd-platform module create <name> [--target DIR]",
     "  mgd-platform update [PATH]",
+    "  mgd-platform resources scan|init|github|help [PATH] [--config FILE] [--output DIR]",
     "  mgd-platform version [PATH] [--bump major|minor|patch] [--status STATUS] [--sync] [--check]",
     "                       [--note TEXT --audience frontend,backoffice --type feature|patch|fix|security]",
     "  mgd-platform briefing [PATH] [--write]",
     "  mgd-platform recommend [PATH]",
     "  mgd-platform template list | check | create <id> [--target DIR]",
+    "  mgd-platform companions [status|install] [PATH] [--scope project|user] [--agent claude|codex|both]",
+    "                          [--graphify user|project|skip] [--hooks] [--pinned] [--yes]   (living documentation, Graphify, Todo – mandatory)",
     "",
     "Recommended first run:",
     "  mgd-platform template create php-mysql-starter --target ./mein-projekt",
     "  mgd-platform init --preset general --target ./mein-projekt",
+    "  mgd-platform companions install ./mein-projekt --scope project --graphify user --yes",
     "  mgd-platform briefing ./mein-projekt --write",
     "  mgd-platform doctor",
     "  mgd-platform audit --write",
@@ -40,6 +46,9 @@ function help() {
 }
 
 export async function runCli(args) {
+  // On Windows, Node looks for programs in the working directory first unless this is set in our own environment.
+  if (process.platform === "win32") process.env.NoDefaultCurrentDirectoryInExePath = "1";
+
   const command = args[0];
   const rest = args.slice(1);
 
@@ -59,6 +68,8 @@ export async function runCli(args) {
   if (command === "briefing") return briefingCommand(rest);
   if (command === "recommend") return recommendCommand(rest[0] || ".");
   if (command === "template") return templateCommand(rest);
+  if (command === "companions") return companionsCommand(rest);
+  if (command === "resources") return resourcesCommand(rest);
 
   console.error("Unknown command: " + command);
   help();

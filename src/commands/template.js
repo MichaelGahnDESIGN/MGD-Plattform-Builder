@@ -43,6 +43,7 @@ async function createCommand(id, args) {
   await copyTemplate(template, target);
   console.log("\n✓ Created " + template.manifest.name + " in " + target);
   console.log("Next: mgd-platform init --target " + path.relative(process.cwd(), target) +
+    " && mgd-platform companions install " + path.relative(process.cwd(), target) + " --scope project --graphify user --yes" +
     " && mgd-platform briefing " + path.relative(process.cwd(), target));
   return 0;
 }

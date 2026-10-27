@@ -10,10 +10,13 @@
 * [[23-AI-CMS-Pflichtfunktionen]]
 * [[24-Briefing-Templates-und-Empfehlungen]]
 * [[25-Lizenz-Label-Whitelabel-und-Module]]
-* [[26-Loop-System]]
+* [[27-Begleiter-Living-Documentation-Graphify-Todo]]
 
 **Werkzeuge**
 * [[18-CLI-Validator-und-Automatisierung]]
+* [[26-Zugaenge-einrichten]]
+* [[28-System-und-Abhaengigkeitsmanager]]
+* [[29-Loop-System]]
 * [[19-Referenzimplementierungen-und-Demos]]
 * [[20-PHP-MariaDB-Referenzplattform]]
 * [[21-Migrationen-I18n-Agenten-und-Jobs]]

@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { loadProjectProfile } from "../lib/profile.js";
 import { validateProfile } from "../lib/validation.js";
+import { inspectCompanions, loadCompanionRegistry } from "../lib/companions.js";
 
 const checks = [
   ["MGD_PLATFORM.yml", true, "project profile"],
@@ -40,6 +41,13 @@ export async function doctorCommand(target = ".") {
     const evidenceDir = path.join(root, ".mgd", "evidence");
     const evidenceExists = await fs.access(evidenceDir).then(() => true).catch(() => false);
     console.log((evidenceExists ? "✓" : "!") + " .mgd/evidence            " + (evidenceExists ? "release evidence directory" : "create this for release evidence"));
+
+    const companions = await inspectCompanions({ root, profile: loaded.profile, registry: await loadCompanionRegistry() });
+    for (const item of companions) {
+      const state = item.ok ? "in use" : !item.installed ? "mandatory companion not installed" : item.project.error || "no " + item.project.path + " in the project";
+      console.log((item.ok ? "✓" : "!") + " " + item.companion.id.padEnd(24) + " " + state);
+    }
+    if (companions.some((item) => !item.ok)) console.log("  ! fix with: mgd-platform companions install " + root + " --scope project --graphify user --yes");
   } catch (error) {
     console.log("✗ Profile could not be read: " + error.message);
     failures += 1;

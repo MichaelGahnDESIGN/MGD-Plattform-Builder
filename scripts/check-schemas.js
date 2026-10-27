@@ -14,7 +14,8 @@ const schemaFiles = [
   "schema/version.schema.json",
   "schema/release-notes.schema.json",
   "schema/template-manifest.schema.json",
-  "schema/module-package.schema.json"
+  "schema/module-package.schema.json",
+  "schema/companion-registry.schema.json"
 ];
 
 const compiled = new Map();
@@ -102,6 +103,16 @@ for (const entry of recommendations.recommendations || []) {
   recommendationIds.add(entry.id);
 }
 console.log("✓ Recommendation registry has " + recommendationIds.size + " entries");
+
+const companionRegistry = YAML.parse(await fs.readFile(path.join(root, "registry/companions.yml"), "utf8"));
+const companionValid = compiled.get("schema/companion-registry.schema.json");
+if (!companionValid(companionRegistry)) {
+  console.error("✗ registry/companions.yml is invalid");
+  console.error(companionValid.errors);
+  process.exitCode = 1;
+} else {
+  console.log("✓ Companion registry matches schema (" + companionRegistry.companions.length + " mandatory companions)");
+}
 
 const briefing = YAML.parse(await fs.readFile(path.join(root, "registry/briefing.yml"), "utf8"));
 const questionIds = (briefing.sections || []).flatMap((section) => section.questions.map((question) => question.id));

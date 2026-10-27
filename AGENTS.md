@@ -38,7 +38,7 @@ Keep the foundation project-neutral, privacy-aware, secure and understandable.
 
 ## Versioning of this repository
 
-- `version.json` is the single source of truth (currently `0.5.1 Pre-Alpha`)
+- `version.json` is the single source of truth (currently `0.7.0 Pre-Alpha`)
 - change it only with `node bin/mgd-platform.js version --bump ... --note ...`; never edit `VERSION` or `package.json` by hand
 - every release adds an entry to `release-notes.json` and `CHANGELOG.md`
 - starter templates in `templates/<id>/` must keep their light and dark variants (`npm run check:templates`)
@@ -60,12 +60,23 @@ Before changing a subsystem:
 5. update docs/schemas/examples together
 6. report what changed and what remains open
 
+## Mandatory companions
+
+Living documentation, Graphify and the Todo skill are mandatory companions of every project built with
+this foundation (`registry/companions.yml`, `mgd-platform companions`). Skill companions are pinned to a
+release tag **and** commit SHA – that pin is the tested floor and the `--pinned` pin, not the version new
+projects get (they get the newest release). Raise both together only when a new release needs a newer floor, run
+`npm run check`, and never point the registry at a branch. Do not duplicate a companion's workflow inside this repository – the
+platform skill orchestrates, the companion skills do the work. See `WIKI/07-AGENTS/COMPANIONS.md`.
+
 ## Related MGD skills
 
 If installed, prefer existing skills instead of reimplementing workflows:
 
 - /dev
-- /todo
+- /todo (mandatory companion)
+- /living-documentation (mandatory companion)
+- /graphify (mandatory companion)
 - /backup
 - /autopilot
 - /thread
@@ -77,3 +88,11 @@ See `WIKI/07-AGENTS/SKILL-ECOSYSTEM.md`.
 ## Public repository rule
 
 Everything committed here must be safe for a public repository.
+
+## Optional comment style
+
+When the user requests Michael's German comment style, use `/code-kommentare`
+(Codex: `$code-kommentare`) if installed. Its portable source lives in
+`platform/skills/code-kommentare/` in the foundation; installation and examples
+are documented in `WIKI/Code-Kommentare.md`. Keep safety explanations and valid
+syntax. The style does not change runtime behavior or authorize live changes.
