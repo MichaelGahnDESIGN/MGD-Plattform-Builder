@@ -472,6 +472,18 @@ Claude Code: `/code-kommentare [Datei oder Bereich]`; Codex:
 [Installation, Beispiele und Divi-Ablageorte](WIKI/Code-Kommentare.md) ·
 [Skill](platform/skills/code-kommentare/SKILL.md)
 
+## Notification Center: Glocke und Posteingang
+
+Der optionale Skill `notification-center` hilft beim Bau einer Glocke oder eines
+Posteingangs in Website, Shop oder Plattform. Öffentliche Meldungen und persönliche
+Nachrichten sind strikt getrennt; persönliche Meldungen und ihr Lesestatus bleiben
+auf dem Server. Der Skill enthält Hinweise für WordPress/WooCommerce, JTL-Shop,
+Shopware und Shopify sowie eine Prüfliste vor dem Release.
+
+Installation: den Ordner `platform/skills/notification-center/` nach `~/.claude/skills/`
+(Claude Code) oder `~/.agents/skills/` (Codex) kopieren. Aufruf: `/notification-center`
+in Claude Code, `$notification-center` in Codex. [Skill](platform/skills/notification-center/SKILL.md)
+
 ## Projektprofil: `MGD_PLATFORM.yml`
 
 Die Datei beschreibt die Eigenschaften eines konkreten Projekts, ohne die Foundation selbst projektspezifisch zu machen.
