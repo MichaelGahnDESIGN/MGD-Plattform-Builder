@@ -480,9 +480,12 @@ Nachrichten sind strikt getrennt; persönliche Meldungen und ihr Lesestatus blei
 auf dem Server. Der Skill enthält Hinweise für WordPress/WooCommerce, JTL-Shop,
 Shopware und Shopify sowie eine Prüfliste vor dem Release.
 
-Installation: den Ordner `platform/skills/notification-center/` nach `~/.claude/skills/`
-(Claude Code) oder `~/.agents/skills/` (Codex) kopieren. Aufruf: `/notification-center`
-in Claude Code, `$notification-center` in Codex. [Skill](platform/skills/notification-center/SKILL.md)
+Installation: den Ordner `platform/skills/notification-center/` aus dem Release-ZIP oder
+einem Klon dieses Repositories nach `~/.claude/skills/` (Claude Code) oder `~/.agents/skills/`
+(Codex) kopieren. Das npm-Paket der CLI enthält die Skills nicht. Aufruf: `/notification-center`
+in Claude Code, `$notification-center` in Codex. Der Briefing-Agent empfiehlt den Skill bei
+passenden Stichwörtern (`mgd-platform recommend`).
+[Skill](platform/skills/notification-center/SKILL.md)
 
 ## Projektprofil: `MGD_PLATFORM.yml`
 

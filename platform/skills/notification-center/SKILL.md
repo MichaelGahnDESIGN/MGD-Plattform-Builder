@@ -20,14 +20,16 @@ Verwende mindestens zwei logisch getrennte Datensätze:
 
 ```text
 Notification
-  id, scope(public|personal), type, source_key, title, body, target_url,
+  id, tenant_key, scope(public|personal), type, source_key, title, body, target_url,
   status(draft|scheduled|published|archived), published_at, expires_at
 
 NotificationRecipient
   notification_id, recipient_id, read_at, dismissed_at
 ```
 
-`source_key` ist für automatische Ereignisse eindeutig. Verwende zum Beispiel `product:<id>:published:<revision>` oder `order:<id>:status:<state>`. Ein wiederholter Hook darf keine weitere Meldung erzeugen. Manuelle Meldungen erhalten keine automatisch wiederverwendete Quell-ID.
+`tenant_key` benennt den Eigentümer der Meldung: Shop, Shopify-Domain, Sales-Channel oder Mandant. Bei einer Einzelinstallation ist es ein fester Wert. Jede Abfrage und jede Auslieferung filtert danach.
+
+`source_key` ist für automatische Ereignisse je `tenant_key` eindeutig; die Eindeutigkeit gilt für die Kombination aus `tenant_key` und `source_key`, weil IDs von Produkten und Bestellungen nur innerhalb eines Shops eindeutig sind. Verwende zum Beispiel `product:<id>:published:<revision>` oder `order:<id>:status:<state>:<event_id>`. Die `event_id` ist eine stabile Ereignis- oder Revisions-ID des Statuswechsels. So bleibt ein wiederholter Hook (Retry) folgenlos, aber ein späterer echter Wechsel zurück in einen früheren Status (zum Beispiel `processing`, `on-hold`, `processing`) erzeugt wieder eine Meldung. Manuelle Meldungen erhalten keine automatisch wiederverwendete Quell-ID.
 
 Persönliche Meldungen und ihr Lesestatus bleiben serverseitig. Öffentliche Ungelesen-Zustände dürfen lokal im Browser liegen, wenn dort ausschließlich öffentliche Meldungs-IDs gespeichert werden. Keine E-Mail-Adresse, Kunden-ID, Bestellung oder persönliche Nachricht in Local Storage, URL, HTML-Dataset oder öffentlichem JSON ausgeben.
 
@@ -71,7 +73,7 @@ Verwende Migrationen, Entity/Repository, ACL-geschützte Admin-Routen, Store-API
 
 ### Shopify
 
-Jede Auslieferung besteht aus MichaThemeV5 und der verpflichtenden MichaThemeV5-App. Das Theme liefert Liquid, Platzierung und App-Block. Die App besitzt die Datenhaltung, Admin-Oberfläche, signaturgeprüften App-Proxy und Webhooks. Webhooks prüfen den HMAC über den Rohbody, deduplizieren `X-Shopify-Webhook-Id` und antworten schnell. Der App-Proxy prüft seine Signatur und darf persönliche Daten nur für `logged_in_customer_id` desselben Shops ausliefern. Datenschutz-Webhooks für Auskunft und Löschung sind Teil der App-Konfiguration.
+Die Auslieferung besteht aus einem Theme und einer zugehörigen App. Das Theme liefert Liquid, Platzierung und App-Block; welches Theme das ist, hängt vom Projekt ab. Beispiel aus dem MGD-Umfeld: MichaThemeV5 mit der MichaThemeV5-App. Die App besitzt die Datenhaltung, Admin-Oberfläche, signaturgeprüften App-Proxy und Webhooks. Webhooks prüfen den HMAC über den Rohbody, deduplizieren `X-Shopify-Webhook-Id` und antworten schnell. Der App-Proxy prüft seine Signatur und darf persönliche Daten nur für `logged_in_customer_id` desselben Shops ausliefern. Datenschutz-Webhooks für Auskunft und Löschung sind Teil der App-Konfiguration.
 
 ## Betrieb
 

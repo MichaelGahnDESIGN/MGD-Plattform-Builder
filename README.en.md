@@ -491,9 +491,11 @@ shop or platform. Public messages and personal messages are strictly separated;
 personal messages and their read state stay on the server. It includes notes for
 WordPress/WooCommerce, JTL-Shop, Shopware and Shopify plus a pre-release checklist.
 
-Installation: copy the folder `platform/skills/notification-center/` to `~/.claude/skills/`
-(Claude Code) or `~/.agents/skills/` (Codex). Invoke `/notification-center` in Claude Code
-or `$notification-center` in Codex. See the [skill](platform/skills/notification-center/SKILL.md).
+Installation: copy the folder `platform/skills/notification-center/` from the release ZIP or
+a clone of this repository to `~/.claude/skills/` (Claude Code) or `~/.agents/skills/` (Codex).
+The CLI's npm package does not contain the skills. Invoke `/notification-center` in Claude Code
+or `$notification-center` in Codex. The briefing agent recommends the skill for matching
+keywords (`mgd-platform recommend`). See the [skill](platform/skills/notification-center/SKILL.md).
 
 ## MGD skill ecosystem
 
