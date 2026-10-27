@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/schema/module-package.schema.json",
+  "title": "MGD Starter Module Package",
+  "description": "module.json of an installable starter module in modules/<id>/. Paid modules require a signed module license key.",
+  "type": "object",
+  "required": ["id", "name", "version", "license"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{1,63}$" },
+    "name": { "type": "string", "minLength": 1 },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "description": { "type": "string" },
+    "vendor": { "type": "string" },
+    "license": { "type": "string", "enum": ["free", "paid"] },
+    "requires": {
+      "type": "object",
+      "properties": {
+        "starter": { "type": "string" },
+        "php": { "type": "string" }
+      },
+      "additionalProperties": { "type": "string" }
+    },
+    "entry": { "type": "string", "pattern": "^[A-Za-z0-9_./-]+\\.php$", "default": "module.php" },
+    "migrations": { "type": "string" },
+    "menu": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["href", "label"],
+        "properties": {
+          "href": { "type": "string", "pattern": "^/admin/[a-z0-9/_-]+$" },
+          "label": { "type": "string", "minLength": 1, "maxLength": 60 },
+          "role": { "type": "string", "enum": ["moderator", "editor", "admin"] }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": true
+}

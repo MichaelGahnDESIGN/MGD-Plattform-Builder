@@ -1,6 +1,6 @@
 # PHP/MariaDB Referenzplattform
 
-Die PHP/MariaDB Referenz ist die erste **wirklich startbare Beispielplattform** des MGD Project Platform Systems.
+Die PHP/MariaDB Referenz ist die erste **wirklich startbare Beispielplattform** des MGD-Plattform-Builders.
 
 Sie zeigt, wie die abstrakten Foundation-Regeln in einer kleinen klassischen Webanwendung umgesetzt werden können, ohne Symfony, Laravel oder ein anderes Framework vorzuschreiben.
 
@@ -46,8 +46,8 @@ Composer
 Repository klonen und in die Referenz wechseln:
 
 ```bash
-git clone https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System.git
-cd Projekt-Plattform-System/reference/php-mariadb
+git clone https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder.git
+cd MGD-Plattform-Builder/reference/php-mariadb
 ```
 
 ### Einfachster Weg mit Docker
@@ -339,6 +339,6 @@ Capability prüfen
 → Audit Event schreiben
 ```
 
-Dadurch bekommen Menschen und Coding-Agenten ein konkretes Muster, ohne dass das gesamte MGD Project Platform System zu einem PHP-Framework wird.
+Dadurch bekommen Menschen und Coding-Agenten ein konkretes Muster, ohne dass das gesamte MGD-Plattform-Builder zu einem PHP-Framework wird.
 
 Weiter: [[22-Translation-Review-Agenten-Historie-und-Idempotente-Jobs]] · [[21-Migrationen-I18n-Agenten-und-Jobs]] · [[18-CLI-Validator-und-Automatisierung]] · [[19-Referenzimplementierungen-und-Demos]] · [[05-Rollen-Berechtigungen-und-Backoffice]]

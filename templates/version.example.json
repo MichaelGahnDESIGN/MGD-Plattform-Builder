@@ -1,0 +1,6 @@
+{
+  "version": "0.0.1",
+  "status": "pre-alpha",
+  "released_at": null,
+  "sync_targets": ["VERSION"]
+}

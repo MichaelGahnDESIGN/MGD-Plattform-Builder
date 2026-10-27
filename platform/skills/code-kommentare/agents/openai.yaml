@@ -1,0 +1,6 @@
+interface:
+  display_name: "Code-Kommentare"
+  short_description: "Kurze deutsche Code-Kommentare in Michaels Stil"
+  default_prompt: "Nutze $code-kommentare für die Kommentare im gewählten Codebereich."
+policy:
+  allow_implicit_invocation: true

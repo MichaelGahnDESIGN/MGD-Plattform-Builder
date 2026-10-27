@@ -1,23 +1,98 @@
 <div align="center">
 
-# MGD Project Platform System
+# MGD-Plattform-Builder
 
 **A reusable, agent-friendly foundation for building and operating modern digital platforms.**
 
 Privacy, security, compliance, modular backends, administration, moderation, Docker workflows, documentation and AI-agent collaboration in one project-neutral blueprint.
 
-[![Status](https://img.shields.io/badge/status-early%20foundation-orange?style=flat-square)](ROADMAP.md)
+[![Version](https://img.shields.io/badge/version-0.8.2%20Pre--Alpha-orange?style=flat-square)](version.json)
 [![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-compatible-6B5CE7?style=flat-square)](AGENTS.md)
 [![ChatGPT Codex](https://img.shields.io/badge/ChatGPT%20Codex-compatible-10A37F?style=flat-square)](AGENTS.md)
 
-[Deutsch](README.md) · **English** · [Installation](INSTALL.md) · [GitHub Wiki](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki) · [CLI documentation](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki/18-CLI-Validator-und-Automatisierung) · [Roadmap](ROADMAP.md) · [Contributing](CONTRIBUTING.md)
+[Deutsch](README.md) · **English** · [Installation](INSTALL.md) · [GitHub Wiki](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/wiki) · [CLI documentation](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/wiki/18-CLI-Validator-und-Automatisierung) · [Roadmap](ROADMAP.md) · [Contributing](CONTRIBUTING.md)
 
 </div>
 
+## New in 0.8.0: system and dependency inventory
+
+`mgd-platform resources` inventories supported lockfiles, CMS/plugin/theme metadata, container and CI declarations, and explicit system/service observations. Current OSV/GitHub checks and support data feed a private local HTML/JSON dashboard. Unknown coverage stays visible; private package names are not sent to OSV. `register` includes new projects in an existing local monitoring setup, and `--track` lets scheduled callers stay quiet unless findings or coverage change. Dependabot setup uses reviewable configuration PRs and never deploys or merges updates automatically.
+
+[Usage, supported formats and security boundaries (German)](WIKI/06-OPERATIONS/RESOURCE-MANAGER.md)
+
 ---
 
-## New in 0.5: translation review, agent history and idempotent jobs
+## New in 0.7.0 Pre-Alpha: mandatory companions – living documentation, Graphify and Todo
+
+Every project built or managed with the Builder now carries **three companions**. They are installed with the project and then maintained with **every change** – by people and by AI agents.
+
+| Companion | Owns | Where | Skill / tool |
+|---|---|---|---|
+| [**Living documentation**](https://github.com/MichaelGahnDESIGN/MGD_Living-Documentation) | the **state**: confirmed facts, decisions, open points, risks, evidence | `DOKUMENTATION/` | `living-documentation` |
+| [**Graphify**](https://github.com/Graphify-Labs/graphify) | the **map**: what exists and what depends on what (machine-generated, local, no LLM) | `graphify-out/` | `graphify` |
+| [**Todo**](https://github.com/MichaelGahnDESIGN/MGD_Todo_SKILL) | the **work**: tasks and their status | `TODO/TODO.html` | `todo` |
+
+Graphify is built into the living documentation: the graph is its **map**. The documentation links to `graphify-out/GRAPH_REPORT.md`, architecture statements cite their evidence (`graphify explain`, `graphify path`), and `graphify update .` is a fixed step of every work cycle.
+
+```bash
+mgd-platform companions status ./my-project        # what is installed, what is missing?
+mgd-platform companions install ./my-project       # dry run: shows the plan, changes nothing
+mgd-platform companions install ./my-project --scope project --graphify user --yes
+```
+
+- **Install:** skills come from the **newest release** of each companion's own repository (default; `--pinned` installs the tested release, for example in CI), the clone is verified against the commit that was looked up (a moved tag aborts), they are installed for Claude Code (`.claude/skills`) and Codex (`.agents/skills`), and the command creates `DOKUMENTATION/README.md` and `TODO/TODO.html`, sets up Graphify and builds the first graph. Existing installs (also under the alias `mgd-todo`) are never overwritten.
+- **Safety:** the CLI never runs a program from inside the project (not even in the dry run), never follows symbolic links when writing, and verifies the clone against the looked-up commit before checking it out. Graphify's git hooks are opt-in (`--hooks`). An independent security review covered this before the release.
+- **Updates in one place:** publish a new Todo, Living Documentation or Graphify release in its own repository and every project created afterwards uses it. Nothing has to change in the Builder (the registry only holds the floor). Existing installs are never overwritten, so a skill you updated locally keeps being used.
+- **Ask, don't automate:** with `--yes` you must pass `--scope project|user` and, while Graphify is missing, `--graphify user|project|skip`. The agent asks the user; nothing is installed silently.
+- **Work cycle:** the template `AGENTS.md`/`CLAUDE.md` prescribe it – ask the graph first, then update todo list, living documentation and `graphify update .` after every finished sub-goal.
+- **Enforcement:** `doctor` reports them (a hint), `validate` rejects `enabled: false` in the profile, and `release-check` is **blocked** while one is missing.
+- **Clean graph:** installed agent skills and `TODO/` are kept out of the graph via `.graphifyignore`; `graphify-out/cache/` stays out of Git.
+- **Shortcut:** `mgd-platform init --target ./my-project --companions --scope project --graphify user` sets up the project and the companions in one run (`--scope` is required here too).
+
+More: [Mandatory companions](WIKI/07-AGENTS/COMPANIONS.md)
+
+---
+
+## Since 0.6.0: MGD-Plattform-Builder, license label, users, media and modules
+
+The project is now called **MGD-Plattform-Builder**.
+
+- **Dual license:** CLI, schemas and docs stay MIT; starter templates, the reference platform and the label are under the [MGD License](MGD-Lizenz.md) – see [LICENSING.md](LICENSING.md).
+- **Mandatory label** "powered by: Michael Gahn DESIGN" (logo, link in a new tab) in footers, landing pages, login, backoffice and settings, plus **Settings › License**.
+- **White-label** (EUR 500 one-time per project/domain) via a signed license key.
+- **Starter:** user management, my account, optional e-mail password reset, media library, full GrapesJS saving (HTML, CSS, project data), updater channels, module interface (free and paid modules).
+
+More: [Licensing, label, white-label and modules](WIKI/18-CMS/LICENSING.md)
+
+---
+
+## Since 0.5.1: AI-generated CMS with mandatory features
+
+With 0.5.1 the foundation becomes an **AI-agent driven CMS**. Claude Code, ChatGPT Codex and other agents use it to build websites for games, projects and platforms – from a **briefing**, a **starter template** and **mandatory features** that every project always contains.
+
+| Mandatory feature | In short |
+|---|---|
+| **Versioning** | `version.json` as single source, `MAJOR.MINOR.PATCH` + status (Pre-Alpha … Stable). Start: `0.0.1 Pre-Alpha`. Shown below the login and in (game) settings; more locations configurable in the backoffice |
+| **Release notes** | timeline in settings; the frontend sees frontend notes only, editor/admin/mod see everything |
+| **Credits** | people and roles first, then all AI systems, tools, plugins, libraries, fonts and icons with logo, provider, links and license tags – everything embedded locally |
+| **Legal / CMS pages** | contact, imprint, terms, privacy, cookies, cookie box, payment, shipping, withdrawal, withdrawal button, youth protection, accessibility, AI philosophy – edit, delete, add, revisions, export/import |
+| **Settings** | always searchable and filterable; design colors, light/dark toggle, file locations, optional code editors |
+| **Templates** | `templates/php-mysql-starter`: PHP + FTP + one MySQL DB (logins), optional second DB for personal data, always light **and** dark |
+
+```bash
+mgd-platform template create php-mysql-starter --target ./my-project
+mgd-platform init --target ./my-project
+mgd-platform briefing ./my-project --write     # mandatory questions: editor local/CDN, version display, updater, loading screen, SEO, ...
+mgd-platform recommend ./my-project            # matching MGD skills, tools, plugins and MGD-DevOS
+mgd-platform version ./my-project --bump patch --note "First deploy" --audience frontend
+```
+
+More: [Mandatory features](WIKI/18-CMS/MANDATORY-FEATURES.md) · [Versioning](WIKI/18-CMS/VERSIONING-RELEASE-NOTES.md) · [Credits](WIKI/18-CMS/CREDITS.md) · [Legal/CMS pages](WIKI/18-CMS/LEGAL-CMS-PAGES.md) · [Settings/design/themes](WIKI/18-CMS/SETTINGS-DESIGN-THEMES.md) · [Briefing](WIKI/18-CMS/BRIEFING-RECOMMENDATIONS.md) · [Templates](WIKI/18-CMS/TEMPLATES.md)
+
+---
+
+## Since 0.5: translation review, agent history and idempotent jobs
 
 Version 0.5 adds team and operational workflows. Translations now move through draft, review, published or rejected states. JSON exports can be imported again and intentionally return to draft. Service principals have dedicated detail/history views. Background jobs can use idempotency keys and modular handler registration.
 
@@ -36,7 +111,7 @@ request + idempotency key
 → done / retry / dead
 ```
 
-More: [0.5 translation review, agent history and idempotent jobs](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki/22-Translation-Review-Agenten-Historie-und-Idempotente-Jobs)
+More: [0.5 translation review, agent history and idempotent jobs](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/wiki/22-Translation-Review-Agenten-Historie-und-Idempotente-Jobs)
 
 ---
 
@@ -53,7 +128,7 @@ php scripts/migrate.php
 php -S 127.0.0.1:8080 -t public
 ```
 
-More: [0.4 migrations, i18n, agents and jobs](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki/21-Migrationen-I18n-Agenten-und-Jobs)
+More: [0.4 migrations, i18n, agents and jobs](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/wiki/21-Migrationen-I18n-Agenten-und-Jobs)
 
 ---
 
@@ -71,7 +146,7 @@ php -S 127.0.0.1:8080 -t public
 
 The reference is integration-tested against a real MariaDB instance in GitHub Actions.
 
-[PHP/MariaDB reference Wiki guide](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki/20-PHP-MariaDB-Referenzplattform)
+[PHP/MariaDB reference Wiki guide](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/wiki/20-PHP-MariaDB-Referenzplattform)
 
 ---
 
@@ -91,15 +166,15 @@ mgd-platform update ./my-project
 
 Version 0.2 also adds a central capability registry, machine-readable release evidence, automated GitHub Foundation Checks, a PHP/MariaDB reference implementation and a local backoffice demo.
 
-Full CLI documentation: [CLI, Validator and Automation](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki/18-CLI-Validator-und-Automatisierung)
+Full CLI documentation: [CLI, Validator and Automation](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/wiki/18-CLI-Validator-und-Automatisierung)
 
-Reference implementations: [Reference Implementations and Demos](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/wiki/19-Referenzimplementierungen-und-Demos)
+Reference implementations: [Reference Implementations and Demos](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/wiki/19-Referenzimplementierungen-und-Demos)
 
 ---
 
 ## What is this project?
 
-The **MGD Project Platform System** is not a finished CMS, SaaS product or rigid application framework.
+The **MGD-Plattform-Builder** is a foundation for **AI-generated CMS projects** – not a SaaS product or rigid application framework.
 
 It is a **reusable platform foundation** for projects that need more than a frontend and a database: user accounts, roles, administration, moderation, privacy, security, compliance, backups, staging, translations, support, documentation, AI agents and a controlled development workflow.
 
@@ -193,12 +268,13 @@ The foundation moves these concerns to the beginning of the project instead of t
 ## Quick start
 
 ```bash
-git clone https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System.git
-cd Projekt-Plattform-System
+git clone https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder.git
+cd MGD-Plattform-Builder
 npm install
 npm link
 mgd-platform init --preset general --target ../my-project
 cd ../my-project
+mgd-platform companions install . --scope project --graphify user --yes   # living documentation, Graphify, Todo
 mgd-platform doctor
 mgd-platform audit --write
 ```
@@ -379,18 +455,66 @@ See [Agent Workflow](WIKI/07-AGENTS/AGENT-WORKFLOW.md).
 
 ---
 
+## Reusable access skill
+
+The standalone `zugang` skill imports a local Markdown credential file into a protected dotenv
+file, verifies Git/upload exclusions and platform-specific write/delete protection, and performs
+a minimal authentication check. It preserves existing files and does not deploy, create keys or
+change security settings by default. Available for new and existing projects under the MIT license.
+
+```sh
+python3 scripts/install-zugang.py --agent both
+```
+
+Invoke `/zugang private/access.md` in Claude Code or `$zugang private/access.md` in Codex.
+See [installation](INSTALL.md) and [the access guide](WIKI/Zugaenge-einrichten.md).
+
+## Code comments in Michael's style
+
+The optional `code-kommentare` skill writes concise, practical German comments,
+keeping necessary safety notes and the language's comment syntax. Small natural
+comment typos are allowed, never forced; code, paths, UI and documentation stay correct.
+
+```sh
+python3 scripts/install-code-kommentare.py --agent codex
+```
+
+Claude Code: `/code-kommentare [file or area]`; Codex:
+`$code-kommentare [file or area]`. Use `--agent claude` or `--agent both` as needed.
+Existing destinations are preserved. See the [installation and style guide](WIKI/Code-Kommentare.md)
+and [skill](platform/skills/code-kommentare/SKILL.md).
+
+## Notification center: bell and inbox
+
+The optional `notification-center` skill helps build a bell or inbox in a website,
+shop or platform. Public messages and personal messages are strictly separated;
+personal messages and their read state stay on the server. It includes notes for
+WordPress/WooCommerce, JTL-Shop, Shopware and Shopify plus a pre-release checklist.
+
+Installation: copy the folder `platform/skills/notification-center/` from the release ZIP or
+a clone of this repository to `~/.claude/skills/` (Claude Code) or `~/.agents/skills/` (Codex).
+The CLI's npm package does not contain the skills. Invoke `/notification-center` in Claude Code
+or `$notification-center` in Codex. The briefing agent recommends the skill for matching
+keywords (`mgd-platform recommend`). See the [skill](platform/skills/notification-center/SKILL.md).
+
 ## MGD skill ecosystem
 
 | Project | Purpose |
 |---|---|
 | [MGD DEV Skill](https://github.com/MichaelGahnDESIGN/MGD_DEV_SKILL) | project state, testing, release and deployment readiness |
-| [MGD Todo Skill](https://github.com/MichaelGahnDESIGN/MGD_Todo_SKILL) | project task and documentation index |
+| [MGD Todo Skill](https://github.com/MichaelGahnDESIGN/MGD_Todo_SKILL) | **mandatory companion:** project task and documentation index |
 | [MGD Backup Skill](https://github.com/MichaelGahnDESIGN/MGD_Backup_SKILL) | backup and restore workflows |
 | [MGD Autopilot Skill](https://github.com/MichaelGahnDESIGN/MGD_Autopilot_SKILL) | controlled autonomous work |
 | [MGD ProjectClean Skill](https://github.com/MichaelGahnDESIGN/MGD_ProjectClean_SKILL) | project completion and cleanup |
 | [MGD AI Thread](https://github.com/MichaelGahnDESIGN/MGD_AI-Thread) | handoff between context windows |
 | [MGD AI PlayTest Skill](https://github.com/MichaelGahnDESIGN/MGD_AI-PlayTest_SKILL) | role-based play/product testing |
-| [MGD Platform Builder](https://github.com/MichaelGahnDESIGN/MGD_Platform-Builder_TOOL) | generates technical starter skeletons |
+| [MGD Docker Projektbuilder](https://github.com/MichaelGahnDESIGN/MGD_Docker_Projektbuilder) | generates technical starter skeletons |
+| [MGD-DevOS](https://github.com/MichaelGahnDESIGN/MGD-DevOS) | desktop project hub with dashboards; recommended by the briefing when several projects or agents are managed |
+| [MGD Living Documentation](https://github.com/MichaelGahnDESIGN/MGD_Living-Documentation) | **mandatory companion:** evidence-based, versioned project documentation |
+| [Graphify](https://github.com/Graphify-Labs/graphify) | **mandatory companion:** project knowledge graph, the machine-generated map of the living documentation |
+| [MGD Software Updater Skill](https://github.com/MichaelGahnDESIGN/MGD_Software-Updater_SKILL) | plans and builds updaters when the briefing asks for one |
+
+The complete machine-readable list with matching rules is [`registry/recommendations.yml`](registry/recommendations.yml) (`mgd-platform recommend`).
 
 ---
 
@@ -412,7 +536,7 @@ See [Domain Packs](WIKI/10-DOMAIN-PACKS/README.md).
 
 ## Maturity
 
-Current status: **Early Foundation / 0.5.x**
+Current status: **0.7.0 Pre-Alpha** (see [`version.json`](version.json) and [`release-notes.json`](release-notes.json))
 
 Schemas and recommendations may change before 1.0. Real-world feedback and contributions are welcome.
 
@@ -432,7 +556,7 @@ Security issues should follow [SECURITY.md](SECURITY.md).
 
 ## License
 
-MIT License. See [LICENSE](LICENSE).
+Dual licensed, see [LICENSING.md](LICENSING.md): **MIT** for CLI, validator, schemas, registries, scripts and docs; **MGD License** ([MGD-Lizenz.md](MGD-Lizenz.md)) for starter templates, the reference platform, the "powered by" label and projects built from them. Versions up to 0.5.1 remain MIT.
 
 ---
 

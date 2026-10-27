@@ -17,10 +17,10 @@ concurrency:
 
 jobs:
   publish-wiki:
-    runs-on: [self-hosted, Linux]
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Clone GitHub wiki
         env:

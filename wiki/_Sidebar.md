@@ -1,4 +1,4 @@
-# MGD Project Platform System
+# MGD-Plattform-Builder
 
 **Start**
 * [[Home]]
@@ -6,8 +6,16 @@
 * [[02-Schnellstart]]
 * [[03-Projektprofil-und-Konfiguration]]
 
+**AI-CMS**
+* [[23-AI-CMS-Pflichtfunktionen]]
+* [[24-Briefing-Templates-und-Empfehlungen]]
+* [[25-Lizenz-Label-Whitelabel-und-Module]]
+* [[27-Begleiter-Living-Documentation-Graphify-Todo]]
+
 **Werkzeuge**
 * [[18-CLI-Validator-und-Automatisierung]]
+* [[26-Zugaenge-einrichten]]
+* [[28-System-und-Abhaengigkeitsmanager]]
 * [[19-Referenzimplementierungen-und-Demos]]
 * [[20-PHP-MariaDB-Referenzplattform]]
 * [[21-Migrationen-I18n-Agenten-und-Jobs]]
@@ -37,4 +45,4 @@
 
 ---
 
-[Repository](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System) · [Issues](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/issues)
+[Repository](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder) · [Issues](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/issues)

@@ -1,0 +1,31 @@
+/* Design-Tokens (modusunabhängig). Farben stehen in theme-light.css / theme-dark.css
+   und werden durch die Design-Einstellungen im Backoffice überschrieben. */
+:root {
+  --font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --radius: 8px;
+  --radius-small: calc(var(--radius) / 2);
+  --radius-pill: 999px;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --font-size-small: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lead: 1.125rem;
+  --font-size-h3: 1.2rem;
+  --font-size-h2: 1.5rem;
+  --font-size-h1: clamp(1.75rem, 1.4rem + 1.5vw, 2.5rem);
+  --line-height: 1.6;
+  --container: 72rem;
+  --container-narrow: 48rem;
+  --transition: 150ms ease;
+  --focus-ring: 0 0 0 3px color-mix(in srgb, var(--color-primary) 45%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --transition: 0ms; }
+}

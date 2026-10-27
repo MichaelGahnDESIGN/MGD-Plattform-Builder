@@ -1,4 +1,4 @@
-version: "0.5.0"
+version: "0.5.1"
 
 conventions:
   format: "<domain>.<resource>.<action>"
@@ -109,3 +109,66 @@ capabilities:
     group: translations
     risk: low
     audit: true
+
+  # 0.5.1 mandatory CMS features
+  cms.pages.read:
+    group: cms
+    risk: low
+    audit: false
+
+  cms.pages.manage:
+    group: cms
+    risk: medium
+    audit: true
+
+  cms.pages.delete:
+    group: cms
+    risk: high
+    audit: true
+
+  cms.pages.import:
+    group: cms
+    risk: high
+    audit: true
+
+  cms.pages.export:
+    group: cms
+    risk: medium
+    audit: true
+
+  release-notes.manage:
+    group: cms
+    risk: low
+    audit: true
+
+  credits.manage:
+    group: cms
+    risk: low
+    audit: true
+
+  settings.read:
+    group: system
+    risk: low
+    audit: false
+
+  settings.manage:
+    group: system
+    risk: high
+    audit: true
+
+  design.manage:
+    group: system
+    risk: medium
+    audit: true
+
+  code-editor.assets.manage:
+    group: system
+    risk: high
+    audit: true
+    reauthentication: true
+
+  code-editor.server.manage:
+    group: system
+    risk: critical
+    audit: true
+    reauthentication: true

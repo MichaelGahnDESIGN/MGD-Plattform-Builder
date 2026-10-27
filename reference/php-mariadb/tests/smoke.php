@@ -13,6 +13,7 @@ use MGD\Platform\Core\Jobs\JobHandlerRegistry;
 use MGD\Platform\Core\Jobs\Outbox;
 use MGD\Platform\Core\Permissions\Authorization;
 use MGD\Platform\Core\Permissions\CapabilityRepository;
+use MGD\Platform\Core\Support\Version;
 use MGD\Platform\Modules\Accounts\AccountService;
 
 require dirname(__DIR__) . '/vendor/autoload.php';
@@ -352,4 +353,8 @@ if ($auditCount < 10) {
     throw new RuntimeException('Expected audit events were not created.');
 }
 
-fwrite(STDOUT, "PHP/MariaDB 0.5 reference smoke test passed.\n");
+if (Version::format('0.5.1', 'pre-alpha') !== '0.5.1 Pre-Alpha' || Version::label() === 'unknown') {
+    throw new RuntimeException('Version label could not be resolved from version.json.');
+}
+
+fwrite(STDOUT, "PHP/MariaDB 0.5.1 reference smoke test passed (" . Version::label() . ").\n");

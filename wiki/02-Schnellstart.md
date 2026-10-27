@@ -9,8 +9,8 @@ Für neue Projekte ist die CLI der einfachste Einstieg.
 Repository klonen und Abhängigkeiten installieren:
 
 ```bash
-git clone https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System.git
-cd Projekt-Plattform-System
+git clone https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder.git
+cd MGD-Plattform-Builder
 npm install
 npm link
 ```
@@ -30,6 +30,14 @@ community
 creator
 ecommerce
 ```
+
+Living Documentation, Graphify und Todo gehören zu jedem Projekt. Den Nutzer fragen, ob die Skills nur für dieses Projekt (`--scope project`) oder für alle Projekte (`--scope user`) installiert werden und ob Graphify für den Benutzer (`--graphify user`) oder projektlokal (`--graphify project`) laufen soll:
+
+```bash
+mgd-platform companions install ../mein-projekt --scope project --graphify user --yes
+```
+
+Oder gleich beim Anlegen: `mgd-platform init --preset general --target ../mein-projekt --companions`. Details: [[27-Begleiter-Living-Documentation-Graphify-Todo]].
 
 Anschließend:
 
@@ -54,6 +62,8 @@ CLAUDE.md
 FEATURE-GOVERNANCE.md
 .mgd/evidence/
 ```
+
+`DOKUMENTATION/`, `TODO/TODO.html` und `graphify-out/` entstehen mit `mgd-platform companions install` (oder `init --companions`).
 
 Das Projektprofil wird anschließend an das echte Projekt angepasst.
 

@@ -67,4 +67,4 @@ Wenn sich Verhalten, Schema, Rollenmodell oder Release-Prozess ändert, sollen d
 
 Keine echten Credentials, privaten Serverpfade, Kundendaten, NDA-Inhalte oder vertrauliche Rechtskorrespondenz committen.
 
-Repository: [MichaelGahnDESIGN/Projekt-Plattform-System](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System)
+Repository: [MichaelGahnDESIGN/MGD-Plattform-Builder](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder)

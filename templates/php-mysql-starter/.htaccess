@@ -1,0 +1,14 @@
+# Nur nötig, wenn der Hoster den Document Root NICHT auf public/ setzen kann.
+# Leitet alles nach public/ um und sperrt interne Ordner.
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^(config|src|database|scripts|storage|tests|custom)(/|$) - [F,L]
+    RewriteRule (^|/)\.(?!well-known/) - [F,L]
+    RewriteRule ^((?!public/).*)$ public/$1 [L]
+</IfModule>
+
+<FilesMatch "(?i)\.(md|sql|lock|bak|log|json|example)$">
+    Require all denied
+</FilesMatch>

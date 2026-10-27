@@ -47,6 +47,6 @@ Das Repository enthält ein strukturiertes Modell für Rechtsquellen. Primärque
 
 Die Foundation und dieses Wiki sind keine Rechtsberatung. Vor einem öffentlichen Launch, insbesondere bei Verbrauchern, Zahlungen, Kindern oder besonderen Datenkategorien, ist eine projektspezifische Prüfung erforderlich.
 
-Technische Referenzen: [Privacy](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/tree/main/WIKI/04-PRIVACY) · [Compliance](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/tree/main/WIKI/05-COMPLIANCE)
+Technische Referenzen: [Privacy](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/tree/main/WIKI/04-PRIVACY) · [Compliance](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/tree/main/WIKI/05-COMPLIANCE)
 
 Weiter: [[08-Sicherheit-und-Threat-Model]]

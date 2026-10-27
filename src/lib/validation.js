@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import Ajv2020 from "ajv/dist/2020.js";
 import { foundationRoot } from "./paths.js";
+import { validateMandatoryFeatures } from "./mandatory-rules.js";
 
 export async function loadProfileSchema() {
   const schemaPath = path.join(foundationRoot, "schema", "mgd-platform.schema.json");
@@ -127,7 +128,12 @@ export function validateProfileRules(profile) {
     }
   }
 
-  return { errors, warnings };
+  const mandatory = validateMandatoryFeatures(profile);
+
+  return {
+    errors: [...errors, ...mandatory.errors],
+    warnings: [...warnings, ...mandatory.warnings]
+  };
 }
 
 export async function validateProfile(profile) {

@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { loadProjectProfile } from "../lib/profile.js";
 import { validateProfile } from "../lib/validation.js";
+import { inspectCompanions, loadCompanionRegistry } from "../lib/companions.js";
 
 function isExpired(record) {
   if (!record.expires_at) return false;
@@ -9,7 +10,7 @@ function isExpired(record) {
   return Number.isFinite(time) && time < Date.now();
 }
 
-export async function releaseCheckCommand(target = ".") {
+export async function releaseCheckCommand(target = ".", overrides = {}) {
   const root = path.resolve(target);
   let loaded;
 
@@ -47,6 +48,12 @@ export async function releaseCheckCommand(target = ".") {
 
   if (gates.length === 0) {
     console.log("! No release gates declared");
+  }
+
+  const companions = await inspectCompanions({ root, profile: loaded.profile, registry: await loadCompanionRegistry(), ...overrides });
+  for (const item of companions) {
+    console.log((item.ok ? "✓" : "✗") + " companion " + item.companion.id + (item.ok ? "" : " — " + (item.installed ? item.project.error || item.project.path + " missing" : "not installed")));
+    if (!item.ok) blocked = true;
   }
 
   console.log("\nRelease readiness: " + (blocked ? "BLOCKED" : "READY"));

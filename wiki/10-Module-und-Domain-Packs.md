@@ -65,6 +65,6 @@ Entitlements beschreiben Nutzungsrechte für Features, Produkte, Inhalte oder Mo
 
 Beispiel: Ein Nutzer darf ein Premium-Modul besitzen, ohne dadurch Admin-Rechte zu erhalten.
 
-Technische Referenz: [Domain Packs](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/tree/main/WIKI/10-DOMAIN-PACKS)
+Technische Referenz: [Domain Packs](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/tree/main/WIKI/10-DOMAIN-PACKS)
 
 Weiter: [[11-Betrieb-Staging-Deployment-Backup-und-Monitoring]]

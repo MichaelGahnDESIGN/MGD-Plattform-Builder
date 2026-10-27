@@ -95,7 +95,7 @@ async function createOrUpdateRelease(notes) {
   const payload = {
     tag_name: tag,
     target_commitish: targetCommitish,
-    name: `MGD Project Platform System ${tag}`,
+    name: `MGD-Plattform-Builder ${tag}`,
     body: notes,
     draft: false,
     prerelease: false,

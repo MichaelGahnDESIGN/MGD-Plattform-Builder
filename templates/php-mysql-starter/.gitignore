@@ -1,0 +1,22 @@
+# Geheimnisse
+/config/config.php
+
+# Laufzeitdaten
+/storage/install.lock
+/storage/backups/*
+!/storage/backups/code/
+/storage/backups/code/*
+!/storage/backups/code/.gitkeep
+/storage/logs/*
+!/storage/logs/.gitkeep
+/storage/exports/*
+!/storage/exports/.gitkeep
+/public/uploads/*
+!/public/uploads/.gitkeep
+!/public/uploads/.htaccess
+
+# Lokal eingebettete Editor-Bibliotheken (werden separat heruntergeladen)
+/public/assets/vendor/*
+!/public/assets/vendor/README.md
+
+.DS_Store

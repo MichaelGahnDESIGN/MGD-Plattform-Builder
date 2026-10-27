@@ -55,6 +55,24 @@ Das Projektprofil soll Projekttyp, Zielmärkte, Sprachen, relevante Features, Da
 
 Keine Passwörter, API-Keys, Tokens, personenbezogenen Produktionsdaten, private Serverzugänge oder vertrauliche Kundeninformationen.
 
+## Pflichtabschnitte ab 0.5.1 (`companions` ab 0.7.0)
+
+| Abschnitt | Inhalt |
+|---|---|
+| `versioning` | Version, Status, Anzeigeorte, Sichtbarkeit, Release Notes |
+| `cms` | Editor, lokal oder CDN, Revisionen, Import/Export, Rechtsseiten |
+| `credits` | Personen, Komponenten, nur lokale Assets |
+| `settings` | durchsuchbar und filterbar |
+| `appearance` | Light + Dark, Standardmodus, Umschalter-Orte, Design-Farben |
+| `file_locations` | wichtige Pfade (ohne Secrets) |
+| `code_editors` | CSS/JS/PHP-Editoren und Schutzmaßnahmen |
+| `experience` | Updater, Ladebildschirm, SEO, Cookie-Box, Wartungsmodus, ... |
+| `template` | Starter-Template, Varianten, Datenbanken, Auslieferung |
+| `briefing` | Briefing-Status und angenommene Empfehlungen |
+| `companions` | Pflicht-Begleiter (ab 0.7.0): `living_documentation`, `graphify`, `todo` mit je `enabled` und `path`; `enabled: false` ist ein Fehler |
+
+Siehe [[23-AI-CMS-Pflichtfunktionen]] und [[27-Begleiter-Living-Documentation-Graphify-Todo]].
+
 ## Schema
 
 Das Repository enthält ein JSON Schema unter:

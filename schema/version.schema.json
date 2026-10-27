@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/schema/version.schema.json",
+  "title": "MGD Version File",
+  "description": "Single source of truth for a project's version number and release status. Other files are synchronized from it.",
+  "type": "object",
+  "required": ["version", "status"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "version": {
+      "type": "string",
+      "description": "MAJOR.MINOR.PATCH. MAJOR = release line, MINOR = new features, PATCH = patches and updates of existing features.",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pre-alpha", "alpha", "beta", "pre-release", "release", "stable", "staging", "hotfix", "lts", "deprecated"]
+    },
+    "build": { "type": ["string", "null"] },
+    "released_at": { "type": ["string", "null"], "format": "date" },
+    "sync_targets": {
+      "type": "array",
+      "description": "Files updated by `mgd-platform version --sync`. Supported: VERSION, package.json, composer.json, template.json.",
+      "items": { "type": "string", "enum": ["VERSION", "package.json", "composer.json", "template.json"] },
+      "uniqueItems": true
+    }
+  },
+  "additionalProperties": false
+}

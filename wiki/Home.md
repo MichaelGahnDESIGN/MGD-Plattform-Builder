@@ -1,10 +1,16 @@
-# MGD Project Platform System
+# MGD-Plattform-Builder
 
-Willkommen im öffentlichen Wiki des **MGD Project Platform Systems**.
+Willkommen im öffentlichen Wiki des **MGD-Plattform-Builders**.
 
 Diese Dokumentation erklärt die Foundation so, dass Entwickler, Projektverantwortliche, Agenten und externe Dritte verstehen können, **was das System ist, wie es eingesetzt wird, welche Sicherheits- und Datenschutzprinzipien gelten und wie ein Projekt damit betrieben und weiterentwickelt wird**.
 
-> **Kurz gesagt:** Das MGD Project Platform System ist eine projektneutrale Grundlage für moderne digitale Plattformen mit Accounts, Rollen, Admin- und Moderatorbereichen, Datenschutz, Sicherheit, Compliance, Backups, Staging, Support, Dokumentation und AI-Agenten.
+> **Neu in 0.8.0 Pre-Alpha:** Der System- und Abhängigkeitsmanager inventarisiert den Software-Stack, prüft aktuelle Sicherheits- und Supportquellen und bereitet kontrollierte Update-PRs vor. → [[28-System-und-Abhaengigkeitsmanager]]
+
+> **Seit 0.7.0 Pre-Alpha:** **Living Documentation, Graphify und Todo** sind Pflicht-Begleiter jedes Projekts: Sie werden mit `mgd-platform companions install` zusammen mit dem Projekt installiert und bei jeder Änderung gepflegt. → [[27-Begleiter-Living-Documentation-Graphify-Todo]]
+
+> **Seit 0.5.1 Pre-Alpha:** Die Foundation wird zum **AI-Agenten-gesteuerten CMS** – mit Pflichtfunktionen (Versionierung, Release Notes, Credits, editierbare Rechtstexte, durchsuchbare Einstellungen, Design, Light/Dark), Agenten-Briefing, Empfehlungen für MGD-DevOS und MGD Skills sowie einem FTP-fähigen PHP/MySQL-Starter. → [[23-AI-CMS-Pflichtfunktionen]] · [[24-Briefing-Templates-und-Empfehlungen]]
+
+> **Kurz gesagt:** Das MGD-Plattform-Builder ist eine projektneutrale Grundlage für moderne digitale Plattformen mit Accounts, Rollen, Admin- und Moderatorbereichen, Datenschutz, Sicherheit, Compliance, Backups, Staging, Support, Dokumentation und AI-Agenten.
 
 ## Wo sollte ich anfangen?
 
@@ -12,13 +18,16 @@ Wenn du das System zum ersten Mal siehst, lies in dieser Reihenfolge:
 
 1. [[01-Systemueberblick]]
 2. [[02-Schnellstart]]
-3. [[03-Projektprofil-und-Konfiguration]]
-4. [[04-Architektur]]
-5. [[05-Rollen-Berechtigungen-und-Backoffice]]
-6. [[07-Datenschutz-und-Compliance]]
-7. [[08-Sicherheit-und-Threat-Model]]
-8. [[18-CLI-Validator-und-Automatisierung]]
-9. [[11-Betrieb-Staging-Deployment-Backup-und-Monitoring]]
+3. [[23-AI-CMS-Pflichtfunktionen]]
+4. [[24-Briefing-Templates-und-Empfehlungen]]
+5. [[27-Begleiter-Living-Documentation-Graphify-Todo]]
+6. [[03-Projektprofil-und-Konfiguration]]
+7. [[04-Architektur]]
+8. [[05-Rollen-Berechtigungen-und-Backoffice]]
+9. [[07-Datenschutz-und-Compliance]]
+10. [[08-Sicherheit-und-Threat-Model]]
+11. [[18-CLI-Validator-und-Automatisierung]]
+12. [[11-Betrieb-Staging-Deployment-Backup-und-Monitoring]]
 
 Danach kannst du über die Sidebar gezielt in einzelne Themen einsteigen. Auf jeder Wiki-Seite stellt außerdem der globale Footer die wichtigsten Projekt- und Rechtshinweise bereit.
 
@@ -51,6 +60,9 @@ Sie eignet sich unter anderem für:
 | Erweiterungen | Module, Domain Packs, Themes, Entitlements |
 | Governance | Dokumentation, Feature Governance, Release-Gates |
 | CLI & Automation | Init, Validator, Doctor, Audit, Module Generator, Release-Checks |
+| AI-CMS | Versionierung, Release Notes, Credits, Rechtstexte mit Revisionen, durchsuchbare Einstellungen, Design, Light/Dark |
+| Begleiter (Pflicht) | Living Documentation (Stand), Graphify (Karte) und Todo (Arbeit): Installation, Arbeitszyklus, Durchsetzung durch `doctor`, `validate`, `release-check` |
+| Briefing & Templates | Pflichtfragen für Agenten, Empfehlungen (MGD-DevOS, Skills, Plugins), PHP/MySQL-Starter für FTP |
 | Referenzen | startbare PHP/MariaDB Plattform, Review Workflows, Agenten-Historie, idempotente Jobs und reale Integrationstests |
 
 ## Zentrale Idee
@@ -69,7 +81,7 @@ Die Foundation versucht nicht, jede Plattform gleich aussehen zu lassen. Sie sor
 
 ## Projektstatus
 
-Die Foundation befindet sich aktuell im **Early Foundation / 0.5.x** Stadium. Seit 0.2 besitzt sie eine eigene CLI und automatische Prüfungen. 0.3 brachte die startbare PHP/MariaDB Referenzplattform. 0.4 ergänzte Migrationen, I18n, Agentenverwaltung und robuste Jobs. Mit 0.5 kommen ein echter Translation Review Workflow, JSON Import und Export, Agenten-Historien, Job Idempotency Keys und eine Handler Registry hinzu. Vor Version 1.0 können sich Schemas und Empfehlungen noch verändern.
+Aktuelle Version: **0.5.1 Pre-Alpha**. Die Foundation befindet sich im frühen Stadium. Seit 0.2 besitzt sie eine eigene CLI und automatische Prüfungen. 0.3 brachte die startbare PHP/MariaDB Referenzplattform. 0.4 ergänzte Migrationen, I18n, Agentenverwaltung und robuste Jobs. Mit 0.5 kommen ein echter Translation Review Workflow, JSON Import und Export, Agenten-Historien, Job Idempotency Keys und eine Handler Registry hinzu. Vor Version 1.0 können sich Schemas und Empfehlungen noch verändern.
 
 Adoptierende Projekte sollten die verwendete Foundation-Version im eigenen `MGD_PLATFORM.yml` dokumentieren.
 
@@ -99,6 +111,12 @@ Sie ist eine technische und organisatorische Grundlage, die hilft, relevante The
 **Du willst Translation Review, Agenten-Historie und idempotente Jobs verstehen?**  
 → [[22-Translation-Review-Agenten-Historie-und-Idempotente-Jobs]]
 
+**Du willst ein AI-generiertes CMS mit allen Pflichtfunktionen aufsetzen?**  
+→ [[23-AI-CMS-Pflichtfunktionen]] und [[24-Briefing-Templates-und-Empfehlungen]]
+
+**Du willst wissen, wie Lizenz, „powered by“-Label, Whitelabel und Module funktionieren?**  
+→ [[25-Lizenz-Label-Whitelabel-und-Module]]
+
 **Du willst ein bestehendes Projekt migrieren?**  
 → [[13-Migration-bestehender-Projekte]]
 
@@ -113,6 +131,6 @@ Sie ist eine technische und organisatorische Grundlage, die hilft, relevante The
 
 ---
 
-Repository: [MichaelGahnDESIGN/Projekt-Plattform-System](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System)
+Repository: [MichaelGahnDESIGN/MGD-Plattform-Builder](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder)
 
-Technische Tiefendokumentation: [WIKI im Hauptrepository](https://github.com/MichaelGahnDESIGN/Projekt-Plattform-System/tree/main/WIKI)
+Technische Tiefendokumentation: [WIKI im Hauptrepository](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/tree/main/WIKI)

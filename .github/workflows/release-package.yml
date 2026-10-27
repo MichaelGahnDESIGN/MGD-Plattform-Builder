@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - "VERSION"
+      - "version.json"
+      - "release-notes.json"
       - "package.json"
       - "CHANGELOG.md"
       - ".github/workflows/release-package.yml"
@@ -20,18 +22,37 @@ concurrency:
 
 jobs:
   release:
-    runs-on: [self-hosted, Linux]
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
+
+      # Release schon da > kein Neubau (nur manuell über workflow_dispatch)
+      - name: Check for existing release
+        id: existing
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT: ${{ github.event_name }}
+        run: |
+          VERSION="$(tr -d '[:space:]' < VERSION)"
+          ASSETS="$(gh release view "v${VERSION}" --repo "$GITHUB_REPOSITORY" --json assets --jq '.assets | length' 2>/dev/null || echo 0)"
+          if [[ "$EVENT" == "push" && "$ASSETS" -ge 3 ]]; then
+            echo "Release v${VERSION} already has ${ASSETS} files, no rebuild. Rebuild by hand: run this workflow manually."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Use Node.js
-        uses: actions/setup-node@v4
+        if: steps.existing.outputs.skip != 'true'
+        uses: actions/setup-node@v7
         with:
           node-version: "24"
 
       - name: Read version
+        if: steps.existing.outputs.skip != 'true'
         id: version
         shell: bash
         run: |
@@ -44,6 +65,7 @@ jobs:
           test "$(node -p "require('./package.json').version")" = "$VERSION"
 
       - name: Build release packages
+        if: steps.existing.outputs.skip != 'true'
         shell: bash
         env:
           VERSION: ${{ steps.version.outputs.version }}
@@ -52,31 +74,33 @@ jobs:
           rm -rf dist
           mkdir -p dist
 
-          git archive             --format=zip             --prefix="MGD-Project-Platform-System-v${VERSION}/"             --output="dist/MGD-Project-Platform-System-${VERSION}.zip"             HEAD
+          git archive             --format=zip             --prefix="MGD-Plattform-Builder-v${VERSION}/"             --output="dist/MGD-Plattform-Builder-${VERSION}.zip"             HEAD
 
           CLI_PACKAGE="$(npm pack --pack-destination dist --silent)"
           mv "dist/${CLI_PACKAGE}" "dist/MGD-Platform-CLI-${VERSION}.tgz"
 
           awk -v version="$VERSION" '
-            $0 == "## [" version "] - 2026-09-20" { found=1; print "# MGD Project Platform System v" version; print ""; next }
+            BEGIN { prefix = "## [" version }
+            !found && substr($0, 1, length(prefix)) == prefix && (substr($0, length(prefix) + 1, 1) == "]" || substr($0, length(prefix) + 1, 1) == " ") { found=1; print "# MGD-Plattform-Builder v" version; print ""; next }
             found && /^## \[/ { exit }
             found { print }
           ' CHANGELOG.md > dist/RELEASE_NOTES.md
 
-          if ! grep -q "Foundation 0.5" dist/RELEASE_NOTES.md && [[ "$VERSION" == "0.5.0" ]]; then
+          if [[ "$(wc -l < dist/RELEASE_NOTES.md)" -lt 4 ]]; then
             echo "Release notes extraction failed." >&2
             exit 1
           fi
 
           (
             cd dist
-            sha256sum               "MGD-Project-Platform-System-${VERSION}.zip"               "MGD-Platform-CLI-${VERSION}.tgz"               > SHA256SUMS.txt
+            sha256sum               "MGD-Plattform-Builder-${VERSION}.zip"               "MGD-Platform-CLI-${VERSION}.tgz"               > SHA256SUMS.txt
           )
 
           echo "Release assets:"
           ls -lh dist
 
       - name: Publish GitHub release
+        if: steps.existing.outputs.skip != 'true'
         env:
           GITHUB_TOKEN: ${{ github.token }}
           VERSION: ${{ steps.version.outputs.version }}

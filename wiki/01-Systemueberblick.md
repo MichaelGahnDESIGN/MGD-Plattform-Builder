@@ -1,6 +1,6 @@
 # Systemüberblick
 
-Das **MGD Project Platform System** ist eine wiederverwendbare technische und organisatorische Grundlage für digitale Plattformen. Es ist kein fertiges CMS, kein SaaS-Produkt und kein starres Framework. Stattdessen beschreibt es robuste Muster für Architektur, Rollen, Datenschutz, Sicherheit, Betrieb, Dokumentation und die Zusammenarbeit mit Coding-Agenten.
+Das **MGD-Plattform-Builder** ist eine wiederverwendbare technische und organisatorische Grundlage für digitale Plattformen. Es ist kein fertiges CMS, kein SaaS-Produkt und kein starres Framework. Stattdessen beschreibt es robuste Muster für Architektur, Rollen, Datenschutz, Sicherheit, Betrieb, Dokumentation und die Zusammenarbeit mit Coding-Agenten.
 
 ## Für welche Projekte ist es gedacht?
 
