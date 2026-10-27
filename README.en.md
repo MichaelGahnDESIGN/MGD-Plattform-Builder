@@ -484,6 +484,19 @@ Claude Code: `/code-kommentare [file or area]`; Codex:
 Existing destinations are preserved. See the [installation and style guide](WIKI/Code-Kommentare.md)
 and [skill](platform/skills/code-kommentare/SKILL.md).
 
+## Notification center: bell and inbox
+
+The optional `notification-center` skill helps build a bell or inbox in a website,
+shop or platform. Public messages and personal messages are strictly separated;
+personal messages and their read state stay on the server. It includes notes for
+WordPress/WooCommerce, JTL-Shop, Shopware and Shopify plus a pre-release checklist.
+
+Installation: copy the folder `platform/skills/notification-center/` from the release ZIP or
+a clone of this repository to `~/.claude/skills/` (Claude Code) or `~/.agents/skills/` (Codex).
+The CLI's npm package does not contain the skills. Invoke `/notification-center` in Claude Code
+or `$notification-center` in Codex. The briefing agent recommends the skill for matching
+keywords (`mgd-platform recommend`). See the [skill](platform/skills/notification-center/SKILL.md).
+
 ## MGD skill ecosystem
 
 | Project | Purpose |

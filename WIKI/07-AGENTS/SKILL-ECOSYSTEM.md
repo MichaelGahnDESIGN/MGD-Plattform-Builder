@@ -20,6 +20,7 @@ every project (`mgd-platform companions install`) and maintained with every chan
 |---|---|
 | [zugang](../Zugaenge-einrichten.md) | local credential import, verified file protection and minimal authentication tests; Codex and Claude Code |
 | [code-kommentare](../Code-Kommentare.md) | optional concise German comment style, preserving safety notes and correct syntax |
+| [notification-center](../../platform/skills/notification-center/SKILL.md) | optional privacy-friendly notification bell and inbox with strictly separated public and personal messages; adapters for WordPress/WooCommerce, JTL-Shop, Shopware and Shopify |
 | MGD DEV | state, tests, release/readiness |
 | MGD Backup | backup/restore |
 | MGD Autopilot | controlled autonomous iteration |

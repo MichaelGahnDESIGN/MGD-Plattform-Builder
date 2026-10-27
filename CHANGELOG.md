@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format follows the spirit of Keep a Changelog and semantic versioning.
 
+## [0.11.0] - 2026-10-27
+
+- Neuer optionaler Skill `notification-center`: Glocke und Posteingang mit strikt getrennten öffentlichen und persönlichen Meldungen, serverseitigen Rechten, Datensparsamkeit und Hinweisen für WordPress/WooCommerce, JTL-Shop, Shopware und Shopify.
+- Mit Codex-Konfiguration (`agents/openai.yaml`) und einem Test für die Pflichtabschnitte; in README, README.en und das Skill-Ökosystem aufgenommen.
+
 ## [0.10.2] - 2026-10-27
 
 - `companions install` und die Release-Abfrage funktionieren wieder hinter einem Proxy (zum Beispiel in einer abgesicherten Agenten-Umgebung). Die Härtung hatte alle `GIT_CONFIG*`-Variablen gelöscht; darüber reichen solche Umgebungen ihre Proxy-Einstellung (`http.proxyAuthMethod`) an `git` weiter, und die Abfrage scheiterte mit „Proxy CONNECT aborted“.

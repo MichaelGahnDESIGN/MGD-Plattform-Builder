@@ -37,6 +37,15 @@ recommendations:
     reason: "Wenn dieser Kommentarstil ausdrücklich gewünscht ist; keine Änderung der Programmlogik."
     when:
       keywords: ["code-kommentare", "kommentarstil", "michaels stil"]
+  - id: "mgd-notification-center"
+    name: "MGD Notification Center"
+    kind: "skill"
+    url: "https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/blob/main/platform/skills/notification-center/SKILL.md"
+    license: "MIT"
+    summary: "Glocke und Posteingang mit getrennten öffentlichen und persönlichen Meldungen."
+    reason: "Wenn ein Benachrichtigungsbereich gebaut wird; trennt öffentliche und persönliche Inhalte und achtet auf Datensparsamkeit."
+    when:
+      keywords: ["notification", "benachrichtigung", "glocke", "posteingang", "inbox", "meldungen"]
   - id: "mgd-devos"
     name: "MGD-DevOS"
     kind: "tool"
