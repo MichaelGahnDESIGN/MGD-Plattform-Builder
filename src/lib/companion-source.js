@@ -19,14 +19,82 @@ const UNSAFE_GIT_ENV = /^(GIT_DIR|GIT_WORK_TREE|GIT_INDEX_FILE|GIT_OBJECT_DIRECT
 const GIT_SETTINGS = [["core.hooksPath", "/dev/null"], ["core.fsmonitor", "false"], ["submodule.recurse", "false"]];
 
 /**
+ * Inherited git settings that are only about reaching the network. Sandboxes and company networks hand their
+ * proxy settings to git through GIT_CONFIG_PARAMETERS or GIT_CONFIG_COUNT/KEY/VALUE; without them git cannot
+ * connect ("Proxy CONNECT aborted"). Everything else stays out: a variable that carries any other entry is
+ * dropped as a whole (fail closed). Empty credential-helper resets are the one harmless extra (see HELPER_RESET).
+ */
+const KEPT_GIT_KEYS = new Set(["http.proxy", "http.proxyauthmethod", "http.sslcainfo", "http.sslcapath", "safe.directory"]);
+const MAX_INHERITED_SETTINGS = 64;
+
+const unquote = (text) => text.replace(/'\\''/g, "'");
+
+/** Parses GIT_CONFIG_PARAMETERS (`'key=value'` and `'key'='value'` entries) into [key, value] pairs, or null. */
+export function parseConfigParameters(text) {
+  const quoted = /'((?:[^']|'\\'')*)'/y;
+  const source = String(text);
+  const entries = [];
+  let index = 0;
+  while (index < source.length) {
+    if (source[index] === " ") {
+      index += 1;
+      continue;
+    }
+    quoted.lastIndex = index;
+    const first = quoted.exec(source);
+    if (!first) return null;
+    index = quoted.lastIndex;
+    if (source[index] === "=") {
+      quoted.lastIndex = index + 1;
+      const second = quoted.exec(source);
+      if (!second) return null;
+      index = quoted.lastIndex;
+      entries.push([unquote(first[1]), unquote(second[1])]);
+    } else {
+      const raw = unquote(first[1]);
+      const equals = raw.indexOf("=");
+      entries.push(equals < 0 ? [raw, ""] : [raw.slice(0, equals), raw.slice(equals + 1)]);
+    }
+  }
+  return entries;
+}
+
+// `credential.helper=` / `credential.<url>.helper=` with an EMPTY value only resets the helper list (no program runs);
+// sandboxes use it so git does not ask for credentials at their local proxy. A helper with content would run a program.
+const HELPER_RESET = /^credential\.(?:[^=]*\.)?helper$/i;
+const isKept = ([key, value]) => KEPT_GIT_KEYS.has(key.toLowerCase()) || (HELPER_RESET.test(key) && value === "");
+const onlyKeptKeys = (entries) => entries.every(isKept);
+
+function inheritedParameters(base) {
+  const entries = base.GIT_CONFIG_PARAMETERS ? parseConfigParameters(base.GIT_CONFIG_PARAMETERS) : null;
+  return entries && entries.length > 0 && onlyKeptKeys(entries) ? base.GIT_CONFIG_PARAMETERS : null;
+}
+
+function inheritedSettings(base) {
+  const count = Number.parseInt(base.GIT_CONFIG_COUNT, 10);
+  if (!Number.isInteger(count) || count < 1 || count > MAX_INHERITED_SETTINGS) return [];
+  const entries = Array.from({ length: count }, (_, index) => [base["GIT_CONFIG_KEY_" + index], base["GIT_CONFIG_VALUE_" + index]]);
+  return entries.every(([key, value]) => typeof key === "string" && typeof value === "string") && onlyKeptKeys(entries) ? entries : [];
+}
+
+/**
  * The environment for every git call: no inherited repository overrides, no prompts, no LFS download, and
  * hooks, fsmonitor and submodules switched off, so neither the user's global config nor a cloned repository
- * can make `git clone` or `git checkout` run anything.
+ * can make `git clone` or `git checkout` run anything. Network-only settings (see KEPT_GIT_KEYS) survive.
  */
 export function gitEnvironment(base = process.env) {
   const clean = Object.fromEntries(Object.entries(base).filter(([key]) => !UNSAFE_GIT_ENV.test(key)));
-  const config = Object.fromEntries(GIT_SETTINGS.flatMap(([key, value], index) => [["GIT_CONFIG_KEY_" + index, key], ["GIT_CONFIG_VALUE_" + index, value]]));
-  return { ...clean, ...config, GIT_CONFIG_COUNT: String(GIT_SETTINGS.length), GIT_TERMINAL_PROMPT: "0", GIT_LFS_SKIP_SMUDGE: "1" };
+  const settings = [...inheritedSettings(base), ...GIT_SETTINGS];
+  const config = Object.fromEntries(settings.flatMap(([key, value], index) => [["GIT_CONFIG_KEY_" + index, key], ["GIT_CONFIG_VALUE_" + index, value]]));
+  const parameters = inheritedParameters(base);
+  return {
+    ...clean,
+    ...(parameters ? { GIT_CONFIG_PARAMETERS: parameters } : {}),
+    ...config,
+    GIT_CONFIG_COUNT: String(settings.length),
+    GIT_TERMINAL_PROMPT: "0",
+    GIT_LFS_SKIP_SMUDGE: "1"
+  };
 }
 
 export function isTracking(source) {
