@@ -85,7 +85,9 @@ Das Projekt heißt jetzt **MGD-Plattform-Builder**. Neu:
 | **Medienbibliothek** | sichere Uploads (Bilder, PDF) mit MIME-Prüfung und Neukodierung ohne Metadaten |
 | **GrapesJS** | speichert HTML, CSS und Projektdaten, inkl. Revisionen und Export/Import |
 | **Updater** | Release-Kanäle (stable, beta, alpha, lts) im Manifest |
-| **Module** | eigene und kostenpflichtige Module unter `modules/<id>/`, aktivierbar im Backoffice |
+| **Module** | eigene und kostenpflichtige Module unter `modules/<id>/`, aktivierbar im Backoffice; mitgeliefert: **Backup** (verschlüsselt, cron-getrieben, lokal und FTPS) |
+
+Mehr zum Backup-Modul: [WIKI 30 · Backup-Modul](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/wiki/30-Backup-Modul)
 
 Mehr: [Lizenz, Label, Whitelabel und Module](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/wiki/25-Lizenz-Label-Whitelabel-und-Module)
 

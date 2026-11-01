@@ -35,6 +35,7 @@ It is organized so humans and coding agents can enter at different depths withou
 - [Briefing and Recommendations](18-CMS/BRIEFING-RECOMMENDATIONS.md)
 - [Templates](18-CMS/TEMPLATES.md)
 - [Licensing, label, white-label and modules](18-CMS/LICENSING.md)
+- [Backup module (encrypted backups, cron, FTPS, restore)](18-CMS/BACKUP-MODULE.md)
 
 ## Security
 

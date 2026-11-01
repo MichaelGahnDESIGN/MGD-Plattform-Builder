@@ -116,6 +116,27 @@ return [
         'reencode_images' => true,
     ],
 
+    /*
+     * Optional: Backup-Modul (modules/backup). Alles hier ist nur per Dateizugriff änderbar, nicht im Backoffice.
+     * Ohne diesen Block gelten die Standardwerte.
+     */
+    // 'backup' => [
+    //     // Freigegebene Dateibereiche (Name => Pfad, absolut oder relativ zum Projektordner). Im Backoffice lassen sich
+    //     // nur diese Bereiche an- und abwählen. config/ und storage/ sind nie erlaubt. Name: a-z, 0-9, _ und -.
+    //     'areas' => ['uploads' => 'public/uploads', 'custom-assets' => 'public/assets/custom'],
+    //     // Zusätzlich nie gesicherte Tabellen (backup_*, login_attempts und Passwort-Reset-Tabellen sind immer ausgeschlossen).
+    //     'exclude_tables' => [],
+    //     // Sekunden Arbeitszeit je Cron-Aufruf (20-600); begrenzt durch max_execution_time des Hosters.
+    //     'tick_seconds' => 100,
+    //     // Mindestens frei zu haltender Speicherplatz in Byte, bevor ein Lauf startet.
+    //     'min_free_bytes' => 268435456,
+    //     // Entfernte Ziele: erlaubte Ports (FTPS explizit 21, implizit 990) und Größe eines Upload-Abschnitts in Byte.
+    //     'ftp_allowed_ports' => [21, 990],
+    //     'upload_chunk_bytes' => 8388608,
+    //     // Ziele im privaten Netz (localhost, 10.x ...) sind standardmäßig gesperrt (SSRF-Schutz). Nur bewusst aktivieren.
+    //     'allow_private_hosts' => false,
+    // ],
+
     'mail' => [
         // 'disabled' (Standard), 'mail' (PHP mail()) oder 'smtp'.
         'transport' => 'disabled',

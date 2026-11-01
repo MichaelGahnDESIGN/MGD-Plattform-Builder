@@ -61,7 +61,7 @@ The project is now called **MGD-Plattform-Builder**.
 - **Dual license:** CLI, schemas and docs stay MIT; starter templates, the reference platform and the label are under the [MGD License](MGD-Lizenz.md) – see [LICENSING.md](LICENSING.md).
 - **Mandatory label** "powered by: Michael Gahn DESIGN" (logo, link in a new tab) in footers, landing pages, login, backoffice and settings, plus **Settings › License**.
 - **White-label** (EUR 500 one-time per project/domain) via a signed license key.
-- **Starter:** user management, my account, optional e-mail password reset, media library, full GrapesJS saving (HTML, CSS, project data), updater channels, module interface (free and paid modules).
+- **Starter:** user management, my account, optional e-mail password reset, media library, full GrapesJS saving (HTML, CSS, project data), updater channels, module interface (free and paid modules) with a bundled **Backup** module (encrypted, cron-driven, local and FTPS destinations; [details](WIKI/18-CMS/BACKUP-MODULE.md)).
 
 More: [Licensing, label, white-label and modules](WIKI/18-CMS/LICENSING.md)
 

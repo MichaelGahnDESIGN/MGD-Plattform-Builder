@@ -76,4 +76,6 @@ Monitoring sollte technische Fehler, Jobs, Queue-Zustände, Verfügbarkeit, Secu
 
 Ein Release Gate ist eine Bedingung, die vor einem Release erfüllt sein muss. Beispiele sind Restore Test, Permission Review, Migration Test, Security Check oder Consumer Flow Review.
 
+Für den PHP/MySQL-Starter gibt es ein fertiges Backup-Modul (verschlüsselt, cron-getrieben, Ziele lokal und FTPS): [[30-Backup-Modul]].
+
 Weiter: [[14-Governance-Dokumentation-und-Releases]]

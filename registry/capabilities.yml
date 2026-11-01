@@ -172,3 +172,43 @@ capabilities:
     risk: critical
     audit: true
     reauthentication: true
+
+  # Backup module of the PHP/MySQL starter (modules/backup). The starter maps all of them to the administration role.
+  backup.read:
+    group: operations
+    risk: medium
+    audit: false
+    description: "View backup status, history and fingerprints; never keys or credentials."
+
+  backup.run:
+    group: operations
+    risk: medium
+    audit: true
+    description: "Queue or cancel a backup run."
+
+  backup.download:
+    group: operations
+    risk: high
+    audit: true
+    description: "Download an encrypted backup part through the authenticated endpoint."
+
+  backup.settings.manage:
+    group: operations
+    risk: high
+    audit: true
+    reauthentication: true
+    description: "Change public keys, destinations, schedule, retention, file areas and the cron token."
+
+  backup.delete:
+    group: operations
+    risk: high
+    audit: true
+    reauthentication: true
+    description: "Delete stored backups locally or at destinations."
+
+  backup.restore:
+    group: operations
+    risk: critical
+    audit: true
+    reauthentication: true
+    description: "Restore a backup. Command line only, never through the web; the private key stays off the server."

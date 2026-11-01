@@ -1,0 +1,14 @@
+{
+  "id": "backup",
+  "name": "Backup",
+  "version": "0.1.0",
+  "description": "Verschlüsselte Datenbank- und Dateisicherungen (Public-Key, Format MGDB1) mit Download und FTPS-Ziel, Cron-getrieben. Restore per Kommandozeile.",
+  "vendor": "MGD-Plattform-Builder",
+  "license": "free",
+  "requires": { "starter": ">=0.7.0", "php": ">=8.2" },
+  "entry": "module.php",
+  "migrations": "migrations",
+  "menu": [
+    { "href": "/admin/backup", "label": "Backup", "role": "admin" }
+  ]
+}

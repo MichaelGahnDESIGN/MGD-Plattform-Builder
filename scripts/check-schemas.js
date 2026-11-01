@@ -91,6 +91,12 @@ for (const entry of await fs.readdir(path.join(root, "templates"), { withFileTyp
   await checkJson("schema/template-manifest.schema.json", path.join(base, "template.json"));
   await checkJson("schema/version.schema.json", path.join(base, "version.json"));
   await checkJson("schema/release-notes.schema.json", path.join(base, "release-notes.json"));
+
+  // Mitgelieferte Starter-Module (modules/<id>/module.json) gegen das Modul-Paket-Schema prüfen.
+  const modules = await fs.readdir(path.join(root, base, "modules"), { withFileTypes: true }).catch(() => []);
+  for (const mod of modules) {
+    if (mod.isDirectory()) await checkJson("schema/module-package.schema.json", path.join(base, "modules", mod.name, "module.json"));
+  }
 }
 
 const recommendations = YAML.parse(await fs.readFile(path.join(root, "registry/recommendations.yml"), "utf8"));

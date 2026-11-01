@@ -61,4 +61,6 @@ through the web is intentionally not supported.
 - `license: "paid"` – requires a signed module key (`type: "module"`, `module_id`, domains).
 - A broken module is logged and skipped; the site keeps running.
 
+**Bundled module:** `backup` (free) – encrypted database and file backup with download and an FTPS destination, cron-driven, restore on the command line. Setup, cron, security and limits: [Backup module](BACKUP-MODULE.md).
+
 Paid modules and templates are maintained in a private repository and are not part of this repository.

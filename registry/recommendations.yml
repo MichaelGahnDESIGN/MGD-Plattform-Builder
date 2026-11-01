@@ -133,7 +133,7 @@ recommendations:
     kind: "skill"
     url: "https://github.com/MichaelGahnDESIGN/MGD_Backup_SKILL"
     summary: "Backups lokal, NAS oder Cloud mit Secrets-Filterung und Verifikation."
-    reason: "Backup vor Migrationen, Deployments und Code-Editor-Änderungen."
+    reason: "Backup vor Migrationen, Deployments und Code-Editor-Änderungen. Ergänzt das Starter-Modul „backup“, das die laufende Website-Instanz (Datenbank und freigegebene Dateien) verschlüsselt sichert; der Skill sichert Projektordner und Entwicklungsstände."
     when:
       always: true
   - id: "mgd-autopilot-skill"

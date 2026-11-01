@@ -11,6 +11,7 @@ Thumbs.db
 # Versionierte Schema-Migrationen sind Code, keine Backups:
 !templates/*/database/core/*.sql
 !templates/*/database/private/*.sql
+!templates/*/modules/*/migrations/*.sql
 !reference/*/database/*.sql
 !reference/*/database/migrations/*.sql
 *.sql.gz

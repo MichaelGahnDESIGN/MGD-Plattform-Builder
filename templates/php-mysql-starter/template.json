@@ -52,7 +52,8 @@
     "loading-screen",
     "updater",
     "cookie-box",
-    "maintenance-mode"
+    "maintenance-mode",
+    "backup-module"
   ],
   "entry": "public/index.php",
   "license": "LicenseRef-MGD"

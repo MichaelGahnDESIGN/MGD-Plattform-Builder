@@ -66,4 +66,14 @@ Regeln für Module: Rollen serverseitig prüfen (`requireRole`), bei POST `requi
 escapen (`View::e`), nur vorbereitete SQL-Statements, Änderungen mit `$app->audit()` protokollieren.
 Ein fehlerhaftes Modul wird protokolliert und übersprungen, die Website läuft weiter.
 
+## Mitgelieferte Module
+
+| Modul | Zweck | Doku |
+|---|---|---|
+| `backup` | Verschlüsselte Datenbank- und Dateisicherung (Public-Key, Format MGDB1), Ziele lokal (Download im Backoffice) und FTPS, Cron-getrieben, Restore nur per Kommandozeile. Nur Rolle Administration, Passwort-Bestätigung für sensible Aktionen. | [WIKI 30 · Backup-Modul](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/wiki/30-Backup-Modul) · English: [Backup module](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/blob/main/WIKI/18-CMS/BACKUP-MODULE.md) |
+
+Das Modul `backup` ist ein vollständiges Beispiel für Migrationen, Menü, mehrere Routen, Step-up-Passwort, CLI-Werkzeuge (`tools/`)
+und eigene Tests (`tests/run.php`). Es braucht `sodium` und `zlib` (FTPS zusätzlich `curl`). Voraussetzung für den Betrieb ist ein
+Cronjob; die optionale Konfiguration steht in `config/config.example.php` unter dem Schlüssel `backup`.
+
 Kostenpflichtige Module und Templates von Michael Gahn DESIGN: https://michael-gahn.de

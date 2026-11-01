@@ -4,7 +4,7 @@ Options -Indexes
 
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteRule ^(config|src|database|scripts|storage|tests|custom)(/|$) - [F,L]
+    RewriteRule ^(config|src|database|scripts|storage|tests|custom|modules)(/|$) - [F,L]
     RewriteRule (^|/)\.(?!well-known/) - [F,L]
     RewriteRule ^((?!public/).*)$ public/$1 [L]
 </IfModule>

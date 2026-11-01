@@ -201,6 +201,10 @@ Eigene und kostenpflichtige Module liegen unter `modules/<id>/` und werden unter
 Aufbau, Manifest und Beispiel: [modules/README.md](modules/README.md). Kostenpflichtige Module brauchen einen signierten
 Modul-Schlüssel. Nach dem Aktivieren laufen ihre Migrationen automatisch.
 
+Mitgeliefert wird das kostenlose Modul **Backup** (`modules/backup/`): verschlüsselte Datenbank- und Dateisicherung mit lokalem
+Download und FTPS-Ziel, Cron-getrieben, Wiederherstellung nur per Kommandozeile. Es braucht `sodium` und `zlib`, für FTPS `curl`,
+und einen Cronjob. Einrichtung und Sicherheit: [WIKI 30 · Backup-Modul](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/wiki/30-Backup-Modul).
+
 ## Update bestehender Installationen
 
 Nach dem Hochladen einer neuen Version immer `php scripts/migrate.php` ausführen (oder den Web-Installer bei

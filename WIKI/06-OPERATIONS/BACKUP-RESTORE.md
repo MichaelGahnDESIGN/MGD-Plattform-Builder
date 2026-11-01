@@ -4,6 +4,8 @@
 
 Track both backup success and restore-test success.
 
+The PHP/MySQL starter ships a ready-made backup module (encrypted, cron-driven, local and FTPS destinations, command-line restore): [Backup module](../18-CMS/BACKUP-MODULE.md).
+
 ## What to protect
 
 - database

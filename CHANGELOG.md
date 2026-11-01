@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format follows the spirit of Keep a Changelog and semantic versioning.
 
+## [Unreleased]
+
+- Neues kostenloses Starter-Modul `backup` (`templates/php-mysql-starter/modules/backup/`): verschlüsselte Datenbank- und Dateisicherung nach Zeitplan oder auf Knopfdruck, Public-Key-Verfahren und Paketformat MGDB1 (libsodium `secretstream` + `crypto_box_seal`, Ed25519-signiertes Manifest), PDO-Dump ohne `mysqldump`, Cron-getriebene Läufe mit Zeitbudget, Aufbewahrung nach Anzahl und Höchstalter, Speicherplatzprüfung, Parallelschutz.
+- Ziele: lokal (authentifizierter Download im Backoffice) und FTPS über `ext-curl` (TLS ≥ 1.2, Host-/Zertifikatsprüfung, SSRF-Schutz, Löschen nur über gespeicherte Referenzen). Weitere Dienste bleiben dem Marketplace vorbehalten; das Treiber-Interface `DestinationDriver` ist nachrüstbar.
+- Sicherheit: nur Rolle Administration, CSRF, Passwort-Bestätigung für sensible Aktionen, Whitelist für Dateibereiche und Pfade, Fehler nur als Katalogcodes, Audit-Einträge. Privater Schlüssel nur auf dem eigenen Rechner (`tools/mgd-backup.php keygen|info|verify|decrypt`); Wiederherstellung nur per Kommandozeile (`tools/restore.php`, Trockenlauf, Transaktion, Staging-Tausch).
+- Doku: [WIKI 30 · Backup-Modul](wiki/30-Backup-Modul.md) und [Backup module](WIKI/18-CMS/BACKUP-MODULE.md), Einträge in Modul-README, Starter-README und `registry/capabilities.yml` (`backup.*`). Starter: `modules/` ist im Root-`.htaccess` gesperrt; optionaler Konfigurationsblock `backup` in `config.example.php`.
+- Tests: PHP-Tests ohne Datenbank (`modules/backup/tests/run.php`, in `npm test` eingebunden) und End-to-End-Test gegen MySQL/MariaDB (`tests/e2e.php`). Abweichung vom Referenzverfahren: Datei-Backups verwenden freie Bereichsnamen (Obermenge der Pfadregel); Abkühlphase für neue Schlüssel/Ziele und Sicherheitsmails sind nicht enthalten.
+
 ## [0.13.1] - 2026-10-27
 
 - Loop-Protokoll: durchgespieltes Beispiel `platform/loop/EXAMPLE.md` (Prüfskript, Startzustand, drei Runden, Stopp-Fälle), verlinkt in `platform/LOOP.md` und im Wiki. Dazu ein Test, der Beispiel und Zustandsvorlage synchron hält.
@@ -42,8 +50,6 @@ The format follows the spirit of Keep a Changelog and semantic versioning.
 - Begrenzte, getrennte Trivy-/OCI-Image-Nachweise ohne Containerstart; vollständige Befunde nach Digest gruppiert.
 - Herstellerhinweise von nachgewiesenen Provider-Backports unterscheiden. Keine Paket- oder Serverupdates.
 - Gezielte Negativtests, Installer mit Hersteller-Prüfsummen und dokumentierter Rückfallweg.
-
-## [Unreleased]
 
 ## [0.9.0] - 2026-10-24
 

@@ -117,6 +117,9 @@ Sie ist eine technische und organisatorische Grundlage, die hilft, relevante The
 **Du willst wissen, wie Lizenz, „powered by“-Label, Whitelabel und Module funktionieren?**  
 → [[25-Lizenz-Label-Whitelabel-und-Module]]
 
+**Du willst Datenbank und Dateien verschlüsselt sichern (Starter-Modul Backup, Cron, FTPS, Restore)?**  
+→ [[30-Backup-Modul]]
+
 **Du willst ein bestehendes Projekt migrieren?**  
 → [[13-Migration-bestehender-Projekte]]
 
