@@ -6,6 +6,8 @@ The format follows the spirit of Keep a Changelog and semantic versioning.
 
 ## [Unreleased]
 
+## [0.14.0] - 2026-10-29
+
 - Neues kostenloses Starter-Modul `backup` (`templates/php-mysql-starter/modules/backup/`): verschlüsselte Datenbank- und Dateisicherung nach Zeitplan oder auf Knopfdruck, Public-Key-Verfahren und Paketformat MGDB1 (libsodium `secretstream` + `crypto_box_seal`, Ed25519-signiertes Manifest), PDO-Dump ohne `mysqldump`, Cron-getriebene Läufe mit Zeitbudget, Aufbewahrung nach Anzahl und Höchstalter, Speicherplatzprüfung, Parallelschutz.
 - Ziele: lokal (authentifizierter Download im Backoffice) und FTPS über `ext-curl` (TLS ≥ 1.2, Host-/Zertifikatsprüfung, SSRF-Schutz, Löschen nur über gespeicherte Referenzen). Weitere Dienste bleiben dem Marketplace vorbehalten; das Treiber-Interface `DestinationDriver` ist nachrüstbar.
 - Sicherheit: nur Rolle Administration, CSRF, Passwort-Bestätigung für sensible Aktionen, Whitelist für Dateibereiche und Pfade, Fehler nur als Katalogcodes, Audit-Einträge. Privater Schlüssel nur auf dem eigenen Rechner (`tools/mgd-backup.php keygen|info|verify|decrypt`); Wiederherstellung nur per Kommandozeile (`tools/restore.php`, Trockenlauf, Transaktion, Staging-Tausch).

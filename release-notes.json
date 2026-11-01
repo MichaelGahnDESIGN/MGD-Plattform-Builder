@@ -2,6 +2,17 @@
   "$schema": "./schema/release-notes.schema.json",
   "entries": [
     {
+      "version": "0.14.0",
+      "status": "pre-alpha",
+      "date": "2026-10-29",
+      "audience": [
+        "backoffice"
+      ],
+      "type": "feature",
+      "title": "Backup-Modul für den PHP/MySQL-Starter",
+      "items": []
+    },
+    {
       "version": "0.13.1",
       "status": "pre-alpha",
       "date": "2026-10-27",
