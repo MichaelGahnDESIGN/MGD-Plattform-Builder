@@ -1,9 +1,9 @@
 # 30 · Backup-Modul (Starter-Modul `backup`)
 
-Das Modul `backup` liegt im PHP/MySQL-Starter unter `templates/php-mysql-starter/modules/backup/` und sichert **Datenbank und ausgewählte Dateien verschlüsselt**, nach Zeitplan oder auf Knopfdruck. Es läuft auf einfachem Shared Hosting: reines PHP, eine MySQL/MariaDB-Datenbank, **kein** Node, **kein** Composer, **kein** `mysqldump`, **kein** `exec()`, **kein** Queue-Worker. Ein Cronjob treibt die Läufe in kleinen Zeitscheiben voran. Englische Fassung: [BACKUP-MODULE](18-CMS/BACKUP-MODULE.md).
+Das Modul `backup` liegt im PHP/MySQL-Starter unter `templates/php-mysql-starter/modules/backup/` und sichert **Datenbank und ausgewählte Dateien verschlüsselt**, nach Zeitplan oder auf Knopfdruck. Es läuft auf einfachem Shared Hosting: reines PHP, eine MySQL/MariaDB-Datenbank, **kein** Node, **kein** Composer, **kein** `mysqldump`, **kein** `exec()`, **kein** Queue-Worker. Ein Cronjob treibt die Läufe in kleinen Zeitscheiben voran. Englische Fassung: [BACKUP-MODULE](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/blob/main/WIKI/18-CMS/BACKUP-MODULE.md).
 
 > [!IMPORTANT]
-> Ein Backup gilt erst als belegt, wenn eine Wiederherstellung getestet wurde ([Backup & Restore](06-OPERATIONS/BACKUP-RESTORE.md)). Der private Schlüssel gehört auf **zwei getrennte Medien** außerhalb des Servers. Ohne ihn sind alle Backups unlesbar.
+> Ein Backup gilt erst als belegt, wenn eine Wiederherstellung getestet wurde ([Backup & Restore](https://github.com/MichaelGahnDESIGN/MGD-Plattform-Builder/blob/main/WIKI/06-OPERATIONS/BACKUP-RESTORE.md)). Der private Schlüssel gehört auf **zwei getrennte Medien** außerhalb des Servers. Ohne ihn sind alle Backups unlesbar.
 
 ## Was das Modul kann – und was nicht
 

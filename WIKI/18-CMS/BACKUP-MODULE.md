@@ -1,6 +1,6 @@
 # Backup module (starter module `backup`)
 
-The `backup` module ships with the PHP/MySQL starter in `templates/php-mysql-starter/modules/backup/`. It backs up the **database and selected files, encrypted**, on a schedule or on demand. It runs on plain shared hosting: pure PHP, one MySQL/MariaDB database, **no** Node, **no** Composer, **no** `mysqldump`, **no** `exec()`, **no** queue worker. A cron job advances each run in small time slices. German version: [29 · Backup-Modul](../30-Backup-Modul.md).
+The `backup` module ships with the PHP/MySQL starter in `templates/php-mysql-starter/modules/backup/`. It backs up the **database and selected files, encrypted**, on a schedule or on demand. It runs on plain shared hosting: pure PHP, one MySQL/MariaDB database, **no** Node, **no** Composer, **no** `mysqldump`, **no** `exec()`, **no** queue worker. A cron job advances each run in small time slices. German version: [29 · Backup-Modul](../../wiki/30-Backup-Modul.md).
 
 > [!IMPORTANT]
 > A backup is only proven once a restore has been tested ([Backup & Restore](../06-OPERATIONS/BACKUP-RESTORE.md)). Keep the private key on **two separate media** outside the server. Without it every backup is unreadable.

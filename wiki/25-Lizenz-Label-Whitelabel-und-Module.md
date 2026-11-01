@@ -70,7 +70,7 @@ modules/mein-modul/
 * **Kostenpflichtige Module** (`"license": "paid"`) laufen nur mit einem signierten Modul-Schlüssel für die eigene Domain
 * Ein fehlerhaftes Modul wird protokolliert und übersprungen, die Website läuft weiter
 
-**Mitgeliefertes Modul:** `backup` (kostenlos) – verschlüsselte Datenbank- und Dateisicherung mit Download und FTPS-Ziel, Cron-getrieben, Restore per Kommandozeile. Einrichtung, Cron, Sicherheit und Grenzen: [29 · Backup-Modul](30-Backup-Modul.md).
+**Mitgeliefertes Modul:** `backup` (kostenlos) – verschlüsselte Datenbank- und Dateisicherung mit Download und FTPS-Ziel, Cron-getrieben, Restore per Kommandozeile. Einrichtung, Cron, Sicherheit und Grenzen: [30 · Backup-Modul](30-Backup-Modul.md).
 
 Schema: `schema/module-package.schema.json` · Anleitung mit Beispiel: `templates/php-mysql-starter/modules/README.md`
 
