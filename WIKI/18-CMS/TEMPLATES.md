@@ -52,3 +52,14 @@ mgd-platform template create shopware6-plugin-starter --target ./my-shopware-plu
 
 Then run the project briefing and install the mandatory companions. Production deployment, app-store
 publication and installation in a customer shop remain separate, manually verified delivery steps.
+
+## Einheitliches MGD-Interface und Theme-Integration
+
+Alle Shop-Starter folgen demselben Integrationsstandard: lokale MGD-Design-Tokens, Light/Dark,
+zugängliche Zustände, eine nachvollziehbare Plugin-Empfehlungskarte und ein optionaler,
+versionierter Adapter zu `theme.michael-gahn.de`. Er ersetzt keine Plattformberechtigungen und darf
+keine API-Endpunkte, Tokens oder Datenformate erfinden. Die Kernfunktion muss ohne entfernten
+Katalog- oder Theme-Dienst sicher weiterlaufen.
+
+Kopierfertige Prompts für ChatGPT und Claude sowie die Abnahmekriterien stehen unter
+[Prompts für Plugins und Apps](PLUGIN-APP-PROMPTS.md).

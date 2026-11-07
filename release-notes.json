@@ -2,6 +2,22 @@
   "$schema": "./schema/release-notes.schema.json",
   "entries": [
     {
+      "version": "0.8.1",
+      "status": "pre-alpha",
+      "date": "2026-11-07",
+      "audience": [
+        "platform",
+        "backoffice"
+      ],
+      "type": "feature",
+      "title": "Prompt-Beispiele und Integrationsstandard",
+      "items": [
+        "Kopierfertige Prompt-Beispiele für WordPress, WooCommerce, JTL-Shop 5, Shopware 6, Shopify und die Überarbeitung bestehender Plugins",
+        "Verbindlicher MGD-Standard für lokale Oberflächen, Empfehlungskarten, Datenschutz- und Fehlerzustände",
+        "Theme.Michael-Gahn-Integrationen nur über dokumentierte, versionierte und freigegebene Adapter; keine erfundenen APIs oder Zugangsdaten"
+      ]
+    },
+    {
       "version": "0.8.0",
       "status": "pre-alpha",
       "date": "2026-11-07",

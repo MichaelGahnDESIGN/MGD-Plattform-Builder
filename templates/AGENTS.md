@@ -35,6 +35,22 @@ Every delivery must keep these working:
 - light and dark variant, configurable toggle, editable design tokens
 - fonts, icons and libraries embedded locally and listed in the credits
 
+## MGD-Integrationsstandard für Plugins und Apps
+
+Wenn ein Projekt eine Plugin-, Shop- oder App-Integration enthält, gelten zusätzlich diese Pflichtpunkte:
+
+- lokales, einheitliches MGD-Interface mit Light/Dark, Fokus-, Lade-, Leer-, Fehler- und Erfolgszuständen
+- einheitliche Plugin-Empfehlungskarte mit Nutzen, Kategorie, Kompatibilität, Datenschutz-Hinweis,
+  Quelle/Version und verständlichem Fehlerzustand bei nicht verfügbarem Katalog
+- `theme.michael-gahn.de` nur über einen versionierten, dokumentierten und ausdrücklich freigegebenen
+  Adapter anbinden; keine Endpunkte, Tokens oder Datenformate erfinden
+- Kernfunktion bleibt sicher nutzbar, wenn Katalog oder Theme-Dienst nicht erreichbar sind; externe
+  Abfragen sind standardmäßig aus oder benötigen eine aktive Admin-Entscheidung
+- Integrations-, Rechte-, Datenschutz- und Fehlerfall in einer Testumgebung prüfen, bevor Kompatibilität,
+  Release oder Veröffentlichung behauptet wird
+
+Prompts und Abnahmekriterien: `WIKI/18-CMS/PLUGIN-APP-PROMPTS.md`.
+
 Before implementing, run the briefing (`mgd-platform briefing --write`) and ask all open mandatory
 questions. After each delivery bump the version and add a release note:
 

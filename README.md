@@ -30,6 +30,7 @@ mgd-platform template create shopware6-plugin-starter --target ./mein-shopware-p
 ```
 
 Details: [Plugin- und App-Starter](WIKI/18-CMS/TEMPLATES.md).
+Direkte Prompt-Beispiele für ChatGPT und Claude: [Plugins und Apps entwickeln](WIKI/18-CMS/PLUGIN-APP-PROMPTS.md).
 
 ## Neu in 0.7.0 Pre-Alpha: Pflicht-Begleiter – Living Documentation, Graphify und Todo
 

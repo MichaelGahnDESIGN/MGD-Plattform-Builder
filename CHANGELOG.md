@@ -12,6 +12,15 @@ The format follows the spirit of Keep a Changelog and semantic versioning.
   mit Codex-/Claude-Installer, Schutz vor Überschreiben und Symlinks sowie Beispielen
   und Hinweisen zur getrennten Divi-CSS-/JavaScript-/Plugin-Ablage.
 
+## [0.8.1 Pre-Alpha] - 2026-11-07
+
+### Added
+
+- kopierfertige ChatGPT-/Claude-Prompts für neue und bestehende WordPress-, WooCommerce-,
+  JTL-Shop-5-, Shopware-6- und Shopify-Erweiterungen
+- MGD-Integrationsstandard für lokale Oberflächen, Plugin-Empfehlungen, nachvollziehbare
+  Fehlerzustände und sichere, optionale Theme.Michael-Gahn-Adapter
+
 ## [0.8.0 Pre-Alpha] - 2026-11-07
 
 ### Added
