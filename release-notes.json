@@ -2,6 +2,22 @@
   "$schema": "./schema/release-notes.schema.json",
   "entries": [
     {
+      "version": "0.8.0",
+      "status": "pre-alpha",
+      "date": "2026-11-07",
+      "audience": [
+        "platform",
+        "backoffice"
+      ],
+      "type": "feature",
+      "title": "Fünf sichere Plugin- und App-Starter",
+      "items": [
+        "Neue Startgerüste für WordPress, WooCommerce, JTL-Shop 5, Shopware 6 und Shopify mit lokalen Light-/Dark-Varianten, Versionsdateien und klaren Sicherheitsgrenzen",
+        "Die Template-Prüfung kontrolliert für die neuen MGD-Starter Lizenzkopie, geschützte Label-Datei, Plattformkennung sowie die notwendige Agentenregel",
+        "Die CLI lädt Befehle bedarfsgesteuert, damit eine optional nicht verfügbare Abhängigkeit für Begleiter reine Versions- und Template-Prüfungen nicht blockiert"
+      ]
+    },
+    {
       "version": "0.7.0",
       "status": "pre-alpha",
       "date": "2026-10-22",

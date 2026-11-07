@@ -1,0 +1,18 @@
+{
+  "id": "jtl-shop5-plugin-starter",
+  "name": "MGD JTL-Shop 5 Plugin Starter",
+  "version": "0.1.0",
+  "status": "pre-alpha",
+  "platform": "jtl-shop-5",
+  "requirements": {
+    "php": ">=8.1",
+    "extensions": ["json", "mbstring"],
+    "databases": { "core": { "engine": "jtl-shop", "required": true, "purpose": "JTL-Shop-Konfiguration und Plugin-Daten" } },
+    "deployment": ["JTL-Shop-Pluginverwaltung", "Plugin-ZIP"]
+  },
+  "variants": { "light": "admin/css/light.css", "dark": "admin/css/dark.css" },
+  "features": ["plugin-metadata", "bootstrap-boundary", "template-boundary", "privacy-notes", "cache-checklist", "release-checklist"],
+  "entry": "Bootstrap.php",
+  "license": "LicenseRef-MGD",
+  "license_label_paths": ["admin/css/powered-by.css"]
+}

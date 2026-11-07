@@ -35,7 +35,7 @@ export async function checkTemplate(template) {
   }
 
   if (template.manifest.license === "LicenseRef-MGD") {
-    problems.push(...await checkMgdLicense(template.dir));
+    problems.push(...await checkMgdLicense(template.dir, template.manifest));
   }
 
   return problems;
@@ -58,7 +58,7 @@ export function parseIntegrityHashes(phpSource) {
  * MGD-licensed templates must ship the unchanged root MGD-Lizenz.md, and the integrity
  * hashes of the "powered by" label must match the files.
  */
-export async function checkMgdLicense(dir) {
+export async function checkMgdLicense(dir, manifest = {}) {
   const problems = [];
   const licenseCopy = path.join(dir, "MGD-Lizenz.md");
   const rootLicense = path.join(foundationRoot, "MGD-Lizenz.md");
@@ -71,7 +71,18 @@ export async function checkMgdLicense(dir) {
 
   const integrityFile = path.join(dir, "src", "Core", "License", "LicenseIntegrity.php");
   const source = await fs.readFile(integrityFile, "utf8").catch(() => null);
-  if (source === null) return [...problems, "missing LicenseIntegrity.php"];
+  if (source === null) {
+    // Plattform-Starter haben noch keine gemeinsame Laufzeit. Sie schützen deshalb die
+    // vorhandenen Label-Dateien; konkrete Integritätslogik entsteht erst im Zielprojekt.
+    const labelPaths = manifest.license_label_paths || [];
+    if (!labelPaths.length) return [...problems, "missing license label paths"];
+    for (const relative of labelPaths) {
+      if (!await fs.access(path.join(dir, relative)).then(() => true).catch(() => false)) {
+        problems.push("license label file not found: " + relative);
+      }
+    }
+    return problems;
+  }
 
   for (const [relative, expected] of Object.entries(parseIntegrityHashes(source))) {
     const file = path.join(dir, relative);

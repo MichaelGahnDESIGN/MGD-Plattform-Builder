@@ -20,6 +20,21 @@ test("every bundled template passes the contract incl. light/dark and license la
   }
 });
 
+test("shop-platform starters identify their target platform and ship agent rules", async () => {
+  const expectedPlatforms = new Set(["wordpress", "woocommerce", "jtl-shop-5", "shopware-6", "shopify"]);
+  const templates = await listTemplates();
+
+  for (const template of templates.filter((item) => expectedPlatforms.has(item.manifest.platform))) {
+    assert.ok(expectedPlatforms.has(template.manifest.platform), template.manifest.id + " has a known platform");
+    await fs.access(path.join(template.dir, "AGENTS.md"));
+    assert.equal(template.manifest.license, "LicenseRef-MGD");
+    assert.ok(Array.isArray(template.manifest.license_label_paths));
+    assert.ok(template.manifest.license_label_paths.length > 0);
+  }
+
+  assert.equal(templates.filter((item) => expectedPlatforms.has(item.manifest.platform)).length, expectedPlatforms.size);
+});
+
 test("a modified license copy or label file is detected", async () => {
   const source = path.join(foundationRoot, "templates", "php-mysql-starter");
   const dir = await fs.mkdtemp(path.join(os.tmpdir(), "mgd-license-"));

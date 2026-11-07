@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Plugin>
+  <Name>MGD JTL-Shop 5 Plugin Starter</Name>
+  <Description>Startgerüst – vor Installation Metadaten, Namespace und Zielversion ergänzen.</Description>
+  <Version>0.0.1</Version>
+  <Author>Michael Gahn DESIGN</Author>
+</Plugin>

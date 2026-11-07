@@ -12,6 +12,23 @@ The format follows the spirit of Keep a Changelog and semantic versioning.
   mit Codex-/Claude-Installer, Schutz vor Überschreiben und Symlinks sowie Beispielen
   und Hinweisen zur getrennten Divi-CSS-/JavaScript-/Plugin-Ablage.
 
+## [0.8.0 Pre-Alpha] - 2026-11-07
+
+### Added
+
+- fünf kopierbare, datensparsame Startgerüste für WordPress, WooCommerce, JTL-Shop 5,
+  Shopware 6 und Shopify – jeweils mit lokalen Light-/Dark-Tokens, Versions- und
+  Release-Notiz-Dateien, Lizenzschutz und plattformspezifischen Sicherheitsregeln
+- Template-Metadaten für Zielplattform und geschützte Label-Dateien sowie Prüfungen,
+  die die fünf Shop-Starter als vollständige MGD-Starter erkennen
+- Wiki- und Template-Dokumentation mit klaren Installations-, Datenschutz- und
+  Marketplace-Grenzen
+
+### Changed
+
+- die CLI lädt Befehlsmodule erst bei Aufruf; damit blockieren optionale Abhängigkeiten
+  der Begleiter nicht mehr `version` oder `template`
+
 ### Planned
 
 - Node/PostgreSQL reference implementation

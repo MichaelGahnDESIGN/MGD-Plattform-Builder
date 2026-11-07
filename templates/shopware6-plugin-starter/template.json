@@ -1,0 +1,18 @@
+{
+  "id": "shopware6-plugin-starter",
+  "name": "MGD Shopware 6 Plugin Starter",
+  "version": "0.1.0",
+  "status": "pre-alpha",
+  "platform": "shopware-6",
+  "requirements": {
+    "php": ">=8.2",
+    "extensions": ["json", "mbstring", "zip"],
+    "databases": { "core": { "engine": "shopware", "required": true, "purpose": "Shopware-Daten und Plugin-Migrationen" } },
+    "deployment": ["Shopware-Plugin-ZIP", "Composer", "bin/console"]
+  },
+  "variants": { "light": "src/Resources/app/administration/src/scss/mgd-light.scss", "dark": "src/Resources/app/administration/src/scss/mgd-dark.scss" },
+  "features": ["composer-metadata", "plugin-class", "migration-policy", "administration-boundary", "storefront-boundary", "privacy-notes", "release-checklist"],
+  "entry": "src/MgdShopwareStarter.php",
+  "license": "LicenseRef-MGD",
+  "license_label_paths": ["src/Resources/app/administration/src/scss/powered-by.scss"]
+}

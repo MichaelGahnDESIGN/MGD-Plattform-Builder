@@ -28,3 +28,27 @@ mgd-platform briefing ./my-project --write
 ```
 
 Details: [`templates/php-mysql-starter/README.md`](../../templates/php-mysql-starter/README.md).
+
+## Plugin and app starters
+
+The following starters establish a consistent MGD baseline for plugin and app work. They are deliberately
+small: each has local light/dark tokens, version and release-note files, German agent rules, an unchanged
+MGD license copy and a protected label asset. They do **not** claim marketplace approval, automatic updates
+or productive compatibility.
+
+| Starter | Use when | Important boundary |
+| --- | --- | --- |
+| `wordpress-plugin-starter` | a WordPress-only admin or frontend extension is needed | All writes require a nonce and server-side capability check. |
+| `woocommerce-extension-starter` | store behavior extends WooCommerce | Guest orders and payment state need an explicit server-side policy. |
+| `jtl-shop5-plugin-starter` | a JTL-Shop-5 plugin is planned | Verify the actual Shop 5 API and cache behavior before installation. |
+| `shopware6-plugin-starter` | a Shopware 6 extension is planned | Keep migrations, ACL, administration and storefront responsibilities separate. |
+| `shopify-app-starter` | Shopify needs protected state or webhooks | Theme is presentation only; HMAC validation and idempotency belong to the app. |
+
+Create a project with the normal command, for example:
+
+```bash
+mgd-platform template create shopware6-plugin-starter --target ./my-shopware-plugin
+```
+
+Then run the project briefing and install the mandatory companions. Production deployment, app-store
+publication and installation in a customer shop remain separate, manually verified delivery steps.

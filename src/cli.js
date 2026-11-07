@@ -1,16 +1,3 @@
-import { initCommand } from "./commands/init.js";
-import { validateCommand } from "./commands/validate.js";
-import { doctorCommand } from "./commands/doctor.js";
-import { auditCommand } from "./commands/audit.js";
-import { releaseCheckCommand } from "./commands/release-check.js";
-import { moduleCommand } from "./commands/module.js";
-import { updateCommand } from "./commands/update.js";
-import { versionCommand } from "./commands/version.js";
-import { briefingCommand } from "./commands/briefing.js";
-import { recommendCommand } from "./commands/recommend.js";
-import { templateCommand } from "./commands/template.js";
-import { companionsCommand } from "./commands/companions.js";
-
 function help() {
   console.log([
     "",
@@ -55,18 +42,20 @@ export async function runCli(args) {
     return 0;
   }
 
-  if (command === "init") return initCommand(rest);
-  if (command === "validate") return validateCommand(rest[0] || ".");
-  if (command === "doctor") return doctorCommand(rest[0] || ".");
-  if (command === "audit") return auditCommand(rest);
-  if (command === "release-check") return releaseCheckCommand(rest[0] || ".");
-  if (command === "module") return moduleCommand(rest);
-  if (command === "update") return updateCommand(rest[0] || ".");
-  if (command === "version") return versionCommand(rest);
-  if (command === "briefing") return briefingCommand(rest);
-  if (command === "recommend") return recommendCommand(rest[0] || ".");
-  if (command === "template") return templateCommand(rest);
-  if (command === "companions") return companionsCommand(rest);
+  // Befehle werden erst bei Bedarf geladen. Ein optionaler Bereich (z. B. YAML für
+  // Begleiter) darf damit nicht die reine Versions- oder Template-Prüfung blockieren.
+  if (command === "init") return (await import("./commands/init.js")).initCommand(rest);
+  if (command === "validate") return (await import("./commands/validate.js")).validateCommand(rest[0] || ".");
+  if (command === "doctor") return (await import("./commands/doctor.js")).doctorCommand(rest[0] || ".");
+  if (command === "audit") return (await import("./commands/audit.js")).auditCommand(rest);
+  if (command === "release-check") return (await import("./commands/release-check.js")).releaseCheckCommand(rest[0] || ".");
+  if (command === "module") return (await import("./commands/module.js")).moduleCommand(rest);
+  if (command === "update") return (await import("./commands/update.js")).updateCommand(rest[0] || ".");
+  if (command === "version") return (await import("./commands/version.js")).versionCommand(rest);
+  if (command === "briefing") return (await import("./commands/briefing.js")).briefingCommand(rest);
+  if (command === "recommend") return (await import("./commands/recommend.js")).recommendCommand(rest[0] || ".");
+  if (command === "template") return (await import("./commands/template.js")).templateCommand(rest);
+  if (command === "companions") return (await import("./commands/companions.js")).companionsCommand(rest);
 
   console.error("Unknown command: " + command);
   help();

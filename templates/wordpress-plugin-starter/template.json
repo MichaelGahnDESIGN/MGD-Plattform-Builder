@@ -1,0 +1,18 @@
+{
+  "id": "wordpress-plugin-starter",
+  "name": "MGD WordPress Plugin Starter",
+  "version": "0.1.0",
+  "status": "pre-alpha",
+  "platform": "wordpress",
+  "requirements": {
+    "php": ">=8.1",
+    "extensions": ["json", "mbstring"],
+    "databases": { "core": { "engine": "wordpress", "required": true, "purpose": "WordPress-Optionen und -Tabellen" } },
+    "deployment": ["WordPress-Plugin-ZIP", "WP-CLI"]
+  },
+  "variants": { "light": "assets/css/admin-light.css", "dark": "assets/css/admin-dark.css" },
+  "features": ["admin-page", "settings-api", "capability-checks", "nonces", "local-assets", "privacy-notes", "uninstall-plan", "release-checklist"],
+  "entry": "mgd-wordpress-plugin.php",
+  "license": "LicenseRef-MGD",
+  "license_label_paths": ["assets/css/powered-by.css"]
+}

@@ -1,0 +1,10 @@
+{
+  "name": "michael-gahn/mgd-shopware6-plugin-starter",
+  "description": "Sicheres Startgerüst für ein Shopware-6-Plugin.",
+  "type": "shopware-platform-plugin",
+  "version": "0.0.1",
+  "license": "LicenseRef-MGD",
+  "require": { "php": ">=8.2", "shopware/core": "~6.6.0 || ~6.7.0" },
+  "autoload": { "psr-4": { "MgdShopwareStarter\\": "src/" } },
+  "extra": { "shopware-plugin-class": "MgdShopwareStarter\\MgdShopwareStarter" }
+}

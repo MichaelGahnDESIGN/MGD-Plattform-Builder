@@ -1,0 +1,4 @@
+name = "MGD Shopify App Starter"
+client_id = "REPLACE_IN_SHOPIFY_PARTNERS"
+application_url = "https://example.invalid"
+embedded = true

@@ -1,0 +1,17 @@
+{
+  "id": "shopify-app-starter",
+  "name": "MGD Shopify App Starter",
+  "version": "0.1.0",
+  "status": "pre-alpha",
+  "platform": "shopify",
+  "requirements": {
+    "node": ">=20",
+    "databases": { "core": { "engine": "postgresql-or-managed-store", "required": false, "purpose": "Nur bei benötigtem serverseitigem App-Zustand" } },
+    "deployment": ["Shopify-CLI", "App-Hosting", "Theme-Extension"]
+  },
+  "variants": { "light": "app/assets/mgd-admin-light.css", "dark": "app/assets/mgd-admin-dark.css" },
+  "features": ["app-theme-separation", "hmac-verification", "webhook-idempotency-policy", "data-minimization", "privacy-webhooks", "local-assets", "release-manifest"],
+  "entry": "app/src/index.mjs",
+  "license": "LicenseRef-MGD",
+  "license_label_paths": ["app/assets/powered-by.css"]
+}
