@@ -3,6 +3,7 @@ import path from "node:path";
 import os from "node:os";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
+import { homebrewIdentity } from './homebrew-audit.js';
 const exec = promisify(execFile);
 const make = (name, version, kind, source) => ({
   name,
@@ -63,15 +64,16 @@ export async function inspectHost() {
           try {
             const s = await fs.lstat(receipt);
             if (!s.isFile() || s.isSymbolicLink() || s.size > 262144) continue;
-            JSON.parse(await fs.readFile(receipt, "utf8"));
-            result.push(
-              make(
-                n.name,
-                v.name,
-                "runtime",
-                "Lokaler Homebrew-Installationsbeleg",
-              ),
+            const raw = await fs.readFile(receipt, "utf8");
+            const identity = homebrewIdentity(n.name, v.name, raw);
+            const item = make(
+              n.name,
+              v.name,
+              "runtime",
+              "Lokaler Homebrew-Installationsbeleg",
             );
+            item.hostIdentity = identity;
+            result.push(item);
           } catch {}
         }
       }

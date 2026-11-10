@@ -6,8 +6,9 @@ import { actionChecks } from './actions.js';
 import { vendorEvidence } from './vendor.js';
 import { imageAudit } from './images.js';
 import { evidenceState } from './evidence.js';
+import { homebrewAudit } from './homebrew-audit.js';
 
-export async function auditProject(project, { request, cacheDirectory, offline, images, api } = {}) {
+export async function auditProject(project, { request, cacheDirectory, offline, images, api, homebrewIndex } = {}) {
   const issues = [];
   await composerProvenance(project,{request,cacheDirectory});
   const eligible = project.components.filter(c=>c.kind==='package' && c.exact && c.publicSource && c.scope!=='lock-history');
@@ -21,6 +22,7 @@ export async function auditProject(project, { request, cacheDirectory, offline, 
   if (request) await supportAudit(project.components,{request});
   issues.push(...await actionChecks(project,{request,api,cacheDirectory}));
   for (const c of project.components) {
+    issues.push(...homebrewAudit(c, homebrewIndex));
     issues.push(...await imageAudit(c,images));
     const evidence=evidenceState(c);
     if(evidence)c.checks.evidence=evidence;

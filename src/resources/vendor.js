@@ -4,7 +4,7 @@ export async function vendorEvidence(c,{fetcher=fetch}={}) {
  const sources={php:'https://www.php.net/security/',nodejs:'https://nodejs.org/en/blog/vulnerability',mariadb:'https://mariadb.com/docs/release-notes/security',ubuntu:'https://ubuntu.com/security/notices'};
  const reasons={php:'Upstream-Version erfasst; Herkunft und Sicherheitskorrekturen des konkreten Provider-Builds sind nicht vollständig belegt.',nodejs:'Laufender Node-Prozess erfasst; ein vollständiger Herstellerabgleich einschließlich gebündelter Bibliotheken fehlt.',mariadb:'Datenbankversion beobachtet; zurückportierte Korrekturen kann nur der Betreiber des Datenbankservers bestätigen.',ubuntu:'Distributionsversion erfasst; installierte DEB-Versionen, laufender Kernel und Livepatch-Stand fehlen.'};
  c.checks.vendor={status:'unchecked',source:c.name,sourceUrl:sources[c.name],reason:reasons[c.name]};
- if(c.checks.vulnerability.status==='unchecked')Object.assign(c.checks.vulnerability,{reasonCode:'provider-evidence-missing',reason:reasons[c.name]});
+ if(c.checks.vulnerability.status==='unchecked'&&!c.checks.vulnerability.reasonCode?.startsWith('homebrew-'))Object.assign(c.checks.vulnerability,{reasonCode:'provider-evidence-missing',reason:reasons[c.name]});
  if(c.name!=='mariadb'||!/^10\.11\.\d+$/.test(c.version))return [];
  try {
   const response=await fetcher('https://raw.githubusercontent.com/mariadb-corporation/mariadb-docs/main/release-notes/community-server/10.11/what-is-mariadb-1011.md',{redirect:'error',signal:AbortSignal.timeout(7000),headers:{'User-Agent':'MGD-ResourceManager/0.10'}});

@@ -6,6 +6,12 @@ The format follows the spirit of Keep a Changelog and semantic versioning.
 
 ## [Unreleased]
 
+## [0.14.1] - 2026-11-10
+
+- Ressourcenmanager: stabilen Homebrew-Core-Installationsbelegen einen festen öffentlichen Hersteller-Gesamtkatalog zuordnen und Versionsbereiche einschließlich Keg-Revisionen lokal abgleichen. Keine Inventarlisten an OSV oder Homebrew übertragen.
+- Fehlende Formel-Advisories, unbestätigte Herkunft, nicht vergleichbare Bereiche sowie veraltete oder manipulierte Caches bleiben ausdrücklich ungeprüft. Bekannte Befunde bleiben auch bei teilweise unbekannter Abdeckung sichtbar.
+- Begrenzter privater Cache mit SHA-256, Quellenfrische und Dateischutz; gezielte Negativ- und Integrationstests. Der Abgleich erteilt keine Freigabe für System-, Container- oder Serverupdates.
+
 ## [0.14.0] - 2026-10-29
 
 - Neues kostenloses Starter-Modul `backup` (`templates/php-mysql-starter/modules/backup/`): verschlüsselte Datenbank- und Dateisicherung nach Zeitplan oder auf Knopfdruck, Public-Key-Verfahren und Paketformat MGDB1 (libsodium `secretstream` + `crypto_box_seal`, Ed25519-signiertes Manifest), PDO-Dump ohne `mysqldump`, Cron-getriebene Läufe mit Zeitbudget, Aufbewahrung nach Anzahl und Höchstalter, Speicherplatzprüfung, Parallelschutz.

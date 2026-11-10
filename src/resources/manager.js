@@ -11,6 +11,7 @@ import { evidenceState } from './evidence.js';
 import { refreshOfflineCache } from './offline-cache.js';
 import { renderReport } from "./report.js";
 import { inspectHost } from "./host.js";
+import { loadHomebrewIndex, refreshHomebrewIndex } from './homebrew-index.js';
 
 export async function loadConfig(file) {
   const root = await fs.realpath(path.dirname(path.resolve(file)));
@@ -131,7 +132,17 @@ export async function scan({
           importedAt: c.scannerTimestamp,
         });
     if (online) {
+      let homebrewIndex;
+      if (host && project.root === null && process.platform === 'darwin' && output) {
+        const directory = path.join(output, 'homebrew');
+        try {
+          // Fester öffentlicher Gesamtkatalog; der Abruf erhält keine Inventardaten.
+          await refreshHomebrewIndex(directory);
+          homebrewIndex = await loadHomebrewIndex(directory);
+        } catch { /* Ein fehlender Herstellerabgleich bleibt je Keg sichtbar. */ }
+      }
       const checked = await auditProject(project, {
+        homebrewIndex,
         request: request || requestJson,
         cacheDirectory: output ? path.join(output, 'provenance') : null,
         images: config.images,
