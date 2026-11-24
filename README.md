@@ -22,6 +22,8 @@ Privacy, security, compliance, modular backends, administration, moderation, Doc
 
 Der Ressourcenmanager bestätigt Composer-Paketursprünge, unterscheidet Anforderungen von Installationen und kann private Pakete über eine separate geprüfte OSV-Scanner-Laufzeit vollständig offline abgleichen. Action-Commits benötigen eine exakte Release-Zuordnung; fehlende Quellen und veraltete Datenbanken bleiben sichtbar. [Offline-Einrichtung und Sicherheitsgrenzen](WIKI/06-OPERATIONS/RESOURCE-MANAGER.md).
 
+Auf macOS ergänzt `--online --host` den lokalen Abgleich stabiler Homebrew-Core-Installationen mit dem festen öffentlichen Herstellerkatalog. Dabei werden keine Inventarlisten übertragen. Fehlende Formeleinträge, unbestätigte Installationsbelege und nicht vergleichbare Versionsbereiche bleiben offen; ein Katalogabgleich ersetzt keinen vollständigen Scan eingebetteter Bibliotheken.
+
 ## System- und Abhängigkeitsmanager
 
 Der Builder erfasst jetzt die technische Basis Deiner Projekte: Paketabhängigkeiten, CMS/Plugins/Themes, Laufzeiten, Container, Build-Werkzeuge sowie ausdrücklich hinterlegte Betriebssystem-, Datenbank-, Webserver- und API-Versionen. Aktuelle OSV-/GitHub-Meldungen und Supportdaten kommen in einen lokalen Bericht mit Suche, Filtern und sichtbaren Prüflücken.
