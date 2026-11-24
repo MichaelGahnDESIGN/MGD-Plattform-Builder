@@ -72,6 +72,12 @@ Mehr: [Begleiter: Living Documentation, Graphify und Todo](https://github.com/Mi
 
 ---
 
+## Optionale Design- und Engineering-Skills
+
+Beim ersten Setup des Plattform-Builder-Skills werden zusätzlich [Hallmark](https://github.com/nutlope/hallmark), [ECC Core](https://github.com/affaan-m/ECC) und [Superpowers](https://github.com/obra/superpowers) aus ihren offiziellen Quellen eingerichtet. Der lokale Skill-Update-Ablauf gleicht sie ebenfalls ab. Hallmark ist nur für neue, ausdrücklich beauftragte Oberflächen gedacht; es verändert weder bestehende Themes noch Markenrichtlinien automatisch. ECC- und Superpowers-Plugin-Vertrauen bleibt eine bewusste Entscheidung des Agenten.
+
+---
+
 ## Seit 0.6.0: MGD-Plattform-Builder, Lizenz-Label, Benutzer, Medien und Module
 
 Das Projekt heißt jetzt **MGD-Plattform-Builder**. Neu:

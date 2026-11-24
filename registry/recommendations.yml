@@ -65,6 +65,35 @@ recommendations:
     reason: "Hält Versionsnummern, Changelog/Release Notes, Staging und Live synchron."
     when:
       always: true
+  - id: "hallmark"
+    name: "Hallmark"
+    kind: "skill"
+    url: "https://github.com/nutlope/hallmark"
+    license: "MIT"
+    summary: "Eigenständige Gestaltung neuer Webseiten und Oberflächen mit Browser-Linter gegen typische KI-Designmuster."
+    reason: "Optional für neue, ausdrücklich beauftragte Frontends; vorhandene Themes, Markenrichtlinien und design.md bleiben unverändert, außer bei angefordertem Audit oder Redesign."
+    when:
+      project_types: ["creator", "community", "ecommerce", "custom"]
+      keywords: ["website", "landingpage", "landing page", "frontend", "oberfläche", "ui", "ux", "design", "redesign"]
+  - id: "ecc-core"
+    name: "ECC Core"
+    kind: "skill"
+    url: "https://github.com/affaan-m/ECC"
+    license: "MIT"
+    summary: "Planungs-, Architektur-, Test- und Verifikationswerkzeuge für Coding-Agenten."
+    reason: "Beim ersten Skill-Setup über die offizielle ECC-Installation einrichten und beim Update-Ablauf aktualisieren."
+    when:
+      features: ["ai_agents"]
+      keywords: ["architektur", "sicherheit", "test", "review", "plattform"]
+  - id: "superpowers"
+    name: "Superpowers"
+    kind: "skill"
+    url: "https://github.com/obra/superpowers"
+    license: "MIT"
+    summary: "Komponierbare Skills für Planung, Debugging, Tests und Reviews."
+    reason: "Beim ersten Skill-Setup über den offiziellen Marktplatz einrichten und über dessen Plugin-Update mit aktualisieren."
+    when:
+      keywords: ["planung", "debugging", "test", "review", "entwicklung"]
   - id: "mgd-todo-skill"
     name: "MGD Todo Skill"
     kind: "skill"

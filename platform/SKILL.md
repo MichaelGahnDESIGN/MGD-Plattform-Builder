@@ -155,6 +155,9 @@ Mandatory (see above): /todo for task tracking, /living-documentation for the ca
 Prefer, when installed:
 
 - /dev for release/readiness
+- /hallmark for new, explicitly commissioned website or interface designs; existing themes,
+  brands and a locked `design.md` take precedence, and Hallmark may redesign only on explicit request
+- ECC Core for architecture, test and verification workflows, and Superpowers for planning and review
 - /backup before risky changes
 - /autopilot only with explicit safe goals (same limits as the loop protocol)
 - /thread for handoff
